@@ -16,5 +16,5 @@ export default defineConfig([
       "jsx-a11y/no-autofocus": "error",
     },
   },
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
+  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", ".claude/**"]),
 ]);

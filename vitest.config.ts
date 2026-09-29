@@ -11,6 +11,7 @@ export default defineConfig({
   },
   test: {
     include: ["src/**/*.test.ts"],
+    exclude: ["**/node_modules/**", ".claude/**"],
     environment: "node",
   },
 });
