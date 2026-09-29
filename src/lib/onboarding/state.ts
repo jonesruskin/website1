@@ -58,7 +58,7 @@ const builtInTasks: OnboardingTask[] = [
   {
     id: "first-tool",
     title: "Add your first tool",
-    description: "Describe what it produces and write the card. Starts with 10 credits.",
+    description: "Describe what it produces and write the card that other tools will show.",
     href: "/tools/new",
     done: async (userId) => (await toolFlags(userId)).hasTool,
   },

@@ -17,7 +17,7 @@ export const metadata = createMetadata({
 
 /** How the exchange looks on each plan. Numbers come from site.config, the rest is the rule. */
 const creditNotes: Record<string, string> = {
-  free: "One tool, starting with 10 credits. Earn one for every click you send, spend one for every visitor you receive. At zero, your tool waits to be shown until it has sent someone.",
+  free: "One tool, starting with 10 credits (20 for the founding 100). Earn one for every click you send, spend one for every visitor you receive. At zero, your tool waits to be shown until it has sent someone.",
   pro: "The same exchange across up to five tools, each with its own balance. Handshakes let you pair directly with tools that agree, and they rank first.",
   enterprise:
     "The same exchange across a whole portfolio, with unlimited tools and handshakes, team seats, and stats you can pull through the API.",
