@@ -46,3 +46,33 @@ is yours; the `site` CLI helps add, update and remove modules without a lock-in.
   names; `pnpm db:generate` → commit the SQL → `pnpm db:migrate` on deploy.
 - Forms use server actions + `useActionState`, validated with Zod on the server.
 - Keep pages accessible: labelled controls, visible focus, one `h1` per page.
+
+## Baton: product and design language
+
+**Product.** Baton is a recommendation network for the *success moment*: the second a tool
+finishes its job (file compressed, audio transcribed), a maker calls `baton.pass()` and Baton
+shows one card for the most useful next tool. Matching is journey-based: host `outputs` →
+candidate `inputs` (`src/lib/baton/taxonomy.ts`, `src/lib/baton/match.ts`). Clicks move credits
+1:1 (host +1, shown tool −1). New tools get 10 starter credits. Honest by design: no fake
+testimonials, users, logos or statistics anywhere on the site.
+
+**Design language: "Relay"** (running track, handoff, the baton). Avoid generic SaaS: no purple
+gradients, no glassmorphism cards, no stock icons-in-circles feature grids.
+
+- Surfaces: bone paper (light) and track-night (dark). One accent, **signal orange**: `bg-signal`,
+  `text-signal` (fills and large type only), `text-signal-ink` (small orange text on paper),
+  `text-signal-foreground` (text on orange). `bg-primary` is also orange with ink text.
+- Type: Archivo variable (weight + width). Headlines use `font-display` with `text-display` or
+  `text-heading`; push width with inline `style={{ fontStretch: "75%" }}` (condensed) or
+  `"125%"` (expanded) for contrast. One emotional word per headline in `accent-serif`
+  (Instrument Serif italic). Data and code use `font-mono`, often uppercase at `text-xs` with
+  `tracking-widest`.
+- Motifs: lane lines (`bg-lanes`, set `--lane-gap`), numbered lanes as section indices
+  ("01 / 05" in mono), the baton pill (a `rounded-full bg-signal` capsule), `grain` overlay,
+  oversized typography that bleeds off the edge.
+- Motion: `reveal` (CSS scroll-driven, zero JS) for entrances; `motion` (`motion/react`) for
+  choreographed scenes; `lenis` for smooth scroll on the marketing site only. Every animation
+  must respect `prefers-reduced-motion` (use `useReducedMotion` from motion/react). Handoff
+  easing: `var(--motion-ease-handoff)`.
+- Layout: generous whitespace, asymmetric grids, big numbers, hairline `border-border` rules,
+  `container-page` for width. Must work from 360px wide.
