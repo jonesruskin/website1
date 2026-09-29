@@ -268,7 +268,6 @@ export default defineSite({
           "5 tools",
           "Handshakes: direct pairings that rank first",
           "90-day stats and journey breakdowns",
-          "Custom card colors",
           "Hide the Baton mark",
         ],
         limits: {

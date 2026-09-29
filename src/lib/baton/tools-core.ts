@@ -2,6 +2,7 @@ import "server-only";
 
 import { randomBytes } from "node:crypto";
 
+import { count } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/db";
@@ -13,6 +14,9 @@ import { createSiteKey } from "./token";
 
 /** Credits every new tool starts with (also written to the ledger as reason `starter`). */
 export const STARTER_CREDITS = 10;
+/** The founding 100: the first tools on the network start with double credits. */
+export const FOUNDING_TOOLS = 100;
+export const FOUNDING_STARTER_CREDITS = STARTER_CREDITS * 2;
 
 const artifactSet = new Set(artifactIds);
 const artifactId = z.string().refine((id) => artifactSet.has(id), "Unknown artifact");
@@ -68,6 +72,9 @@ export async function createToolRecord(userId: string, input: ToolInput): Promis
     const slug = `${base}-${randomBytes(3).toString("hex")}`;
     try {
       return await db.transaction(async (tx) => {
+        const [existing] = await tx.select({ n: count() }).from(batonTool);
+        const starter =
+          (existing?.n ?? 0) < FOUNDING_TOOLS ? FOUNDING_STARTER_CREDITS : STARTER_CREDITS;
         const [tool] = await tx
           .insert(batonTool)
           .values({
@@ -84,13 +91,13 @@ export async function createToolRecord(userId: string, input: ToolInput): Promis
             cardCta: input.cardCta,
             allowSameCategory: input.allowSameCategory,
             siteKey: createSiteKey(),
-            credits: STARTER_CREDITS,
+            credits: starter,
           })
           .returning();
         if (!tool) throw new Error("Tool insert returned no row.");
         await tx
           .insert(batonLedger)
-          .values({ toolId: tool.id, delta: STARTER_CREDITS, reason: "starter" });
+          .values({ toolId: tool.id, delta: starter, reason: "starter" });
         return tool;
       });
     } catch (error) {

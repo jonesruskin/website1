@@ -11,12 +11,12 @@ const dark = "--bg:#15110e;--fg:#f2eee5;--muted:#aaa39a;--line:#2d2824;--ring:#f
 
 /** Card styles: Relay bone paper by day, track-night by dark or `auto` + prefers-color-scheme. */
 const css = `
-  :host{display:block;overflow-wrap:anywhere;--bg:#f8f4eb;--fg:#130e0a;--muted:#5f564e;--line:#dad3c9;--ring:#aa3606;--signal:#fb6c2b;--on:#170d08;--sans:system-ui,sans-serif;--mono:ui-monospace,Menlo,Consolas,monospace}
+  :host{display:block;overflow-wrap:anywhere;--bg:#f8f4eb;--fg:#130e0a;--muted:#5f564e;--line:#dad3c9;--ring:#aa3606;--signal:var(--baton-accent,#fb6c2b);--on:#170d08;--sans:var(--baton-font,system-ui,sans-serif);--mono:ui-monospace,Menlo,Consolas,monospace}
   :host([theme=dark]){${dark}}
   @media (prefers-color-scheme:dark){:host([theme=auto]){${dark}}}
   :host([mode=toast]){position:fixed;right:16px;bottom:16px;z-index:2147483000;width:360px;max-width:calc(100vw - 32px)}
   :host([mode=inline]){max-width:420px;margin:12px 0}
-  .card{position:relative;padding:16px;border:1px solid var(--line);border-radius:14px;color:var(--fg);
+  .card{position:relative;padding:16px;border:1px solid var(--line);border-radius:var(--baton-radius,14px);color:var(--fg);
     background:var(--bg);
     box-shadow:0 12px 32px -8px #0005;font:14px/1.45 var(--sans)}
   :host([mode=toast]) .card{animation:in .34s cubic-bezier(.16,1,.3,1) both}
