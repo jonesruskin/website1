@@ -7,6 +7,8 @@ import { db } from "@/db";
 import { onboarding } from "@/db/schema/onboarding";
 import { onboardingTasks } from "@/generated/onboarding-tasks";
 
+import { toolFlags } from "@/lib/baton/queries";
+
 import { onboardingConfig } from "./config";
 import type { OnboardingTask } from "./types";
 
@@ -41,17 +43,33 @@ export function isNewAccount(createdAt: Date | string) {
 }
 
 /** Tasks every project gets. Add your own here. */
-const builtInTasks: OnboardingTask[] = onboardingConfig.questions.length
-  ? [
-      {
-        id: "questionnaire",
-        title: "Tell us about yourself",
-        description: "A few questions so we can tailor things to you.",
-        href: "/onboarding",
-        done: async (userId) => !!(await getOnboarding(userId))?.completedAt,
-      },
-    ]
-  : [];
+const builtInTasks: OnboardingTask[] = [
+  ...(onboardingConfig.questions.length
+    ? [
+        {
+          id: "questionnaire",
+          title: "Tell us about yourself",
+          description: "A few questions so we can tailor things to you.",
+          href: "/onboarding",
+          done: async (userId: string) => !!(await getOnboarding(userId))?.completedAt,
+        },
+      ]
+    : []),
+  {
+    id: "first-tool",
+    title: "Add your first tool",
+    description: "Describe what it produces and write the card. Starts with 10 credits.",
+    href: "/tools/new",
+    done: async (userId) => (await toolFlags(userId)).hasTool,
+  },
+  {
+    id: "go-live",
+    title: "Go live: install the snippet",
+    description: "Paste the script tag and call baton.pass() when your tool finishes.",
+    href: "/tools",
+    done: async (userId) => (await toolFlags(userId)).hasLiveTool,
+  },
+];
 
 export type ChecklistItem = Omit<OnboardingTask, "done"> & { done: boolean };
 

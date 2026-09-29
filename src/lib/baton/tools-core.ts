@@ -106,3 +106,9 @@ export async function createToolRecord(userId: string, input: ToolInput): Promis
   }
   throw new Error("Could not allocate a unique tool slug.");
 }
+
+/** What a tool created right now starts with: double while the founding 100 are open. */
+export async function currentStarterCredits() {
+  const [existing] = await db.select({ n: count() }).from(batonTool);
+  return (existing?.n ?? 0) < FOUNDING_TOOLS ? FOUNDING_STARTER_CREDITS : STARTER_CREDITS;
+}

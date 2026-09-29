@@ -1,6 +1,7 @@
 import { CodeIcon } from "lucide-react";
 import type { Metadata } from "next";
 
+import { BatonOverview } from "@/components/baton/app/overview-widgets";
 import { EmptyState } from "@/components/sections/empty-state";
 import { dashboardWidgets } from "@/generated/dashboard-widgets";
 import { requireSession } from "@/lib/auth/session";
@@ -15,10 +16,11 @@ export default async function DashboardPage() {
     <div className="flex flex-col gap-8">
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">Welcome back, {firstName}</h1>
-        <p className="text-muted-foreground mt-1 text-sm">
-          Here&apos;s what&apos;s happening in your account.
+        <p className="mt-1 text-sm text-muted-foreground">
+          Your credits, your passes, and what to do next.
         </p>
       </header>
+      <BatonOverview userId={user.id} />
       {dashboardWidgets.length > 0 ? (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {dashboardWidgets.map((Widget, index) => (
