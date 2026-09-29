@@ -11,10 +11,10 @@ const dark = "--bg:#15110e;--fg:#f2eee5;--muted:#aaa39a;--line:#2d2824;--ring:#f
 
 /** Card styles: Relay bone paper by day, track-night by dark or `auto` + prefers-color-scheme. */
 const css = `
-  :host{display:block;overflow-wrap:anywhere;--bg:#f8f4eb;--fg:#130e0a;--muted:#5f564e;--line:#dad3c9;--ring:#aa3606;--signal:var(--baton-accent,#fb6c2b);--on:#170d08;--sans:var(--baton-font,system-ui,sans-serif);--mono:ui-monospace,Menlo,Consolas,monospace}
+  :host{display:block;overflow-wrap:anywhere;--bg:#f8f4eb;--fg:#130e0a;--muted:#5f564e;--line:#dad3c9;--ring:#aa3606;--signal:var(--baton-accent,#fb6c2b);--on:#170d08;--sans:var(--baton-font,system-ui,sans-serif);--mono:ui-monospace,Menlo,monospace}
   :host([theme=dark]){${dark}}
   @media (prefers-color-scheme:dark){:host([theme=auto]){${dark}}}
-  :host([mode=toast]){position:fixed;right:16px;bottom:16px;z-index:2147483000;width:360px;max-width:calc(100vw - 32px)}
+  :host([mode=toast]){position:fixed;right:16px;bottom:16px;z-index:999999;width:360px;max-width:calc(100vw - 32px)}
   :host([mode=inline]){max-width:420px;margin:12px 0}
   .card{position:relative;padding:16px;border:1px solid var(--line);border-radius:var(--baton-radius,14px);color:var(--fg);
     background:var(--bg);
@@ -30,7 +30,7 @@ const css = `
   .cta{display:inline-flex;gap:6px;padding:9px 14px;border-radius:10px;background:var(--signal);color:var(--on);font-weight:700;text-decoration:none}
   .host,.via{color:var(--muted);font:11px var(--mono)}
   .via{margin-left:auto}
-  .x{position:absolute;top:10px;right:10px;width:28px;height:28px;padding:0;border:0;border-radius:8px;background:none;color:var(--muted);font:20px/1 var(--sans);cursor:pointer}
+  .x{position:absolute;top:10px;right:10px;width:28px;height:28px;padding:0;border:0;border-radius:8px;background:0 0;color:var(--muted);font:20px/1 var(--sans);cursor:pointer}
   :focus-visible{outline:2px solid var(--ring);outline-offset:2px}
   @media (prefers-reduced-motion:reduce){.card{animation:none!important}}
 `
@@ -38,12 +38,12 @@ const css = `
   .map((line) => line.trim())
   .join("");
 
-const source = String.raw`(function () {
+const source = String.raw`(function() {
   'use strict';
   var script = document.currentScript || document.querySelector('script[data-key][src*="embed.js"]');
   if (!script || !script.src) return;
   var origin = new URL(script.src, location.href).origin;
-  var attr = function (name) { return script.getAttribute(name) || ''; };
+  var attr = function(name) { return script.getAttribute(name) || ''; };
   var theme = attr('data-theme');
   if (theme !== 'light' && theme !== 'dark') theme = 'auto';
   var key = attr('data-key');
@@ -106,12 +106,12 @@ const source = String.raw`(function () {
       var x = el('button', 'x', '×');
       x.type = 'button';
       x.setAttribute('aria-label', 'Close');
-      x.addEventListener('click', function () { self.remove(); });
+      x.addEventListener('click', function() { self.remove(); });
       card.appendChild(x);
       root.appendChild(card);
 
       if (this.getAttribute('mode') === 'toast') {
-        this._k = function (e) { if (e.key === 'Escape') self.remove(); };
+        this._k = function(e) { if (e.key === 'Escape') self.remove(); };
         document.addEventListener('keydown', this._k);
       }
     }
@@ -136,7 +136,7 @@ const source = String.raw`(function () {
     if (!own) {
       if (target) target.appendChild(node);
       else if (inline && script.parentNode) script.parentNode.insertBefore(node, script.nextSibling);
-      else (document.body || document.documentElement).appendChild(node);
+      else document.body.appendChild(node);
     }
     current = node;
     return true;
@@ -148,9 +148,9 @@ const source = String.raw`(function () {
       var ctx = opts.ctx || ctx0;
       if (!key) return Promise.resolve(false);
       var url = origin + '/api/baton/v1/card?key=' + encodeURIComponent(key) + (ctx ? '&ctx=' + encodeURIComponent(String(ctx)) : '');
-      return fetch(url, { mode: 'cors', credentials: 'omit', cache: 'no-store' })
-        .then(function (res) { return res.status === 200 ? res.json().then(function (d) { return show(d, opts); }) : false; })
-        .catch(function () { return false; });
+      return fetch(url, { credentials: 'omit', cache: 'no-store' })
+        .then(function(res) { return res.status === 200 ? res.json().then(function(d) { return show(d, opts); }) : false; })
+        .catch(function() { return false; });
     } catch (e) {
       return Promise.resolve(false);
     }
