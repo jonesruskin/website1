@@ -1,0 +1,56 @@
+{
+  "slug": "research-paper-workflow",
+  "title": "Research paper workflow",
+  "promise": "Collect sources, write in plain text, format the citations and export a clean PDF.",
+  "time": "Ongoing; set it up in about 2 hours",
+  "minutes": 120,
+  "audience": "Students, academics and anyone who cites things",
+  "from": "idea",
+  "to": "pdf",
+  "steps": [
+    {
+      "title": "Collect and annotate sources",
+      "why": "Zotero saves references from the browser, stores the PDFs and keeps your notes attached to them.",
+      "tool": {
+        "name": "Zotero",
+        "url": "https://www.zotero.org",
+        "pricing": "Open source"
+      },
+      "input": "idea",
+      "output": "notes"
+    },
+    {
+      "title": "Write the draft",
+      "why": "Obsidian makes it easy to link notes and write in Markdown, which converts cleanly to almost any other format.",
+      "tool": {
+        "name": "Obsidian",
+        "url": "https://obsidian.md",
+        "pricing": "Free"
+      },
+      "input": "notes",
+      "output": "article"
+    },
+    {
+      "title": "Format citations and convert",
+      "why": "Pandoc turns Markdown into a Word or OpenDocument file and formats citations from your Zotero export. It is a command-line tool with a learning curve.",
+      "tool": {
+        "name": "Pandoc",
+        "url": "https://pandoc.org",
+        "pricing": "Open source"
+      },
+      "input": "article",
+      "output": "document"
+    },
+    {
+      "title": "Finish the layout and export",
+      "why": "LibreOffice Writer handles page numbers, headings and the final PDF export, with no subscription.",
+      "tool": {
+        "name": "LibreOffice",
+        "url": "https://www.libreoffice.org",
+        "pricing": "Open source"
+      },
+      "input": "document",
+      "output": "pdf"
+    }
+  ]
+}

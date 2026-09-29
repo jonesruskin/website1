@@ -1,0 +1,56 @@
+{
+  "slug": "ship-a-pitch-deck",
+  "title": "Ship a pitch deck",
+  "promise": "Turn a rough idea into a clean slide deck you can present or send.",
+  "time": "About 3 hours",
+  "minutes": 180,
+  "audience": "Founders, students and anyone with ten minutes on someone's calendar",
+  "from": "idea",
+  "to": "slides",
+  "steps": [
+    {
+      "title": "Outline the story in notes",
+      "why": "Writing the argument as plain notes first means the slides only have to carry it, not invent it.",
+      "tool": {
+        "name": "Notion",
+        "url": "https://www.notion.com",
+        "pricing": "Free tier"
+      },
+      "input": "idea",
+      "output": "notes"
+    },
+    {
+      "title": "Sketch the one diagram that matters",
+      "why": "Excalidraw is a hand-drawn-style whiteboard in the browser; the rough look keeps you from polishing a diagram before it is right.",
+      "tool": {
+        "name": "Excalidraw",
+        "url": "https://excalidraw.com",
+        "pricing": "Open source"
+      },
+      "input": "notes",
+      "output": "diagram"
+    },
+    {
+      "title": "Find a cover photo",
+      "why": "One full-bleed image gives the first slide a point of view, and Unsplash images are free to use.",
+      "tool": {
+        "name": "Unsplash",
+        "url": "https://unsplash.com",
+        "pricing": "Free"
+      },
+      "input": "idea",
+      "output": "photo"
+    },
+    {
+      "title": "Build the deck",
+      "why": "Canva's free tier has presentation templates and can present from the browser or export a PDF, though some templates and features are paid.",
+      "tool": {
+        "name": "Canva",
+        "url": "https://www.canva.com",
+        "pricing": "Free tier"
+      },
+      "input": "notes",
+      "output": "slides"
+    }
+  ]
+}

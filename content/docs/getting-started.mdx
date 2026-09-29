@@ -1,0 +1,71 @@
+---
+title: Getting started
+description: Add your tool, paste one line, call baton.pass() when it succeeds. About two minutes.
+order: 1
+---
+
+You need a tool with a clear moment when it has finished its job, and a page where that moment
+happens. That is all.
+
+## 1. Add your tool
+
+[Create an account](/sign-up) and add your tool from the dashboard. You will be asked for:
+
+- **Name and URL**: what people will see on other tools' cards.
+- **Category**: used to keep competitors apart. Two tools in the same category are never paired
+  unless both opt in.
+- **Inputs**: what people bring to your tool (a PDF, a photo, an idea).
+- **Outputs**: what people leave with (a compressed PDF, a transcript, a logo).
+- **Card copy**: a short title, a line of body text and a button label for the card other tools
+  show about you.
+
+Inputs and outputs come from a fixed list. Picking them well is the single biggest factor in
+whether your card is shown to the right people: read
+[Picking inputs and outputs](/docs/network/inputs-and-outputs) if you are unsure.
+
+Your tool starts with **10 credits**, so it can be shown before it has sent anyone anywhere.
+
+## 2. Paste the script
+
+Each tool has a public site key that starts with `bk_`. It identifies your tool and is not a
+secret. Put this in the `<head>` of the page where your success moment happens:
+
+```html
+<script src="https://baton.run/embed.js" data-key="bk_…" async></script>
+```
+
+The script loads asynchronously, so it doesn't block rendering. Nothing appears on the page until
+you ask for it in the next step.
+
+## 3. Call `baton.pass()` at the success moment
+
+Call it right after your tool has done its job, not on page load:
+
+```js
+// The file is compressed and the download button is on screen.
+window.baton?.pass({ ctx: "pdf" });
+```
+
+`ctx` says which of your outputs this moment produced. If your tool can produce several kinds of
+result, it narrows the match to the one the person is actually holding.
+
+The optional chaining (`?.`) means nothing breaks if the script is slow to load or blocked by an
+extension.
+
+## 4. Check it works
+
+Open the page, complete the job your tool does, and watch for the card. A few things to know:
+
+- **You may see no card at first.** Matching only shows tools that fit your outputs, have credits
+  and aren't your competitors. On a young network there are fewer to choose from, and that is
+  normal. `baton.pass()` resolves to `false` when there is no match.
+- **Your own tools are never shown to you.** Baton skips any tool owned by the same account as the
+  host.
+- **Your dashboard shows the install.** The first time the embed renders on your site, your tool
+  is marked as installed.
+
+## What next
+
+- Change where and how the card appears: [Script attributes and theming](/docs/embed/attributes).
+- Wire it into a component: [Framework recipes](/docs/embed/frameworks).
+- Learn how credits flow: [The credit exchange](/docs/network/credits).

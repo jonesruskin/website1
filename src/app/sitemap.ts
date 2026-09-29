@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { sitemapSources } from "@/generated/sitemap";
+import { trailsSitemap } from "@/lib/trails/sitemap";
 import { absoluteUrl, isExternal } from "@/lib/url";
 import siteConfig from "@/site.config";
 
@@ -18,7 +19,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: path === "/" ? 1 : 0.7,
   }));
 
-  const contributed = (await Promise.all(sitemapSources.map((source) => source()))).flat();
+  // Trails aren't a module, so their entries are added here beside the generated sources.
+  const contributed = (
+    await Promise.all([...sitemapSources, trailsSitemap].map((source) => source()))
+  ).flat();
   const seen = new Set(pages.map((page) => page.url));
   return [...pages, ...contributed.filter((entry) => !seen.has(entry.url) && seen.add(entry.url))];
 }

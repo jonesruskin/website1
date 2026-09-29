@@ -1,0 +1,57 @@
+{
+  "slug": "clean-up-a-scanned-contract",
+  "title": "Clean up a scanned contract",
+  "promise": "Scan a paper document, make it searchable, shrink it, and put your signature on it.",
+  "time": "About 45 minutes",
+  "minutes": 45,
+  "audience": "Freelancers and small teams with paperwork to send back",
+  "note": "This trail is about file handling only. It is not legal advice, and a signature image on a PDF is not a certified digital signature. Check what the other party requires.",
+  "from": "image",
+  "to": "signature",
+  "steps": [
+    {
+      "title": "Scan and straighten the pages",
+      "why": "NAPS2 drives most scanners, straightens pages and saves a single PDF, which is easier than stitching phone photos together.",
+      "tool": {
+        "name": "NAPS2",
+        "url": "https://www.naps2.com",
+        "pricing": "Open source"
+      },
+      "input": "image",
+      "output": "pdf"
+    },
+    {
+      "title": "Make the text searchable",
+      "why": "OCRmyPDF adds a text layer under the scan so you can search and copy from it. It is a command-line tool; NAPS2 can also OCR as it scans if you would rather skip this step.",
+      "tool": {
+        "name": "OCRmyPDF",
+        "url": "https://ocrmypdf.readthedocs.io",
+        "pricing": "Open source"
+      },
+      "input": "pdf",
+      "output": "pdf"
+    },
+    {
+      "title": "Compress the file",
+      "why": "Scans are big. PDF24's free tools shrink a PDF enough to fit through most email attachment limits.",
+      "tool": {
+        "name": "PDF24",
+        "url": "https://www.pdf24.org",
+        "pricing": "Free"
+      },
+      "input": "pdf",
+      "output": "pdf"
+    },
+    {
+      "title": "Sign it",
+      "why": "Adobe Acrobat Reader's free Fill & Sign lets you type, draw or place an image of your signature and add the date.",
+      "tool": {
+        "name": "Adobe Acrobat Reader",
+        "url": "https://www.adobe.com/acrobat/pdf-reader.html",
+        "pricing": "Free"
+      },
+      "input": "pdf",
+      "output": "signature"
+    }
+  ]
+}

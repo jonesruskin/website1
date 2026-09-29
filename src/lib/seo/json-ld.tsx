@@ -105,6 +105,35 @@ export function faqJsonLd(items: { question: string; answer: string }[]): JsonLd
   };
 }
 
+export function howToJsonLd(howTo: {
+  name: string;
+  description?: string;
+  path: string;
+  /** Total time in minutes. */
+  minutes?: number;
+  /** Tool names used along the way. */
+  tools?: string[];
+  steps: { name: string; text: string; url?: string }[];
+}): JsonLdNode {
+  return {
+    "@type": "HowTo",
+    name: howTo.name,
+    ...(howTo.description && { description: howTo.description }),
+    url: absoluteUrl(howTo.path),
+    ...(howTo.minutes && { totalTime: `PT${howTo.minutes}M` }),
+    ...(howTo.tools?.length && {
+      tool: howTo.tools.map((name) => ({ "@type": "HowToTool", name })),
+    }),
+    step: howTo.steps.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: step.name,
+      text: step.text,
+      ...(step.url && { url: absoluteUrl(step.url) }),
+    })),
+  };
+}
+
 export function productJsonLd(product: {
   name: string;
   description?: string;

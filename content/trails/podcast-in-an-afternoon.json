@@ -1,0 +1,67 @@
+{
+  "slug": "podcast-in-an-afternoon",
+  "title": "Podcast in an afternoon",
+  "promise": "From a microphone recording to a published episode with a transcript, show notes and cover art.",
+  "time": "About 4 hours",
+  "minutes": 240,
+  "audience": "Solo podcasters and first-time hosts",
+  "from": "voice",
+  "to": "podcast",
+  "steps": [
+    {
+      "title": "Record and clean up the audio",
+      "why": "Audacity is a full multitrack editor that costs nothing, and its noise reduction and normalize effects do most of what a beginner needs.",
+      "tool": {
+        "name": "Audacity",
+        "url": "https://www.audacityteam.org",
+        "pricing": "Open source"
+      },
+      "input": "voice",
+      "output": "audio"
+    },
+    {
+      "title": "Get a transcript",
+      "why": "Whisper runs on your own machine and is very good at speech, but it is a command-line tool, so expect some setup with Python and ffmpeg.",
+      "tool": {
+        "name": "Whisper",
+        "url": "https://github.com/openai/whisper",
+        "pricing": "Open source"
+      },
+      "input": "audio",
+      "output": "transcript"
+    },
+    {
+      "title": "Turn the transcript into show notes",
+      "why": "A transcript is raw material; a few minutes in a document to pull out the summary, timestamps and links is what listeners actually read.",
+      "tool": {
+        "name": "Google Docs",
+        "url": "https://docs.google.com",
+        "pricing": "Free"
+      },
+      "input": "transcript",
+      "output": "notes"
+    },
+    {
+      "title": "Make cover art",
+      "why": "Canva's free tier has square templates that suit podcast directories, so you can skip the blank canvas.",
+      "tool": {
+        "name": "Canva",
+        "url": "https://www.canva.com",
+        "pricing": "Free tier"
+      },
+      "input": "notes",
+      "output": "image"
+    },
+    {
+      "title": "Publish the episode",
+      "why": "Spotify for Creators hosts your audio for free and generates the RSS feed that podcast apps subscribe to.",
+      "tool": {
+        "name": "Spotify for Creators",
+        "url": "https://creators.spotify.com",
+        "pricing": "Free"
+      },
+      "input": "audio",
+      "output": "podcast"
+    }
+  ]
+}

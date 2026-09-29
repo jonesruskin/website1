@@ -1,0 +1,56 @@
+{
+  "slug": "youtube-video-from-screen-recording",
+  "title": "YouTube video from a screen recording",
+  "promise": "Record your screen, cut it into a tidy video, add subtitles and export a file that uploads quickly.",
+  "time": "About 3 hours",
+  "minutes": 180,
+  "audience": "Tutorial makers and people who explain software for a living",
+  "from": "idea",
+  "to": "video",
+  "steps": [
+    {
+      "title": "Record the screen and your voice",
+      "why": "OBS Studio records the screen, a window and your microphone at once, with no watermark and no time limit.",
+      "tool": {
+        "name": "OBS Studio",
+        "url": "https://obsproject.com",
+        "pricing": "Open source"
+      },
+      "input": "idea",
+      "output": "screen-recording"
+    },
+    {
+      "title": "Cut out the false starts",
+      "why": "Kdenlive is a proper timeline editor that is free for good, and trimming pauses and mistakes is most of the work on a tutorial.",
+      "tool": {
+        "name": "Kdenlive",
+        "url": "https://kdenlive.org",
+        "pricing": "Open source"
+      },
+      "input": "screen-recording",
+      "output": "video"
+    },
+    {
+      "title": "Generate subtitles",
+      "why": "Whisper can write an SRT file from the video's audio. It runs locally, so expect a command-line setup, and read the result before you publish it.",
+      "tool": {
+        "name": "Whisper",
+        "url": "https://github.com/openai/whisper",
+        "pricing": "Open source"
+      },
+      "input": "video",
+      "output": "subtitles"
+    },
+    {
+      "title": "Export a sensible file",
+      "why": "HandBrake re-encodes to a widely compatible MP4 and often makes a much smaller file, which speeds up the upload.",
+      "tool": {
+        "name": "HandBrake",
+        "url": "https://handbrake.fr",
+        "pricing": "Open source"
+      },
+      "input": "video",
+      "output": "video"
+    }
+  ]
+}

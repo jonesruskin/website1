@@ -1,0 +1,80 @@
+---
+title: Script attributes and theming
+description: The data attributes the embed script reads, and how to make the card match your site.
+sidebarTitle: Attributes and theming
+order: 2
+---
+
+The embed is a single script tag. Configuration lives in `data-` attributes on it.
+
+```html
+<script
+  src="https://baton.run/embed.js"
+  data-key="bk_…"
+  data-ctx="pdf"
+  data-theme="auto"
+  data-position="inline"
+  async
+></script>
+```
+
+## Attributes
+
+| Attribute       | Values                       | Default | What it does                                                         |
+| --------------- | ---------------------------- | ------- | -------------------------------------------------------------------- |
+| `data-key`      | your `bk_…` site key         | none    | **Required.** Identifies your tool.                                  |
+| `data-ctx`      | an artifact id, e.g. `pdf`   | none    | Default context for every `baton.pass()` call on the page.           |
+| `data-theme`    | `auto`, `light` or `dark`    | `auto`  | The card's color scheme. `auto` follows the visitor's system setting. |
+| `data-position` | `inline` or `toast`          | `inline` | `inline` draws the card in the page; `toast` shows it as a small pop-up card. |
+
+A `ctx` passed directly to [`baton.pass()`](/docs/embed/pass) overrides `data-ctx`.
+
+## The card is a web component
+
+The card renders as a custom element, `<baton-card>`, and its markup and styles live in a
+**Shadow DOM**. That has two consequences:
+
+- Your CSS can't restyle the inside of the card by accident, and the card's CSS can't leak into
+  your page.
+- The card stays readable on any background, because it brings its own surface, text and focus
+  styles.
+
+## Light, dark and auto
+
+Use `data-theme` to choose the card's scheme:
+
+- `auto` follows the visitor's system preference (`prefers-color-scheme`).
+- `light` and `dark` force one scheme, for example when your site has its own theme switch.
+
+## Custom properties
+
+Custom properties inherit through the Shadow DOM boundary, so you can set them on the
+`baton-card` element, or on any ancestor, from your normal stylesheet. Three are supported:
+
+| Property         | What it controls                                    |
+| ---------------- | --------------------------------------------------- |
+| `--baton-accent` | The accent color: the button and highlights.        |
+| `--baton-radius` | The card's corner radius.                           |
+| `--baton-font`   | The font family used inside the card.               |
+
+```css
+baton-card {
+  --baton-accent: #0a7d5a;
+  --baton-radius: 6px;
+  --baton-font: "Inter", system-ui, sans-serif;
+}
+```
+
+Those three are the whole styling surface. There is no way to reach into the card's internals, and
+that is deliberate: it keeps every card recognisable, legible and accessible, wherever it appears.
+
+<Callout type="info" title="Plans">
+  Custom card colors and hiding the Baton mark are part of the [Anchor plan](/pricing) and above.
+  On Relay, the card uses the default look with the mark.
+</Callout>
+
+## Where to load the script
+
+Put the script in the `<head>` (or, in a framework, wherever you load third-party scripts) and keep
+`async`. It is small, doesn't block rendering, and does nothing until you call `pass()`. See the
+[framework recipes](/docs/embed/frameworks) for React, Next.js, Vue, Svelte and plain HTML.

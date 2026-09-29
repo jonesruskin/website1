@@ -1,0 +1,56 @@
+{
+  "slug": "brand-kit-in-an-hour",
+  "title": "Brand kit in an hour",
+  "promise": "Pick colors and fonts, draw a simple logo, and see it working on a real layout.",
+  "time": "About 1 hour",
+  "minutes": 60,
+  "audience": "New projects that need to look like one thing",
+  "from": "idea",
+  "to": "mockup",
+  "steps": [
+    {
+      "title": "Choose a palette",
+      "why": "Coolors generates palettes you can lock and adjust, and shows how they look side by side.",
+      "tool": {
+        "name": "Coolors",
+        "url": "https://coolors.co",
+        "pricing": "Free tier"
+      },
+      "input": "idea",
+      "output": "palette"
+    },
+    {
+      "title": "Choose fonts",
+      "why": "Google Fonts are free to use on the web, and a heading face plus a body face is all a small brand needs.",
+      "tool": {
+        "name": "Google Fonts",
+        "url": "https://fonts.google.com",
+        "pricing": "Free"
+      },
+      "input": "idea",
+      "output": "font"
+    },
+    {
+      "title": "Draw a simple logo",
+      "why": "Inkscape is a vector editor that exports SVG, so the logo stays sharp at any size. A wordmark in your chosen font is a perfectly good start.",
+      "tool": {
+        "name": "Inkscape",
+        "url": "https://inkscape.org",
+        "pricing": "Open source"
+      },
+      "input": "palette",
+      "output": "logo"
+    },
+    {
+      "title": "Try it on a real layout",
+      "why": "Figma's free tier is enough to drop the logo, colors and fonts onto a social header or a business card and see whether they hold together.",
+      "tool": {
+        "name": "Figma",
+        "url": "https://www.figma.com",
+        "pricing": "Free tier"
+      },
+      "input": "logo",
+      "output": "mockup"
+    }
+  ]
+}

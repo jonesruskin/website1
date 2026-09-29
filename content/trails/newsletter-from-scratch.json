@@ -1,0 +1,56 @@
+{
+  "slug": "newsletter-from-scratch",
+  "title": "Newsletter from scratch",
+  "promise": "Capture ideas, draft an issue, add a header image and send it to your first subscribers.",
+  "time": "About 3 hours for the first issue",
+  "minutes": 180,
+  "audience": "Writers and makers starting an audience of their own",
+  "from": "idea",
+  "to": "newsletter",
+  "steps": [
+    {
+      "title": "Capture ideas as notes",
+      "why": "Obsidian keeps notes as plain Markdown files on your own disk, so your archive is yours whatever happens to the app. It is free for personal use.",
+      "tool": {
+        "name": "Obsidian",
+        "url": "https://obsidian.md",
+        "pricing": "Free"
+      },
+      "input": "idea",
+      "output": "notes"
+    },
+    {
+      "title": "Draft the issue",
+      "why": "Google Docs is handy for a first draft because you can share it for comments before it goes out.",
+      "tool": {
+        "name": "Google Docs",
+        "url": "https://docs.google.com",
+        "pricing": "Free"
+      },
+      "input": "notes",
+      "output": "article"
+    },
+    {
+      "title": "Pick a header image",
+      "why": "Unsplash photos are free to use; choose one that says something about the issue instead of a generic stock feel.",
+      "tool": {
+        "name": "Unsplash",
+        "url": "https://unsplash.com",
+        "pricing": "Free"
+      },
+      "input": "idea",
+      "output": "photo"
+    },
+    {
+      "title": "Send it",
+      "why": "Buttondown is a plain, writer-friendly newsletter tool with a free tier while your list is small.",
+      "tool": {
+        "name": "Buttondown",
+        "url": "https://buttondown.com",
+        "pricing": "Free tier"
+      },
+      "input": "article",
+      "output": "newsletter"
+    }
+  ]
+}

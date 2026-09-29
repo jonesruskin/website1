@@ -1,20 +1,46 @@
 ---
 title: Introduction
-description: Start here. What these docs cover and how they are organized.
+description: What Baton is, how a pass works, and where to find everything in these docs.
 order: 0
 ---
 
-Welcome to the documentation. Every page is a Markdown (MDX) file in `content/docs`, so writing
-docs is as simple as adding a file.
+Baton is a recommendation network for the **success moment**: the second a tool finishes its job.
+A file is compressed, audio is transcribed, a logo is exported. The person is holding a result and
+wondering what to do with it. That is when your tool calls `baton.pass()`, and Baton shows **one
+card** for the most useful next tool.
 
-## How pages map to URLs
+## How a pass works
 
-| File                                    | URL                          |
-| --------------------------------------- | ---------------------------- |
-| `content/docs/index.mdx`                | `/docs`                      |
-| `content/docs/guides/writing-pages.mdx` | `/docs/guides/writing-pages` |
+1. Every tool on the network says what people **bring** to it (its inputs) and what they **leave
+   with** (its outputs), using one shared vocabulary of [artifacts](/docs/network/inputs-and-outputs).
+2. When your tool succeeds, it calls [`baton.pass()`](/docs/embed/pass).
+3. Baton looks for a tool whose inputs match what your tool just produced: a compressed PDF goes
+   to a tool that takes a PDF. That is journey-based matching.
+4. One card appears. If the visitor clicks, they arrive on the other tool through a signed link, and
+   [credits](/docs/network/credits) move one for one: you earn 1, the tool they visited spends 1.
+
+If nothing suitable exists, nothing is shown. `baton.pass()` resolves to `false` and your page
+carries on.
+
+## Where to go next
+
+| I want to…                                  | Read                                                          |
+| ------------------------------------------- | ------------------------------------------------------------- |
+| Get a card on my site in two minutes        | [Getting started](/docs/getting-started)                      |
+| Look up the JavaScript API                  | [`baton.pass()`](/docs/embed/pass)                            |
+| Change how the card looks                   | [Script attributes and theming](/docs/embed/attributes)       |
+| Use it from React, Vue, Svelte or plain HTML | [Framework recipes](/docs/embed/frameworks)                  |
+| Describe my tool correctly                  | [Picking inputs and outputs](/docs/network/inputs-and-outputs) |
+| Understand credits                          | [The credit exchange](/docs/network/credits)                  |
+| See what stops abuse                        | [Fairness and anti-fraud](/docs/network/fairness)             |
+| Know what data is stored                    | [Privacy](/docs/network/privacy)                              |
+| Build against the API                       | [REST API](/docs/reference/rest-api)                          |
+
+<Callout type="info" title="Looking for the people-facing side?">
+  [Trails](/trails) are step-by-step routes between free tools for people who just want to get a
+  job done. They are the same idea, written down for humans.
+</Callout>
 
 ## Searching
 
-Press <kbd>⌘</kbd> <kbd>K</kbd> (or <kbd>Ctrl</kbd> <kbd>K</kbd>) anywhere in the docs to search. The search index is
-built when the site is built and downloaded only when you first open search.
+Press <kbd>⌘</kbd> <kbd>K</kbd> (or <kbd>Ctrl</kbd> <kbd>K</kbd>) anywhere in the docs to search.

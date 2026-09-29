@@ -1,0 +1,85 @@
+---
+title: Fairness and anti-fraud
+description: How Baton chooses a card, who is never paired, and what stops credits from being farmed.
+sidebarTitle: Fairness and anti-fraud
+order: 3
+---
+
+A recommendation network is only worth being on if the recommendations are good and the credits
+mean something. These are the rules that protect both.
+
+## How a card is chosen
+
+When a host calls [`baton.pass()`](/docs/embed/pass), Baton considers tools that are **eligible**
+and ranks them.
+
+A tool is eligible when it is:
+
+- active, and has at least **1 credit**;
+- not the host itself, and not another tool owned by the host's owner;
+- not blocked by the host, individually or by category;
+- not a **same-category competitor** of the host, unless both tools opt in.
+
+Eligible tools are ranked by:
+
+1. **Journey fit**: how well the tool's inputs match what the host just produced.
+2. **Handshakes**: accepted, mutual pairings rank first.
+3. **Quality**: a smoothed click-through rate. New tools start at the network baseline and move up
+   or down as people react to their card, so a strong card earns more exposure and a weak one
+   less.
+4. **A little rotation**: equally good tools take turns, so the same one doesn't win every time.
+
+Nothing about the ranking can be bought on the free plan. Handshakes are the only paid element,
+and they need both tools to agree.
+
+## The rules
+
+### Competitors are never paired
+
+Two tools in the same [category](/docs/network/inputs-and-outputs) are never paired unless both opt
+in. Your card won't put a rival's tool in front of your own users by accident.
+
+### Duplicate clicks aren't credited
+
+If the same visitor clicks through to the same tool more than once within 24 hours, only the first
+click is credited. They still reach the tool.
+
+### A daily cap per visitor
+
+At most **3 credited clicks per visitor, per host, per day**. Someone clicking every card a tool
+shows, over and over, can't be turned into credits.
+
+### Anonymous visitors only
+
+Visitors are identified only by an anonymous hash that rotates every day, so nobody can be
+followed from one day to the next. See [Privacy](/docs/network/privacy).
+
+### Earn your place
+
+A tool with **0 credits isn't shown** until it sends traffic. Being on the network means giving as
+well as receiving.
+
+### Handshakes are mutual
+
+Paid plans can set up **handshakes**: direct pairings between two tools that both agree to it.
+They rank first between those two tools. You can't buy a spot on a site whose owner hasn't agreed.
+
+## How clicks are protected
+
+- **Signed links.** Every card links to a signed `/r/<token>` address. The signature covers the
+  impression, the host and the tool shown, and expires after 24 hours. A link can't be forged for
+  an impression that never happened, or redirected to a different tool.
+- **One click per impression.** The database allows a single click per impression.
+- **Redirect, then attribution.** The link takes the visitor to the tool and adds `?ref=baton`
+  so the destination can see where they came from.
+- **Uncredited is not blocked.** A click that breaks a rule still works for the visitor. It just
+  doesn't move credits, and it is recorded as uncredited.
+
+## What we don't do
+
+- No pay-to-rank on free plans.
+- No ads in the slot.
+- No tracking cookies, and no cross-site profiles.
+- No fake testimonials, users or statistics anywhere on this site.
+
+If you think a tool is gaming the network, [tell us](/contact) and we will look at it.
