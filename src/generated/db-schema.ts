@@ -6,3 +6,4 @@ export * from "../db/schema/teams";
 export * from "../db/schema/notifications";
 export * from "../db/schema/onboarding";
 export * from "../db/schema/api";
+export * from "../db/schema/baton";

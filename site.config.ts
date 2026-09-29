@@ -17,22 +17,30 @@ export default defineSite({
   nav: {
     header: [
       {
-        label: "Blog",
-        href: "/blog",
+        label: "How it works",
+        href: "/#how",
       },
       {
-        label: "Pricing",
-        href: "/pricing",
+        label: "Trails",
+        href: "/trails",
       },
       {
         label: "Docs",
         href: "/docs",
+      },
+      {
+        label: "Pricing",
+        href: "/pricing",
       },
     ],
     footer: [
       {
         title: "Company",
         links: [
+          {
+            label: "Blog",
+            href: "/blog",
+          },
           {
             label: "Contact",
             href: "/contact",
@@ -42,6 +50,18 @@ export default defineSite({
       {
         title: "Product",
         links: [
+          {
+            label: "For makers",
+            href: "/makers",
+          },
+          {
+            label: "Trails",
+            href: "/trails",
+          },
+          {
+            label: "Docs",
+            href: "/docs",
+          },
           {
             label: "Changelog",
             href: "/changelog",
@@ -85,6 +105,21 @@ export default defineSite({
         label: "Overview",
         href: "/dashboard",
         icon: "layout-dashboard",
+      },
+      {
+        label: "Tools",
+        href: "/tools",
+        icon: "box",
+      },
+      {
+        label: "Network",
+        href: "/network",
+        icon: "users",
+      },
+      {
+        label: "Credits",
+        href: "/credits",
+        icon: "activity",
       },
     ],
     settings: [
@@ -136,7 +171,14 @@ export default defineSite({
   features: {},
   seo: {
     titleTemplate: "%s · Baton",
-    keywords: [],
+    keywords: [
+      "distribution",
+      "cross-promotion",
+      "recommendation network",
+      "indie makers",
+      "user acquisition",
+      "tool directory",
+    ],
   },
   analytics: {
     consent: "cookieless-exempt",
@@ -152,8 +194,8 @@ export default defineSite({
     },
   },
   legal: {
-    companyName: "",
-    contactEmail: "",
+    companyName: "Baton",
+    contactEmail: "hello@baton.run",
     jurisdiction: "",
     address: "",
   },
@@ -164,21 +206,29 @@ export default defineSite({
     subjectPrefix: "[Contact]",
   },
   blog: {
-    title: "Blog",
-    description: "Notes, announcements and long reads.",
+    title: "Field notes",
+    description: "Essays on distribution, attention and the craft of passing people on.",
     postsPerPage: 12,
   },
   changelog: {
     title: "Changelog",
-    description: "New features, improvements and fixes.",
+    description: "Every change to the network, the embed and the dashboard.",
   },
   faq: {
-    title: "Frequently asked questions",
-    description: "Quick answers to common questions.",
+    title: "Questions, answered",
+    description: "How the exchange works, what users see, and why it stays fair.",
   },
   auth: {
     afterSignIn: "/dashboard",
-    protectedPaths: ["/dashboard", "/settings", "/admin", "/onboarding"],
+    protectedPaths: [
+      "/dashboard",
+      "/tools",
+      "/network",
+      "/credits",
+      "/settings",
+      "/admin",
+      "/onboarding",
+    ],
     requireEmailVerification: true,
     magicLink: true,
   },
@@ -188,41 +238,67 @@ export default defineSite({
     plans: [
       {
         id: "free",
-        name: "Free",
-        description: "For trying things out.",
+        name: "Relay",
+        description: "Everything you need to join the network. Free, for good.",
         price: {
           monthly: 0,
           yearly: 0,
         },
-        features: ["1 project", "Community support"],
+        features: [
+          "1 tool on the network",
+          "1:1 credit exchange",
+          "10 starter credits",
+          "7-day stats",
+        ],
         limits: {
-          projects: 1,
+          tools: 1,
+          handshakes: 0,
+          statsDays: 7,
         },
       },
       {
         id: "pro",
-        name: "Pro",
-        description: "For professionals and small teams.",
+        name: "Anchor",
+        description: "For makers with a few tools and partners they trust.",
         price: {
-          monthly: 19,
-          yearly: 190,
+          monthly: 12,
+          yearly: 120,
         },
-        features: ["Unlimited projects", "Priority email support", "Advanced analytics"],
+        features: [
+          "5 tools",
+          "Handshakes: direct pairings that rank first",
+          "90-day stats and journey breakdowns",
+          "Custom card colors",
+          "Hide the Baton mark",
+        ],
         limits: {
-          projects: 1000,
+          tools: 5,
+          handshakes: 25,
+          statsDays: 90,
         },
         highlighted: true,
-        badge: "Most popular",
+        badge: "For serious makers",
       },
       {
         id: "enterprise",
-        name: "Enterprise",
-        description: "For organizations with custom needs.",
+        name: "Studio",
+        description: "For studios and teams running a portfolio of tools.",
         price: {
-          monthly: null,
+          monthly: 39,
+          yearly: 390,
         },
-        features: ["Everything in Pro", "SSO and audit log", "Dedicated support"],
-        contactHref: "/contact",
+        features: [
+          "Unlimited tools",
+          "Unlimited handshakes",
+          "Team seats and roles",
+          "Stats API and CSV export",
+          "Priority review for new tools",
+        ],
+        limits: {
+          tools: 1000,
+          handshakes: 1000,
+          statsDays: 365,
+        },
       },
     ],
   },
@@ -236,20 +312,25 @@ export default defineSite({
       {
         id: "role",
         type: "choice",
-        title: "What best describes you?",
-        options: ["Founder", "Engineer", "Designer", "Marketer", "Something else"],
+        title: "What are you bringing to the network?",
+        options: [
+          "A tool I built myself",
+          "Tools for a studio or team",
+          "A free utility or side project",
+          "I'm just exploring",
+        ],
       },
       {
-        id: "teamSize",
+        id: "stage",
         type: "choice",
-        title: "How many people will use it?",
-        options: ["Just me", "2–10", "11–50", "More than 50"],
+        title: "How many people use it each month?",
+        options: ["Just launched", "Under 1,000", "1,000 to 50,000", "More than 50,000"],
       },
       {
-        id: "goal",
+        id: "successMoment",
         type: "text",
-        title: "What do you want to get done first?",
-        placeholder: "e.g. launch our beta by June",
+        title: "What does a user have in their hands when your tool is done?",
+        placeholder: "e.g. a compressed PDF, a transcript, a logo",
       },
     ],
   },
@@ -266,7 +347,7 @@ export default defineSite({
   },
   docs: {
     title: "Documentation",
-    description: "Guides and reference.",
+    description: "Install the embed, call pass(), and understand the exchange.",
     editUrl: "",
   },
 });

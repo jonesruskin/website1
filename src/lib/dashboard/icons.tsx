@@ -1,5 +1,6 @@
 import {
   ActivityIcon,
+  ArrowRightLeftIcon,
   BarChart3Icon,
   BellIcon,
   BookOpenIcon,
@@ -49,6 +50,7 @@ const icons: Record<string, LucideIcon> = {
   shield: ShieldIcon,
   "shopping-bag": ShoppingBagIcon,
   sparkles: SparklesIcon,
+  "arrow-right-left": ArrowRightLeftIcon,
   upload: UploadIcon,
   user: UserIcon,
   users: UsersIcon,

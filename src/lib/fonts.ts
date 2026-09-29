@@ -1,9 +1,30 @@
-import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
+import { Archivo, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 
 /**
  * Fonts are self-hosted by next/font (no layout shift, no runtime requests).
- * Each exposes a CSS variable that theme.css maps onto a typeface role:
- * --typeface-body / --typeface-display / --typeface-mono. See docs/theming.md.
+ * Archivo is variable on weight AND width: display type stretches and condenses
+ * (font-stretch 62%–125%) as part of the motion language. Instrument Serif
+ * italic marks the one word per headline that carries the emotion.
  */
-export const fontVariables = [GeistSans.variable, GeistMono.variable].join(" ");
+const archivo = Archivo({
+  subsets: ["latin"],
+  axes: ["wdth"],
+  variable: "--font-archivo",
+  display: "swap",
+});
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-instrument-serif",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
+
+export const fontVariables = [archivo.variable, instrumentSerif.variable, jetbrainsMono.variable].join(" ");
