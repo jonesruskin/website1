@@ -249,7 +249,7 @@ export default defineSite({
         features: [
           "5 tools",
           "Handshakes: direct pairings that rank first",
-          "90-day stats and journey breakdowns",
+          "90-day stats",
           "Hide the Baton mark",
         ],
         limits: {
