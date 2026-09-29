@@ -10,9 +10,9 @@ import { BatonPill } from "./baton-pill";
 import { LaneLabel } from "./lane-label";
 import { usePrefersReducedMotion } from "./use-media";
 
-const INSTALL = `<script async src="https://baton.run/embed.js" data-tool="your-tool-id"></script>`;
+const INSTALL = `<script async src="https://baton.run/embed.js" data-key="bk_your_key"></script>`;
 const PASS = `// the file is ready, the transcript is on screen…
-baton.pass({ output: "pdf" });`;
+baton.pass({ ctx: "pdf" });`;
 
 /** An inverted mono block with a copy button. Tone flips with the page, contrast stays AA. */
 function CodeBlock({ file, code, children }: { file: string; code: string; children: ReactNode }) {
@@ -43,7 +43,7 @@ const lanes = [
         <span className="text-muted-foreground">src=</span>
         <span className="text-signal-ink">{'"https://baton.run/embed.js"'}</span>
         {"\n         "}
-        data-tool=<span className="text-signal-ink">{'"your-tool-id"'}</span>
+        data-key=<span className="text-signal-ink">{'"bk_your_key"'}</span>
         <span className="text-muted-foreground">{"></"}</span>
         <span className="text-signal-ink">script</span>
         <span className="text-muted-foreground">{">"}</span>
@@ -65,7 +65,7 @@ const lanes = [
           {"// the file is ready, the transcript is on screen…"}
         </span>
         {"\n"}
-        baton.<span className="text-signal-ink">pass</span>({"{ output: "}
+        baton.<span className="text-signal-ink">pass</span>({"{ ctx: "}
         <span className="text-signal-ink">{'"pdf"'}</span>
         {" }"});
       </CodeBlock>

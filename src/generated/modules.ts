@@ -6,7 +6,6 @@ export const installedModules = [
   "analytics",
   "ci",
   "vercel",
-  "cookie-consent",
   "mdx",
   "legal",
   "email",

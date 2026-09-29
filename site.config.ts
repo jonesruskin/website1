@@ -82,24 +82,16 @@ export default defineSite({
         ],
       },
     ],
-    legal: [
-      {
-        label: "Cookie settings",
-        href: "#cookie-settings",
-      },
-      {
-        label: "Privacy",
-        href: "/legal/privacy",
-      },
-      {
-        label: "Terms",
-        href: "/legal/terms",
-      },
-      {
-        label: "Cookies",
-        href: "/legal/cookies",
-      },
-    ],
+    legal: [{
+      label: "Privacy",
+      href: "/legal/privacy",
+    }, {
+      label: "Terms",
+      href: "/legal/terms",
+    }, {
+      label: "Cookies",
+      href: "/legal/cookies",
+    }],
     dashboard: [
       {
         label: "Overview",
@@ -182,16 +174,6 @@ export default defineSite({
   },
   analytics: {
     consent: "cookieless-exempt",
-  },
-  cookieConsent: {
-    title: "Cookies",
-    description:
-      "We use essential cookies to run this site, and optional ones to understand usage and improve it. You choose.",
-    policyHref: "/legal/cookies",
-    categories: {
-      analytics: "Analytics: anonymous usage statistics",
-      marketing: "Marketing: campaign measurement",
-    },
   },
   legal: {
     companyName: "Baton",

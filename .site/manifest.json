@@ -421,90 +421,6 @@
         "Import the repository at vercel.com/new, add the variables from .env.example, and deploy."
       ]
     },
-    "cookie-consent": {
-      "$schema": "../../schema/module.schema.json",
-      "name": "cookie-consent",
-      "version": "1.0.0",
-      "title": "Cookie consent",
-      "description": "GDPR-style consent banner with equal accept/reject, per-category choices, and a cookie contract other modules read.",
-      "category": "marketing",
-      "requires": [],
-      "conflicts": [],
-      "ui": [
-        "button",
-        "switch"
-      ],
-      "sections": [],
-      "files": [
-        {
-          "from": "src/lib/consent/consent.ts",
-          "to": "src/lib/consent/consent.ts"
-        },
-        {
-          "from": "src/lib/consent/server.ts",
-          "to": "src/lib/consent/server.ts"
-        },
-        {
-          "from": "src/lib/consent/config.ts",
-          "to": "src/lib/consent/config.ts"
-        },
-        {
-          "from": "src/components/consent/cookie-banner.tsx",
-          "to": "src/components/consent/cookie-banner.tsx"
-        },
-        {
-          "from": "src/components/consent/use-consent.ts",
-          "to": "src/components/consent/use-consent.ts"
-        }
-      ],
-      "dependencies": {},
-      "devDependencies": {},
-      "env": [],
-      "dbSchema": [],
-      "slots": {},
-      "contributes": {
-        "slots": [
-          {
-            "slot": "body-end",
-            "import": "CookieBanner",
-            "from": "src/components/consent/cookie-banner.tsx",
-            "order": 90
-          }
-        ],
-        "next": {
-          "serverExternalPackages": [],
-          "imageRemotePatterns": [],
-          "csp": {}
-        },
-        "nav": [
-          {
-            "location": "legal",
-            "label": "Cookie settings",
-            "href": "#cookie-settings"
-          }
-        ],
-        "siteConfig": {
-          "cookieConsent": {
-            "title": "Cookies",
-            "description": "We use essential cookies to run this site, and optional ones to understand usage and improve it. You choose.",
-            "policyHref": "/legal/cookies",
-            "categories": {
-              "analytics": "Analytics: anonymous usage statistics",
-              "marketing": "Marketing: campaign measurement"
-            }
-          }
-        },
-        "features": {},
-        "scripts": {},
-        "gitignore": [],
-        "allowBuilds": []
-      },
-      "routes": [],
-      "postInstall": [
-        "Consent is stored in the `site_consent` cookie ({\"v\":1,\"analytics\":bool,\"marketing\":bool}).",
-        "Any link to #cookie-settings reopens the banner (one is added to the legal footer links)."
-      ]
-    },
     "mdx": {
       "$schema": "../../schema/module.schema.json",
       "name": "mdx",
@@ -4076,14 +3992,6 @@
       "owner": "module:blog",
       "hash": "c62bd4e93b59686a4d5e22318f4642e17f321c51705ab91a05f899dc4d6b55e6"
     },
-    "src/components/consent/cookie-banner.tsx": {
-      "owner": "module:cookie-consent",
-      "hash": "d745095e9422d4c8ecc7ee7c8121114c6cef877a09b97114bb1d15cdce019740"
-    },
-    "src/components/consent/use-consent.ts": {
-      "owner": "module:cookie-consent",
-      "hash": "143c9cff103d90e3bc91b3f5249dc93a24ed64841bba7cc2aa1045d48aaf3c24"
-    },
     "src/components/contact/contact-form.tsx": {
       "owner": "module:contact",
       "hash": "d5ef6a5de516687836d345487d83cc61b509d943cf6388a7e737e6f01f9d4591"
@@ -4611,18 +4519,6 @@
     "src/lib/changelog/entries.ts": {
       "owner": "module:changelog",
       "hash": "fdd1349e516c25de40a10cafc7f31aa355c2abae56fca749af5434ff5f359807"
-    },
-    "src/lib/consent/config.ts": {
-      "owner": "module:cookie-consent",
-      "hash": "fec4d9db5b07bbabe0b34fe4ccc828013976e3993f3c635facaf06e77042f93e"
-    },
-    "src/lib/consent/consent.ts": {
-      "owner": "module:cookie-consent",
-      "hash": "8174267d4c03bc45629258c59f795b30611c0e4f2caf65d48a619ef706cd50c4"
-    },
-    "src/lib/consent/server.ts": {
-      "owner": "module:cookie-consent",
-      "hash": "37b98a782175ac4412b8851478609be120fb3cbfad813e2eaa56b100612cccf1"
     },
     "src/lib/contact/actions.tsx": {
       "owner": "module:contact",

@@ -69,7 +69,6 @@ pnpm dev
 | [`analytics`](.site/modules/analytics.md) | One track() for Plausible, PostHog, Google Analytics 4 or Umami, chosen by env vars; waits for cookie consent when the provider needs it; logs events locally in dev. |  |
 | [`ci`](.site/modules/ci.md) | Lint, typecheck, test and build on every push and pull request, with cached installs and Next.js builds, least-privilege tokens and grouped Dependabot updates. |  |
 | [`vercel`](.site/modules/vercel.md) | vercel.json that checks production env vars before building, security-minded defaults, and a step-by-step deploy guide. |  |
-| [`cookie-consent`](.site/modules/cookie-consent.md) | GDPR-style consent banner with equal accept/reject, per-category choices, and a cookie contract other modules read. |  |
 | [`mdx`](.site/modules/mdx.md) | Typed MDX collections: Zod-validated frontmatter, drafts, TOC, reading time, token-themed code highlighting, RSS helper. |  |
 | [`legal`](.site/modules/legal.md) | Privacy policy, terms of service and cookie policy as editable MDX templates filled from site.config. | `/legal/privacy` `/legal/terms` `/legal/cookies` |
 | [`email`](.site/modules/email.md) | Send React Email templates through Resend. In development, mail lands in a local outbox at /dev/outbox. | `/dev/outbox` |
