@@ -1,0 +1,89 @@
+---
+title: baton.pass() reference
+description: The JavaScript API. One function, two optional arguments, one boolean back.
+sidebarTitle: baton.pass()
+order: 1
+---
+
+Once the embed script has loaded, it defines `window.baton`. It has one method.
+
+```ts
+window.baton.pass(options?: {
+  ctx?: string;
+  target?: Element | string;
+}): Promise<boolean>;
+```
+
+## Options
+
+| Option   | Type                | What it does                                                                                     |
+| -------- | ------------------- | ------------------------------------------------------------------------------------------------ |
+| `ctx`    | `string`            | The artifact your tool just produced, such as `"pdf"` or `"transcript"`. Optional.               |
+| `target` | `Element`, selector | Where the card should be mounted. Optional; without it the card appears according to `data-position`. |
+
+### `ctx`
+
+`ctx` is one of the artifact ids from [Picking inputs and outputs](/docs/network/inputs-and-outputs).
+It narrows the match: if your tool lists `pdf` and `image` as outputs, passing `ctx: "pdf"` tells
+Baton this particular success moment ended with a PDF, so the card is for tools that take one.
+
+Without `ctx`, Baton considers all of your tool's outputs. You can also set a default for the whole
+page with the [`data-ctx` attribute](/docs/embed/attributes); a `ctx` passed to `pass()` wins.
+
+### `target`
+
+Pass either a DOM element or a CSS selector:
+
+```js
+window.baton.pass({ target: "#result-panel" });
+window.baton.pass({ target: document.querySelector(".download-area") });
+```
+
+The card is drawn inside a Shadow DOM, so your page's CSS can't break it and it doesn't leak into
+yours. See [theming](/docs/embed/attributes).
+
+## Return value
+
+`pass()` returns a promise for a boolean:
+
+| Resolves to | Meaning                                                                      |
+| ----------- | ---------------------------------------------------------------------------- |
+| `true`      | A card was found and shown.                                                  |
+| `false`     | There is no match right now. Nothing was shown, and nothing else happens.    |
+
+`false` is not an error. It is the normal answer whenever no tool fits the journey, every fitting
+tool is a competitor or is out of credits, or the visitor has hit a [fairness limit](/docs/network/fairness).
+Use it if you want to show something of your own in the same spot:
+
+```js
+const shown = await window.baton.pass({ ctx: "pdf", target: "#next-step" });
+if (!shown) {
+  document.querySelector("#next-step").textContent = "All done. Your file is ready.";
+}
+```
+
+## When to call it
+
+Call `pass()` **at the success moment**, once per success:
+
+- After the file has been compressed and the download is available.
+- After the transcript has rendered.
+- After the export finished, not while it is running.
+
+Avoid calling it on page load, on errors or in a loop. A card is worth showing when the person has
+just got what they came for.
+
+## Before the script has loaded
+
+The script is loaded with `async`, so `window.baton` can be `undefined` for a moment. Guard with
+optional chaining:
+
+```js
+window.baton?.pass({ ctx: "pdf" });
+```
+
+## Under the hood
+
+`pass()` asks the public [card endpoint](/docs/reference/rest-api) for a match using your site key
+and `ctx`, and renders the answer. If you would rather build your own card UI, you can call that
+endpoint yourself.

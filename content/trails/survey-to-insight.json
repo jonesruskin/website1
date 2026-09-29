@@ -1,0 +1,45 @@
+{
+  "slug": "survey-to-insight",
+  "title": "Survey to insight",
+  "promise": "Ask a question, collect answers, chart them and write up what you found.",
+  "time": "About 2 hours, plus time for people to answer",
+  "minutes": 120,
+  "audience": "Researchers, product teams and community organizers",
+  "from": "idea",
+  "to": "summary",
+  "steps": [
+    {
+      "title": "Build the survey and collect answers",
+      "why": "Tally is a form builder with a generous free tier, and it can export responses as a spreadsheet when you are done.",
+      "tool": {
+        "name": "Tally",
+        "url": "https://tally.so",
+        "pricing": "Free tier"
+      },
+      "input": "idea",
+      "output": "survey-results"
+    },
+    {
+      "title": "Chart the results",
+      "why": "LibreOffice Calc opens the exported responses and makes pivot tables and charts without an account or a subscription.",
+      "tool": {
+        "name": "LibreOffice",
+        "url": "https://www.libreoffice.org",
+        "pricing": "Open source"
+      },
+      "input": "survey-results",
+      "output": "chart"
+    },
+    {
+      "title": "Write up what you found",
+      "why": "A one-page summary with the chart and two or three honest conclusions is more useful than a dashboard nobody opens.",
+      "tool": {
+        "name": "Google Docs",
+        "url": "https://docs.google.com",
+        "pricing": "Free"
+      },
+      "input": "chart",
+      "output": "summary"
+    }
+  ]
+}

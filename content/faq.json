@@ -1,7 +1,66 @@
 [
   {
-    "category": "General",
-    "question": "How do I edit these questions?",
-    "answer": "Edit content/faq.json. Each entry has a question, an answer and an optional category. Separate paragraphs with a blank line."
+    "category": "The basics",
+    "question": "Is it free?",
+    "answer": "Yes to start, and for good. The Relay plan is free and covers one tool. Every tool starts with 10 credits, and credits are earned by sending visitors, not bought.\n\nPaid plans add things around the exchange, not rank or credits: Anchor ($12 a month) has 5 tools, handshakes, 90-day stats and the option to hide the Baton mark. Studio ($39 a month) has unlimited tools, team seats and the stats API. Paid plans start with a 14-day free trial.",
+    "tags": ["pricing"]
+  },
+  {
+    "category": "The basics",
+    "question": "Does it slow my site down?",
+    "answer": "It shouldn't. The embed is one script tag loaded with async, so it doesn't block rendering, and nothing is drawn until you call baton.pass() at your success moment.\n\nIf the script is blocked or slow, calling window.baton?.pass() does nothing and your page carries on."
+  },
+  {
+    "category": "The basics",
+    "question": "What tools are allowed?",
+    "answer": "Real, working tools with a public URL and a clear job: apps, utilities, templates, courses, anything people finish something with and then take away. Free and paid tools are both welcome.\n\nWe don't accept anything deceptive, illegal or harmful, and we can remove a tool that misleads people or games the exchange. New tools are reviewed, and Studio gets priority review."
+  },
+  {
+    "category": "What your visitors see",
+    "question": "What do my users see?",
+    "answer": "One small card, at the moment you call baton.pass(). It names the next tool, says in a line why it fits, and has a single button. It carries a small \"passed by Baton\" mark unless your plan hides it.\n\nIt is never a feed, a carousel or a full-screen interruption. You choose whether it sits in the page or appears as a toast, and you can match it to your site with a light or dark theme and three CSS custom properties."
+  },
+  {
+    "category": "What your visitors see",
+    "question": "What if nothing matches?",
+    "answer": "Then nothing is shown. baton.pass() resolves to false and your page is left exactly as it was. That is the correct behavior: a bad card is worse than no card.\n\nNo match usually means no tool fits what your visitor just made, or the ones that do are competitors of yours or have no credits. It is more common while the network is young, and it improves as more tools describe what they take and what they make."
+  },
+  {
+    "category": "What your visitors see",
+    "question": "Can a competitor show up on my site?",
+    "answer": "No. Two tools in the same category are never paired unless both of them opt in. When you add your tool you choose its category, and Baton keeps rivals away from each other's success moments."
+  },
+  {
+    "category": "What your visitors see",
+    "question": "Can I choose who I pass to?",
+    "answer": "In part. You decide what your tool outputs and which category it is in, which decides what fits. You can also block individual tools, or whole categories, from your card.\n\nOn Anchor and Studio you can set up handshakes: direct pairings with specific tools that agree to pair back."
+  },
+  {
+    "category": "The exchange",
+    "question": "What happens when I run out of credits?",
+    "answer": "Your tool stops being shown on other tools' cards until it sends traffic of its own. Nothing else changes: your embed keeps working, your visitors still see cards for other tools, and every click they make earns you a credit.\n\nThis keeps the exchange balanced. Everyone receives at about the rate they give.",
+    "tags": ["pricing"]
+  },
+  {
+    "category": "The exchange",
+    "question": "What's a handshake?",
+    "answer": "A handshake is a direct, mutual pairing between two tools that have both agreed to it. Handshakes rank first when Baton chooses a card, so they suit partners who really do want to send people to each other.\n\nHandshakes are on the Anchor plan (up to 25) and the Studio plan (unlimited). Because both sides have to agree, you can't buy a slot on a site whose owner hasn't said yes.",
+    "tags": ["pricing"]
+  },
+  {
+    "category": "The exchange",
+    "question": "Can I remove the Baton mark?",
+    "answer": "On Anchor and Studio, yes. On Relay, the card carries a small mark. The mark tells visitors where the card came from, and it is how other makers discover the network.",
+    "tags": ["pricing"]
+  },
+  {
+    "category": "Trust and privacy",
+    "question": "How do you prevent click fraud?",
+    "answer": "Several rules work together. Every click goes through a signed link, so it can't be forged for a card that was never shown. Repeat clicks from the same visitor to the same tool within 24 hours aren't credited. A visitor can produce at most 3 credited clicks per host per day. Tools in the same category aren't paired, and a tool can't be shown on sites owned by the same account.\n\nClicks that break a rule still take the visitor where they wanted to go. They just don't move credits. The details are in the docs under Fairness and anti-fraud."
+  },
+  {
+    "category": "Trust and privacy",
+    "question": "Do you use cookies?",
+    "answer": "The embed sets no cookies. To apply the fairness rules it uses an anonymous hash of the visitor, which is recalculated every day, so nobody can be recognized from one day to the next. Raw IP addresses and user agents aren't stored with impressions and clicks.\n\nThis website, baton.run, uses a few essential cookies, for example to keep you signed in and remember your theme. The cookie policy lists them."
   }
 ]

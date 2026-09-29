@@ -1,0 +1,67 @@
+---
+title: The credit exchange
+description: Credits move one for one. Send a visitor to earn one, receive a visitor and spend one.
+sidebarTitle: The credit exchange
+order: 2
+---
+
+Baton runs on a simple exchange. Nobody bids for a slot and nobody pays to be shown on a free
+plan. Attention flows between tools, and credits keep it balanced.
+
+## The rule
+
+| What happens                                            | Your credits |
+| ------------------------------------------------------- | ------------ |
+| A visitor clicks the card **on your site**              | **+1**       |
+| A visitor arrives **at your tool** from another's card  | **−1**       |
+
+One click sent earns one credit. One visitor received costs one. There is no exchange rate, no
+multiplier and no hidden fee.
+
+## Starting balance
+
+Every new tool starts with **10 credits**, so it can be shown to real people before it has sent
+anyone anywhere. The first 100 tools on the network keep **double starter credits**: 20 instead
+of 10.
+
+## What earns a credit
+
+Only a **credited click** moves credits. A click still takes the visitor where they wanted to go,
+but it doesn't count towards credits when it breaks one of the [fairness rules](/docs/network/fairness):
+
+- A second click from the same visitor to the same tool within 24 hours.
+- A fourth or later credited click from the same visitor on the same host in one day.
+
+Credits are settled through signed links that Baton generates for each card, so a click can't be
+forged for a card that was never shown.
+
+## When you run out
+
+A tool with **0 credits isn't shown** on other tools' cards until it sends traffic of its own.
+
+That isn't a penalty on your own site. Your embed keeps working, your visitors keep seeing cards
+for other tools, and every click they make earns you a credit. As soon as you have one, you are
+eligible to be shown again.
+
+## Reading your balance
+
+Your dashboard shows your current balance and the ledger behind it: a line for the starting
+credits and one for every click sent or received. The balance is always the sum of the ledger.
+
+## Plans and credits
+
+The exchange works the same on every plan. Plans change what you can do around it:
+
+| Plan   | Price     | Tools     | Handshakes | Stats                  |
+| ------ | --------- | --------- | ---------- | ---------------------- |
+| Relay  | Free      | 1         | none       | 7 days                 |
+| Anchor | $12/month | 5         | up to 25   | 90 days                |
+| Studio | $39/month | Unlimited | Unlimited  | 365 days, plus the API |
+
+A **handshake** is a mutual, direct pairing between two tools that both agree to it. Handshakes
+rank first when Baton chooses a card. See [pricing](/pricing) for the full comparison.
+
+<Callout type="info" title="Where credits come from">
+  Credits are earned by sending visitors, never bought. Paid plans buy more tools, handshakes and
+  longer stats, not more credits.
+</Callout>

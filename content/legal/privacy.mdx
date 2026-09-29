@@ -1,7 +1,7 @@
 ---
 title: Privacy policy
 description: What personal data we collect, why, and the choices you have.
-updated: 2026-01-01
+updated: 2026-09-29
 ---
 
 This policy explains how {legal.companyName} ("we", "us") handles personal data when you use
@@ -22,6 +22,28 @@ This policy explains how {legal.companyName} ("we", "us") handles personal data 
   law requires it, only with your consent.
 - **Technical data** needed to run the service securely, such as server logs, which are kept
   for a limited time.
+
+## Embed data
+
+The {legal.siteName} embed is a script that tool makers add to their own sites to show a
+recommendation card when a task finishes. If you visit a site that uses it, this is what happens:
+
+- **No cookies.** The embed does not set any cookies, and it does not ask you to sign in.
+- **A hashed visitor id.** To apply fairness rules, such as not crediting repeated clicks, we
+  combine your IP address and browser user agent with the current date and a secret key, and store
+  only the resulting hash. The date is part of the input, so the hash changes every day and cannot
+  be used to recognize you from one day to the next. We do not store your raw IP address or user
+  agent in impression or click records.
+- **Impressions and clicks.** We record that a card was shown (which tool asked, which tool was
+  shown, the context the tool supplied and the time) and, if you click, that a click happened,
+  along with the hashed id.
+- **Credits.** Clicks move credits between the two tools involved. This information is about
+  tools, not about you.
+
+Like any web service, our hosting providers may keep ordinary request logs, which can include IP
+addresses, for a limited time to run and secure the service. The tool that showed the card, and
+the tool you were sent to, do not receive your hashed id from us. The destination receives an
+ordinary web visit with <code>?ref=baton</code> added to the address.
 
 ## Why we use it
 

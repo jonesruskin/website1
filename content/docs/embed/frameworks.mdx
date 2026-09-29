@@ -1,0 +1,147 @@
+---
+title: React, Next.js and other frameworks
+description: Load the script once, call baton.pass() when the job is done. Recipes for React, Next.js, Vue, Svelte and plain HTML.
+sidebarTitle: Framework recipes
+order: 3
+---
+
+The recipe is the same everywhere: **load the script once**, then **call `window.baton?.pass()`
+when your tool succeeds**. Frameworks only change where those two lines live.
+
+## React
+
+Load the script in your `index.html`, then call `pass()` from an effect that runs when the job
+finishes:
+
+```tsx
+import { useEffect } from "react";
+
+declare global {
+  interface Window {
+    baton?: {
+      pass(options?: { ctx?: string; target?: Element | string }): Promise<boolean>;
+    };
+  }
+}
+
+export function CompressResult({ done }: { done: boolean }) {
+  useEffect(() => {
+    if (!done) return;
+    void window.baton?.pass({ ctx: "pdf", target: "#next-step" });
+  }, [done]);
+
+  return <div id="next-step" />;
+}
+```
+
+The `declare global` block gives `window.baton` a type. Put it in a `.d.ts` file if you use it in
+more than one component.
+
+## Next.js
+
+Load the script once in the root layout with `next/script`. It passes `data-` attributes through:
+
+```tsx
+// app/layout.tsx
+import Script from "next/script";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        <Script
+          src="https://baton.run/embed.js"
+          data-key="bk_…"
+          strategy="afterInteractive"
+        />
+      </body>
+    </html>
+  );
+}
+```
+
+Then call `pass()` from a client component, exactly as in the React recipe:
+
+```tsx
+"use client";
+
+import { useEffect } from "react";
+
+export function SuccessMoment({ done }: { done: boolean }) {
+  useEffect(() => {
+    if (done) void window.baton?.pass({ ctx: "pdf" });
+  }, [done]);
+  return null;
+}
+```
+
+<Callout type="info" title="Strict Mode">
+  In development, React runs effects twice. That can request two cards. It doesn't happen in
+  production, but if it bothers you, guard the call with a ref.
+</Callout>
+
+## Vue
+
+```vue
+<script setup lang="ts">
+import { watch } from "vue";
+
+const props = defineProps<{ done: boolean }>();
+
+watch(
+  () => props.done,
+  (done) => {
+    if (done) window.baton?.pass({ ctx: "pdf", target: "#next-step" });
+  },
+);
+</script>
+
+<template>
+  <div id="next-step" />
+</template>
+```
+
+Load the script in your `index.html` (or with `useHead` if you use Nuxt).
+
+## Svelte
+
+Using Svelte 5 runes:
+
+```svelte
+<script lang="ts">
+  let { done }: { done: boolean } = $props();
+
+  $effect(() => {
+    if (done) window.baton?.pass({ ctx: "pdf", target: "#next-step" });
+  });
+</script>
+
+<div id="next-step"></div>
+```
+
+Add the script tag to `app.html` in SvelteKit.
+
+## Plain HTML
+
+No build step needed:
+
+```html
+<script src="https://baton.run/embed.js" data-key="bk_…" async></script>
+
+<button id="compress">Compress</button>
+<div id="next-step"></div>
+
+<script>
+  document.querySelector("#compress").addEventListener("click", async () => {
+    // ...do the work, then:
+    await window.baton?.pass({ ctx: "pdf", target: "#next-step" });
+  });
+</script>
+```
+
+## Testing
+
+- In tests, don't load the script. `window.baton?.pass()` is a no-op when `baton` is missing.
+- Use your real site key in staging to see real cards. Impressions and clicks from staging count
+  like any others, so use a separate tool entry if you don't want them mixed with production.

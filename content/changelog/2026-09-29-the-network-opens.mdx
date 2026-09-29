@@ -1,0 +1,47 @@
+---
+title: The network opens
+date: 2026-09-29
+version: 0.1.0
+type: [added]
+---
+
+Baton is open. The first version has everything needed to pass people between tools, and nothing
+more.
+
+**The embed**
+
+- One script tag, `https://baton.run/embed.js`, with your site key in `data-key`.
+- `window.baton.pass({ ctx, target })` shows one card at your success moment. It resolves to
+  `false` when there is no match.
+- The card is a `<baton-card>` web component drawn in a Shadow DOM, themable with `data-theme` and
+  three custom properties: `--baton-accent`, `--baton-radius` and `--baton-font`.
+
+**The network**
+
+- Journey-based matching: what your tool outputs, against what the next tool takes as input.
+- Credits that move one for one. A click sent earns 1, a visitor received costs 1, and every tool
+  starts with 10.
+- Fairness rules from day one: competitors are never paired unless both opt in, duplicate clicks
+  within 24 hours aren't credited, and a visitor can produce at most 3 credited clicks per host
+  per day.
+- Signed `/r/<token>` redirects for every click, and anonymous visitor hashes that rotate daily.
+  No cookies.
+- Handshakes: mutual, direct pairings on paid plans, ranked first.
+
+**Plans**
+
+- **Relay**, free: 1 tool.
+- **Anchor**, $12 a month: 5 tools, handshakes, 90-day stats and the option to hide the Baton mark.
+- **Studio**, $39 a month: unlimited tools, team seats and the stats API.
+- The first 100 tools keep double starter credits.
+
+**API**
+
+- `GET /api/baton/v1/card?key=&ctx=` returns a card, or `204` when nothing matches.
+- Key-authenticated `/api/v1/tools` and `/api/v1/stats` for your own tools and numbers.
+
+**Around it**
+
+- [Documentation](/docs), including the full list of artifacts.
+- [Trails](/trails): step-by-step routes between free tools, for people rather than makers.
+- A [makers page](/makers) that explains the exchange in two minutes.

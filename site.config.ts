@@ -348,6 +348,6 @@ export default defineSite({
   docs: {
     title: "Documentation",
     description: "Install the embed, call pass(), and understand the exchange.",
-    editUrl: "",
+    editUrl: "https://github.com/jonesruskin/website1/edit/main/",
   },
 });

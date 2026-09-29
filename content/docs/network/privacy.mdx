@@ -1,0 +1,59 @@
+---
+title: Privacy
+description: The embed sets no cookies. Visitors are an anonymous hash that changes every day. Here is exactly what is stored.
+order: 4
+---
+
+Baton exists to pass people on at a good moment, not to follow them. The embed is built so that it
+can't.
+
+## The short version
+
+- **No cookies.** The embed doesn't set any, on your site or ours.
+- **No accounts, no profiles.** A visitor is never asked who they are.
+- **An anonymous hash, rotated daily.** To apply the [fairness rules](/docs/network/fairness),
+  Baton needs to tell whether two clicks came from the same visitor on the same day. It does that
+  with a hash that changes every day, so the same person can't be recognised the next day.
+
+## How the visitor hash works
+
+When the card is requested, Baton combines the visitor's IP address and browser user agent with the
+current date and a secret held on the server, and hashes the result. The hash is what is stored.
+
+- The raw IP address and user agent are **not stored** with impressions or clicks.
+- The date is part of the input, so **tomorrow the same visitor produces a different hash**.
+- The hash isn't shown to other tools, and it isn't added to the destination URL.
+
+## What is stored
+
+| Record         | What it holds                                                                          |
+| -------------- | -------------------------------------------------------------------------------------- |
+| **Impression** | Which tool asked, which tool was shown, the `ctx`, the visitor hash and the time.       |
+| **Click**      | The impression it belongs to, the two tools, the visitor hash, whether it was credited and the time. |
+| **Ledger**     | Credit changes per tool: the starting balance, and one line per credited click.        |
+
+That is the whole list. Nothing about the visitor's identity, browsing history on your site or
+activity on other sites is collected.
+
+## What isn't stored
+
+- Cookies, or any identifier that survives from one day to the next.
+- Raw IP addresses or user agents in impression and click records.
+- Names, email addresses or accounts for visitors. Visitors don't have any on Baton.
+
+## What the tool you pass to sees
+
+A visitor who clicks a card goes through a signed redirect and arrives at the destination with
+`?ref=baton` on the URL. That tells the destination that Baton sent them, and nothing else.
+
+## Web server logs
+
+Like any web service, our hosting provider may keep ordinary request logs, which can include IP
+addresses, for a limited time to keep the service running and secure. The [privacy
+policy](/legal/privacy) covers this.
+
+## For your own privacy policy
+
+You can describe the embed truthfully as: a script that loads a recommendation card when a task
+finishes, sets no cookies, and records an anonymous, daily-rotating hash with each impression and
+click. What your own policy needs to say is for you, and your advisers, to decide.

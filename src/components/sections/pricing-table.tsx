@@ -92,11 +92,11 @@ export function PricingTable({
       {toggle && (
         <fieldset className="mb-12 flex justify-center">
           <legend className="sr-only">{labels.interval ?? "Billing interval"}</legend>
-          <div className="bg-muted inline-flex rounded-full p-1 text-sm">
+          <div className="inline-flex rounded-full bg-muted p-1 text-sm">
             {(["monthly", "yearly"] as const).map((interval) => (
               <label
                 key={interval}
-                className="has-[:checked]:bg-background has-[:checked]:text-foreground has-[:focus-visible]:ring-ring text-muted-foreground flex cursor-pointer items-center gap-2 rounded-full px-4 py-1.5 font-medium transition-colors has-[:checked]:shadow-xs has-[:focus-visible]:ring-2"
+                className="flex cursor-pointer items-center gap-2 rounded-full px-4 py-1.5 font-medium text-muted-foreground transition-colors has-[:checked]:bg-background has-[:checked]:text-foreground has-[:checked]:shadow-xs has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring"
               >
                 <input
                   type="radio"
@@ -110,7 +110,7 @@ export function PricingTable({
                   ? (labels.monthly ?? "Monthly")
                   : (labels.yearly ?? "Yearly")}
                 {interval === "yearly" && labels.yearlyHint && (
-                  <span className="text-success text-xs font-semibold">{labels.yearlyHint}</span>
+                  <span className="text-xs font-semibold text-success">{labels.yearlyHint}</span>
                 )}
               </label>
             ))}
@@ -124,7 +124,7 @@ export function PricingTable({
           plans.length === 2 && "max-w-3xl",
         )}
       >
-        {plans.map((plan) => {
+        {plans.map((plan, planIndex) => {
           const currency = plan.currency ?? "USD";
           const monthly = plan.price.monthly;
           const yearlyPrice = plan.price.yearly;
@@ -132,39 +132,46 @@ export function PricingTable({
             <li
               key={plan.id}
               className={cn(
-                "bg-card relative flex flex-col gap-6 rounded-2xl border p-8",
-                plan.highlighted && "border-foreground shadow-lg",
+                "relative flex flex-col gap-6 rounded-2xl border bg-card p-6 sm:p-8",
+                plan.highlighted && "border-2 border-foreground shadow-lg",
               )}
             >
+              {plan.badge && (
+                <span className="absolute -top-3 left-6 rounded-full bg-signal px-3 py-1 font-mono text-[0.6875rem] font-semibold tracking-widest text-signal-foreground uppercase sm:left-8">
+                  {plan.badge}
+                </span>
+              )}
               <div className="flex items-center justify-between gap-3">
-                <h3 className="text-lg font-semibold">{plan.name}</h3>
-                {plan.badge && (
-                  <span className="bg-primary text-primary-foreground rounded-full px-2.5 py-0.5 text-xs font-medium">
-                    {plan.badge}
-                  </span>
-                )}
+                <h3 className="font-display text-2xl font-semibold tracking-tight">{plan.name}</h3>
+                <span
+                  aria-hidden
+                  className="font-mono text-xs tracking-widest text-muted-foreground uppercase"
+                >
+                  {String(planIndex + 1).padStart(2, "0")} / {String(plans.length).padStart(2, "0")}
+                </span>
               </div>
               {plan.description && (
-                <p className="text-muted-foreground -mt-3 text-sm">{plan.description}</p>
+                <p className="-mt-3 text-sm text-muted-foreground">{plan.description}</p>
               )}
               <p className="flex items-baseline gap-1">
                 {monthly === null ? (
-                  <span className="font-display text-4xl font-semibold tracking-tight">
+                  <span className="font-display text-5xl font-bold tracking-tighter">
                     {plan.customPriceLabel ?? "Custom"}
                   </span>
                 ) : (
                   <>
                     <span
                       className={cn(
-                        "font-display text-4xl font-semibold tracking-tight tabular-nums",
+                        "font-display text-5xl font-bold tracking-tighter tabular-nums",
                         toggle && yearlyPrice != null && hideWhenYearly,
                       )}
+                      style={{ fontStretch: "85%" }}
                     >
                       {formatPrice(monthly, currency, locale)}
                     </span>
                     <span
                       className={cn(
-                        "text-muted-foreground text-sm",
+                        "text-sm text-muted-foreground",
                         toggle && yearlyPrice != null && hideWhenYearly,
                       )}
                     >
@@ -174,14 +181,15 @@ export function PricingTable({
                       <>
                         <span
                           className={cn(
-                            "font-display hidden text-4xl font-semibold tracking-tight tabular-nums",
+                            "hidden font-display text-5xl font-bold tracking-tighter tabular-nums",
                             showWhenYearly,
                           )}
+                          style={{ fontStretch: "85%" }}
                         >
                           {formatPrice(yearlyPrice, currency, locale)}
                         </span>
                         <span
-                          className={cn("text-muted-foreground hidden text-sm", showWhenYearly)}
+                          className={cn("hidden text-sm text-muted-foreground", showWhenYearly)}
                         >
                           {labels.perYear ?? "/year"}
                         </span>
@@ -227,7 +235,7 @@ export function PricingTable({
               <ul className="flex flex-col gap-3 text-sm">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex gap-3">
-                    <CheckIcon aria-hidden className="text-foreground mt-0.5 size-4 shrink-0" />
+                    <CheckIcon aria-hidden className="mt-0.5 size-4 shrink-0 text-signal-ink" />
                     <span>{feature}</span>
                   </li>
                 ))}

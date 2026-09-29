@@ -1,0 +1,67 @@
+{
+  "slug": "launch-a-landing-page",
+  "title": "Launch a landing page",
+  "promise": "Go from an idea to a live one-page site with a sign-up form, using only free tiers.",
+  "time": "About 3 hours",
+  "minutes": 180,
+  "audience": "Makers testing an idea before building it",
+  "from": "idea",
+  "to": "landing-page",
+  "steps": [
+    {
+      "title": "Pick a palette",
+      "why": "Two or three colors chosen up front stop a page from looking assembled by committee; Coolors lets you lock the ones you like and keep pressing space.",
+      "tool": {
+        "name": "Coolors",
+        "url": "https://coolors.co",
+        "pricing": "Free tier"
+      },
+      "input": "idea",
+      "output": "palette"
+    },
+    {
+      "title": "Choose a font pairing",
+      "why": "Google Fonts is free to use on the web and previews a pairing on your own sentence, which beats picking from a list.",
+      "tool": {
+        "name": "Google Fonts",
+        "url": "https://fonts.google.com",
+        "pricing": "Free"
+      },
+      "input": "idea",
+      "output": "font"
+    },
+    {
+      "title": "Find one strong photo",
+      "why": "Unsplash photos are free to use, and one good hero image does more than three mediocre ones.",
+      "tool": {
+        "name": "Unsplash",
+        "url": "https://unsplash.com",
+        "pricing": "Free"
+      },
+      "input": "idea",
+      "output": "photo"
+    },
+    {
+      "title": "Build the sign-up form",
+      "why": "Tally is a form builder with a generous free tier and an embed code, so the form can live inside your page.",
+      "tool": {
+        "name": "Tally",
+        "url": "https://tally.so",
+        "pricing": "Free tier"
+      },
+      "input": "idea",
+      "output": "form"
+    },
+    {
+      "title": "Assemble and publish the page",
+      "why": "Carrd is built for one-page sites; the free tier publishes to a carrd.co address, and a custom domain needs a paid plan.",
+      "tool": {
+        "name": "Carrd",
+        "url": "https://carrd.co",
+        "pricing": "Free tier"
+      },
+      "input": "photo",
+      "output": "landing-page"
+    }
+  ]
+}

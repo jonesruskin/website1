@@ -1,0 +1,67 @@
+{
+  "slug": "portfolio-site-weekend",
+  "title": "Portfolio site in a weekend",
+  "promise": "Prepare your images, design the page, write a little HTML and put it online for free.",
+  "time": "A weekend",
+  "minutes": 720,
+  "audience": "Designers, photographers and developers who need somewhere to point people",
+  "from": "photo",
+  "to": "website",
+  "steps": [
+    {
+      "title": "Edit your best work",
+      "why": "GIMP is a full image editor for cropping, color correction and export, and it is free and open source.",
+      "tool": {
+        "name": "GIMP",
+        "url": "https://www.gimp.org",
+        "pricing": "Open source"
+      },
+      "input": "photo",
+      "output": "image"
+    },
+    {
+      "title": "Shrink the files",
+      "why": "Squoosh compresses images in the browser and shows before and after side by side, so you can pick the smallest file that still looks right.",
+      "tool": {
+        "name": "Squoosh",
+        "url": "https://squoosh.app",
+        "pricing": "Open source"
+      },
+      "input": "image",
+      "output": "image"
+    },
+    {
+      "title": "Design the page",
+      "why": "Figma's free tier is enough to lay out a single page and decide what goes where before you write any code.",
+      "tool": {
+        "name": "Figma",
+        "url": "https://www.figma.com",
+        "pricing": "Free tier"
+      },
+      "input": "image",
+      "output": "mockup"
+    },
+    {
+      "title": "Write the page",
+      "why": "Visual Studio Code is a free editor with good HTML and CSS support, and a portfolio can be a handful of static files.",
+      "tool": {
+        "name": "Visual Studio Code",
+        "url": "https://code.visualstudio.com",
+        "pricing": "Free"
+      },
+      "input": "mockup",
+      "output": "code"
+    },
+    {
+      "title": "Put it online",
+      "why": "GitHub Pages serves a repository of static files for free, at a github.io address or your own domain.",
+      "tool": {
+        "name": "GitHub Pages",
+        "url": "https://pages.github.com",
+        "pricing": "Free"
+      },
+      "input": "code",
+      "output": "website"
+    }
+  ]
+}

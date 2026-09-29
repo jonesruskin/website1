@@ -1,0 +1,165 @@
+---
+title: Picking inputs and outputs
+description: How to describe your tool with the shared artifact vocabulary, and the full list to choose from.
+sidebarTitle: Inputs and outputs
+order: 1
+---
+
+Baton matches tools by **journey**, not by keyword. Every tool declares two lists, both drawn from
+one shared vocabulary of *artifacts*:
+
+- **Inputs**: what people bring to your tool.
+- **Outputs**: what people leave with.
+
+When a tool calls [`baton.pass()`](/docs/embed/pass), Baton looks for a tool whose **inputs** match
+what the host tool just produced as an **output**. Someone who has just made a PDF is ready for a
+tool that takes a PDF.
+
+## How to choose
+
+- **Describe the person's hands, not your product.** A PDF compressor takes `pdf` and leaves people
+  with `pdf`. Its category is documents, but what it *produces* is what decides who it is shown to.
+- **List what is true most of the time.** Two or three honest outputs beat ten hopeful ones. Every
+  extra output widens the match, and a match on something you rarely produce is a poor card.
+- **Be specific when it helps.** `podcast` says more than `audio`, and `transcript` more than
+  `text`. Use the general one when the specific one would be wrong.
+- **Use `ctx` to say which output this moment produced.** If your tool can output a `pdf` or an
+  `image`, pass `ctx: "pdf"` when it made a PDF.
+- **Inputs matter as much as outputs.** They decide which tools' hosts will send people your way.
+
+## Categories
+
+Every tool also has one category. **Two tools in the same category are competitors and are never
+paired**, unless both opt in. Choose the category that describes what the tool *is*.
+
+| Category            | id             |
+| ------------------- | -------------- |
+| Documents & PDF     | `documents`    |
+| Images & design     | `images`       |
+| Audio & podcasts    | `audio`        |
+| Video               | `video`        |
+| Writing             | `writing`      |
+| Developer tools     | `developer`    |
+| Data & spreadsheets | `data`         |
+| Marketing & social  | `marketing`    |
+| Productivity        | `productivity` |
+| Websites & no-code  | `web`          |
+| Learning            | `education`    |
+| Something else      | `other`        |
+
+## Artifacts
+
+The full vocabulary, grouped. Use the `id` in `data-ctx` and in `baton.pass({ ctx })`. The
+dashboard shows the same list with the labels.
+
+### Documents
+
+Files people read, sign or send.
+
+| Artifact        | id            |
+| --------------- | ------------- |
+| PDF             | `pdf`         |
+| Document        | `document`    |
+| Spreadsheet     | `spreadsheet` |
+| Slide deck      | `slides`      |
+| Signed document | `signature`   |
+| Résumé          | `resume`      |
+| E-book          | `ebook`       |
+
+### Images
+
+Anything visual, from a screenshot to a brand.
+
+| Artifact      | id             |
+| ------------- | -------------- |
+| Image         | `image`        |
+| Photo         | `photo`        |
+| Screenshot    | `screenshot`   |
+| Logo          | `logo`         |
+| Icon set      | `icon`         |
+| Illustration  | `illustration` |
+| Mockup        | `mockup`       |
+| Diagram       | `diagram`      |
+| Color palette | `palette`      |
+| Font pairing  | `font`         |
+| QR code       | `qr`           |
+
+### Audio & video
+
+Sound and moving pictures, raw or finished.
+
+| Artifact         | id                 |
+| ---------------- | ------------------ |
+| Audio            | `audio`            |
+| Podcast episode  | `podcast`          |
+| Voice recording  | `voice`            |
+| Music track      | `music`            |
+| Video            | `video`            |
+| Short clip       | `clip`             |
+| GIF              | `gif`              |
+| Subtitles        | `subtitles`        |
+| Screen recording | `screen-recording` |
+
+### Words
+
+Text in every stage, from idea to translation.
+
+| Artifact         | id            |
+| ---------------- | ------------- |
+| Plain text       | `text`        |
+| Transcript       | `transcript`  |
+| Article          | `article`     |
+| Notes            | `notes`       |
+| Email            | `email`       |
+| Newsletter issue | `newsletter`  |
+| Social post      | `social-post` |
+| Translation      | `translation` |
+| Summary          | `summary`     |
+| Idea             | `idea`        |
+
+### Web & code
+
+Things that live on the internet or run on a computer.
+
+| Artifact     | id             |
+| ------------ | -------------- |
+| Website      | `website`      |
+| Landing page | `landing-page` |
+| Link         | `link`         |
+| Code         | `code`         |
+| API          | `api`          |
+| App build    | `app`          |
+| Domain       | `domain`       |
+| Form         | `form`         |
+
+### Data
+
+Numbers, tables and what they turn into.
+
+| Artifact         | id               |
+| ---------------- | ---------------- |
+| Dataset          | `data`           |
+| CSV              | `csv`            |
+| JSON             | `json`           |
+| Chart            | `chart`          |
+| Survey results   | `survey-results` |
+| Analytics report | `analytics`      |
+
+### Work
+
+Plans, schedules and the paperwork of getting things done.
+
+| Artifact      | id          |
+| ------------- | ----------- |
+| Task list     | `task-list` |
+| Meeting       | `meeting`   |
+| Schedule      | `schedule`  |
+| Invoice       | `invoice`   |
+| Plan          | `plan`      |
+| Portfolio     | `portfolio` |
+| Audience list | `audience`  |
+
+<Callout type="info" title="Missing something?">
+  The list is deliberately small so that matches are meaningful. If your tool's journey doesn't fit,
+  [tell us](/contact) what people bring and what they leave with.
+</Callout>
