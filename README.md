@@ -1,8 +1,47 @@
 # Baton
 
-The recommendation network for the moment your tool finishes its job.
+**The recommendation network for the moment your tool finishes its job.**
 
-Created with [site-forge](https://github.com/jonesruskin/site-forge) (preset: `saas`). All of the code in this repository is yours to change: nothing is hidden in a package.
+Every tool on the internet ends in a dead end: the file downloads, the transcript appears, and
+then nothing. That *success moment* is the most valuable attention a user gives you. They're
+satisfied, focused, and they have a next job.
+
+Baton turns it into a doorway:
+
+1. A maker adds one script tag and calls `baton.pass()` when their tool finishes.
+2. Baton shows **one** card for the most useful next tool. It matches on the user's journey,
+   not their identity: what your tool outputs (a PDF) connects to what another tool takes in
+   (e-signature).
+3. Clicks move credits **1:1**. Send a visitor, earn a credit; receive one, spend a credit.
+   Free forever on the Relay plan, with no ads, no tracking cookies and no pay-to-rank.
+
+Baton also has a people-facing side. **Trails** (`/trails`) are curated journeys through real,
+free tools for everyday jobs.
+
+```html
+<script src="https://baton.run/embed.js" data-key="bk_…" async></script>
+<script>
+  // when your tool finishes its job:
+  window.baton?.pass({ ctx: "pdf" });
+</script>
+```
+
+### Where the product lives
+
+| Path | What it is |
+| --- | --- |
+| `src/lib/baton/match.ts` | The matching engine (pure, unit-tested; also powers the landing page demo) |
+| `src/lib/baton/taxonomy.ts` | The journey vocabulary: artifacts and categories |
+| `src/lib/baton/engine.ts` | Impressions, signed clicks and the credit ledger |
+| `src/app/api/baton/v1/card` · `src/app/r/[token]` · `src/app/embed.js` | Public embed endpoints |
+| `src/app/(app)/{tools,network,credits}` | The maker app |
+| `src/app/(site)` | Marketing site, trails, makers page, docs, blog |
+| `src/db/schema/baton.ts` | Tools, impressions, clicks, ledger, handshakes, blocks |
+
+Design language and conventions for contributors (human or AI) are in [AGENTS.md](AGENTS.md).
+
+Built on [site-forge](https://github.com/jonesruskin/site-forge) (preset: `saas`). All of the
+code in this repository is yours to change: nothing is hidden in a package.
 
 ## Quick start
 
@@ -18,6 +57,7 @@ pnpm dev
 | `pnpm build` | Production build |
 | `pnpm typecheck` | Generate route types and type-check |
 | `pnpm lint` | ESLint |
+| `pnpm test` | Unit tests (Vitest) |
 | `pnpm site doctor` | Check env vars, dependencies and module requirements |
 
 ## Modules
