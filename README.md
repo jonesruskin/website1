@@ -1,0 +1,71 @@
+# Baton
+
+The recommendation network for the moment your tool finishes its job.
+
+Created with [site-forge](https://github.com/jonesruskin/site-forge) (preset: `saas`). All of the code in this repository is yours to change: nothing is hidden in a package.
+
+## Quick start
+
+```sh
+pnpm install
+cp .env.example .env.local   # optional in development: modules fall back to local behavior
+pnpm dev
+```
+
+| Command | What it does |
+| --- | --- |
+| `pnpm dev` | Start the dev server |
+| `pnpm build` | Production build |
+| `pnpm typecheck` | Generate route types and type-check |
+| `pnpm lint` | ESLint |
+| `pnpm site doctor` | Check env vars, dependencies and module requirements |
+
+## Modules
+
+<!-- site-forge:modules:start -->
+| Module | What it does | Routes |
+| --- | --- | --- |
+| [`seo`](.site/modules/seo.md) | sitemap.xml, robots.txt (no-index outside production), JSON-LD helpers and generated Open Graph images. | `/sitemap.xml` `/robots.txt` `/opengraph-image` |
+| [`analytics`](.site/modules/analytics.md) | One track() for Plausible, PostHog, Google Analytics 4 or Umami, chosen by env vars; waits for cookie consent when the provider needs it; logs events locally in dev. |  |
+| [`ci`](.site/modules/ci.md) | Lint, typecheck, test and build on every push and pull request, with cached installs and Next.js builds, least-privilege tokens and grouped Dependabot updates. |  |
+| [`vercel`](.site/modules/vercel.md) | vercel.json that checks production env vars before building, security-minded defaults, and a step-by-step deploy guide. |  |
+| [`cookie-consent`](.site/modules/cookie-consent.md) | GDPR-style consent banner with equal accept/reject, per-category choices, and a cookie contract other modules read. |  |
+| [`mdx`](.site/modules/mdx.md) | Typed MDX collections: Zod-validated frontmatter, drafts, TOC, reading time, token-themed code highlighting, RSS helper. |  |
+| [`legal`](.site/modules/legal.md) | Privacy policy, terms of service and cookie policy as editable MDX templates filled from site.config. | `/legal/privacy` `/legal/terms` `/legal/cookies` |
+| [`email`](.site/modules/email.md) | Send React Email templates through Resend. In development, mail lands in a local outbox at /dev/outbox. | `/dev/outbox` |
+| [`rate-limit`](.site/modules/rate-limit.md) | Sliding-window rate limits for actions and API routes. Upstash Redis in production, in-memory locally. |  |
+| [`contact`](.site/modules/contact.md) | Contact page and form with layered spam protection (honeypot, timing, rate limit, optional Turnstile) and email delivery. | `/contact` |
+| [`blog`](.site/modules/blog.md) | MDX blog with static pagination, tags, reading time, per-post OG images, RSS, JSON-LD and sitemap entries. | `/blog` `/blog/[slug]` `/blog/tags/[tag]` `/blog/page/[page]` `/blog/rss.xml` |
+| [`changelog`](.site/modules/changelog.md) | Release notes from MDX: dated entries with versions and change types, deep links, RSS feed. | `/changelog` `/changelog/rss.xml` |
+| [`faq`](.site/modules/faq.md) | Typed FAQ data source (content/faq.json) grouped by category, a /faq page and FAQPage structured data. | `/faq` |
+| [`database`](.site/modules/database.md) | Drizzle ORM on Postgres (Neon, Supabase or any Postgres). Zero-setup embedded PGlite in development with automatic schema push. |  |
+| [`auth`](.site/modules/auth.md) | Better Auth: email + password with verification, magic links, Google and GitHub OAuth, password reset, protected routes. | `/sign-in` `/sign-up` `/forgot-password` `/reset-password` `/verify-email` `/api/auth/*` |
+| [`dashboard`](.site/modules/dashboard.md) | Signed-in app area: sidebar + topbar layout, nav from site.config, overview with widget and topbar slots for other modules. | `/dashboard` |
+| [`settings`](.site/modules/settings.md) | Account settings: profile, email change, password, active sessions with revoke, account deletion. Tabs other modules extend. | `/settings` `/settings/security` `/settings/account` |
+| [`payments`](.site/modules/payments.md) | Provider-agnostic checkout, customer portal and webhooks (Stripe adapter), with a mock provider so billing works locally with zero keys. | `/api/payments/webhook` `/dev/checkout/[id]` `/dev/billing-portal` |
+| [`billing`](.site/modules/billing.md) | Subscriptions from plans in site.config: pricing page, checkout, webhooks, customer portal, entitlements and limits. | `/pricing` `/settings/billing` `/billing/checkout` `/billing/portal` |
+| [`teams`](.site/modules/teams.md) | Organizations with roles (owner, admin, member), email invitations, team switcher and team settings, on Better Auth's organization plugin. | `/settings/team` `/invite/[id]` |
+| [`admin`](.site/modules/admin.md) | Admin area on Better Auth's admin plugin: user search, roles, ban/unban, session revocation, impersonation with a stop banner. | `/admin` `/admin/users` |
+| [`notifications`](.site/modules/notifications.md) | Notification inbox: notify(userId, …) from anywhere, a bell with unread count in the top bar, and a /notifications page. | `/notifications` |
+| [`transactional-emails`](.site/modules/transactional-emails.md) | Welcome email after verification, plus /dev/emails: a gallery previewing every email template installed by any module. | `/dev/emails` |
+| [`onboarding`](.site/modules/onboarding.md) | A focused first-run questionnaire configured in site.config.ts, plus a setup checklist on the dashboard that other modules add tasks to. | `/onboarding` |
+| [`api`](.site/modules/api.md) | Hashed API keys with scopes and expiry, an apiRoute() helper (auth, Zod validation, rate limits, problem+json errors), /api/v1/me and an API keys settings tab. | `/settings/api-keys` `/api/v1/me` |
+| [`docs`](.site/modules/docs.md) | Documentation from MDX folders: sidebar, prev/next, TOC, edit links and ⌘K client-side search (static index, lazy-loaded). | `/docs` `/docs/[slug]` `/docs/[slug]/[page]` `/docs/search-index.json` |
+<!-- site-forge:modules:end -->
+
+## Make it yours
+
+- **Look**: everything visual lives in `src/styles/theme.css`. Turn the dials at the top first (hue, tint, accent, radius, density, shadow, motion). With the `theme-lab` module, open `/lab` in development to tune them live.
+- **Content & navigation**: `site.config.ts` is the single source of truth for name, URLs, navigation, SEO defaults, feature flags and module settings.
+- **Environment**: `.env.example` lists every variable with a description. `pnpm site doctor` tells you what's missing.
+
+## Grow the site
+
+```sh
+pnpm site list              # modules, sections, presets and themes
+pnpm site add blog newsletter
+pnpm site add section:pricing
+pnpm site theme editorial   # or tweak dials: pnpm site theme --hue 25 --accent 0.18
+pnpm site diff blog         # compare your copy with the registry
+pnpm site remove newsletter
+```

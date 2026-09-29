@@ -1,0 +1,4836 @@
+{
+  "version": 1,
+  "registry": {
+    "source": "github:jonesruskin/site-forge",
+    "ref": "main",
+    "commit": "b1f13a29f56f8d749cedb2b997be169598e204ae",
+    "version": "0.1.0"
+  },
+  "cli": "0.1.1",
+  "core": {
+    "version": "0.1.0",
+    "slots": {
+      "providers": {
+        "file": "src/generated/providers.ts",
+        "export": "providers",
+        "type": "ComponentType<{ children: ReactNode }>",
+        "typeImports": [
+          "import type { ComponentType, ReactNode } from \"react\";"
+        ],
+        "description": "Client providers contributed by modules, outermost first.",
+        "inferred": false
+      },
+      "body-end": {
+        "file": "src/generated/body-end.ts",
+        "export": "bodyEnd",
+        "type": "ComponentType",
+        "typeImports": [
+          "import type { ComponentType } from \"react\";"
+        ],
+        "description": "Components rendered at the end of <body> (analytics, consent banners, toasters).",
+        "inferred": false
+      },
+      "header-actions": {
+        "file": "src/generated/header-actions.ts",
+        "export": "headerActions",
+        "type": "ComponentType",
+        "typeImports": [
+          "import type { ComponentType } from \"react\";"
+        ],
+        "description": "Components rendered in the site header next to the theme toggle (sign-in, cart …).",
+        "inferred": false
+      },
+      "next-plugins": {
+        "file": "src/generated/next.ts",
+        "export": "nextPlugins",
+        "type": "(config: NextConfig) => NextConfig",
+        "typeImports": [],
+        "description": "next.config wrappers (Sentry, next-intl …). Generated into src/generated/next.ts.",
+        "inferred": false
+      },
+      "proxy": {
+        "file": "src/generated/proxy.ts",
+        "export": "proxyHandlers",
+        "type": "(request: NextRequest, response: NextResponse) => Response | undefined | Promise<Response | undefined>",
+        "typeImports": [
+          "import type { NextRequest, NextResponse } from \"next/server\";"
+        ],
+        "description": "Request handlers run by src/proxy.ts in order. Set cookies/headers on `response` and return nothing to continue, or return a Response to stop.",
+        "inferred": false
+      },
+      "html-lang": {
+        "file": "src/generated/html-lang.ts",
+        "export": "htmlLang",
+        "type": "() => string | undefined | Promise<string | undefined>",
+        "typeImports": [],
+        "description": "Resolvers for <html lang> (i18n). The first non-empty result wins; otherwise site.config.ts locale.",
+        "inferred": false
+      },
+      "error-reporters": {
+        "file": "src/generated/error-reporters.ts",
+        "export": "errorReporters",
+        "type": "(error: Error & { digest?: string }) => void",
+        "typeImports": [],
+        "description": "Called by error.tsx and global-error.tsx with errors caught by React boundaries (Sentry …). Client-side.",
+        "inferred": false
+      }
+    },
+    "env": [
+      {
+        "name": "NEXT_PUBLIC_SITE_URL",
+        "description": "Canonical public URL of the site, no trailing slash. Falls back to the url in site.config.ts",
+        "required": false,
+        "scope": "client",
+        "example": "http://localhost:3000"
+      }
+    ],
+    "allowBuilds": [
+      "@tailwindcss/oxide",
+      "esbuild",
+      "sharp",
+      "unrs-resolver"
+    ]
+  },
+  "preset": "saas",
+  "theme": "neutral",
+  "modules": {
+    "seo": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "seo",
+      "version": "1.0.0",
+      "title": "SEO",
+      "description": "sitemap.xml, robots.txt (no-index outside production), JSON-LD helpers and generated Open Graph images.",
+      "category": "seo-ops",
+      "requires": [],
+      "conflicts": [],
+      "ui": [],
+      "sections": [],
+      "files": [
+        {
+          "from": "src/app/sitemap.ts",
+          "to": "src/app/sitemap.ts"
+        },
+        {
+          "from": "src/app/robots.ts",
+          "to": "src/app/robots.ts"
+        },
+        {
+          "from": "src/app/opengraph-image.tsx",
+          "to": "src/app/opengraph-image.tsx"
+        },
+        {
+          "from": "src/lib/seo/json-ld.tsx",
+          "to": "src/lib/seo/json-ld.tsx"
+        },
+        {
+          "from": "src/lib/seo/og-image.tsx",
+          "to": "src/lib/seo/og-image.tsx"
+        },
+        {
+          "from": "src/lib/seo/og-theme.ts",
+          "to": "src/lib/seo/og-theme.ts"
+        },
+        {
+          "from": "src/lib/seo/site-json-ld.tsx",
+          "to": "src/lib/seo/site-json-ld.tsx"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [],
+      "slots": {
+        "sitemap": {
+          "file": "src/generated/sitemap.ts",
+          "export": "sitemapSources",
+          "type": "() => MetadataRoute.Sitemap | Promise<MetadataRoute.Sitemap>",
+          "typeImports": [
+            "import type { MetadataRoute } from \"next\";"
+          ],
+          "description": "Functions returning sitemap entries (blog posts, docs pages …), merged into /sitemap.xml.",
+          "inferred": false
+        }
+      },
+      "contributes": {
+        "slots": [
+          {
+            "slot": "body-end",
+            "import": "SiteJsonLd",
+            "from": "src/lib/seo/site-json-ld.tsx",
+            "order": 100
+          }
+        ],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [],
+        "siteConfig": {},
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/sitemap.xml",
+        "/robots.txt",
+        "/opengraph-image"
+      ],
+      "postInstall": [
+        "robots.txt blocks indexing unless VERCEL_ENV=production (or NODE_ENV=production off Vercel).",
+        "Open Graph images use colors from src/lib/seo/og-theme.ts."
+      ]
+    },
+    "analytics": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "analytics",
+      "version": "1.0.1",
+      "title": "Analytics",
+      "description": "One track() for Plausible, PostHog, Google Analytics 4 or Umami, chosen by env vars; waits for cookie consent when the provider needs it; logs events locally in dev.",
+      "category": "seo-ops",
+      "requires": [],
+      "conflicts": [],
+      "ui": [],
+      "sections": [],
+      "files": [
+        {
+          "from": "src/env/analytics.ts",
+          "to": "src/env/analytics.ts"
+        },
+        {
+          "from": "src/lib/analytics/providers.ts",
+          "to": "src/lib/analytics/providers.ts"
+        },
+        {
+          "from": "src/lib/analytics/track.ts",
+          "to": "src/lib/analytics/track.ts"
+        },
+        {
+          "from": "src/lib/analytics/consent.ts",
+          "to": "src/lib/analytics/consent.ts"
+        },
+        {
+          "from": "src/components/analytics/analytics.tsx",
+          "to": "src/components/analytics/analytics.tsx"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [
+        {
+          "name": "NEXT_PUBLIC_PLAUSIBLE_DOMAIN",
+          "description": "Enables Plausible (cookieless) for this domain",
+          "required": false,
+          "scope": "client",
+          "example": "",
+          "howTo": "https://plausible.io/sites"
+        },
+        {
+          "name": "NEXT_PUBLIC_PLAUSIBLE_SRC",
+          "description": "Script URL for self-hosted Plausible (default https://plausible.io/js/script.js)",
+          "required": false,
+          "scope": "client",
+          "example": ""
+        },
+        {
+          "name": "NEXT_PUBLIC_POSTHOG_KEY",
+          "description": "Enables PostHog (project API key, phc_…)",
+          "required": false,
+          "scope": "client",
+          "example": "",
+          "howTo": "PostHog → Project settings → Project API key"
+        },
+        {
+          "name": "NEXT_PUBLIC_POSTHOG_HOST",
+          "description": "PostHog ingest host",
+          "required": false,
+          "scope": "client",
+          "example": "https://us.i.posthog.com"
+        },
+        {
+          "name": "NEXT_PUBLIC_GA_MEASUREMENT_ID",
+          "description": "Enables Google Analytics 4 (G-XXXXXXX)",
+          "required": false,
+          "scope": "client",
+          "example": "",
+          "howTo": "GA → Admin → Data streams"
+        },
+        {
+          "name": "NEXT_PUBLIC_UMAMI_WEBSITE_ID",
+          "description": "Enables Umami (cookieless)",
+          "required": false,
+          "scope": "client",
+          "example": "",
+          "howTo": "Umami → Settings → Websites"
+        },
+        {
+          "name": "NEXT_PUBLIC_UMAMI_SRC",
+          "description": "Umami script URL (default Umami Cloud)",
+          "required": false,
+          "scope": "client",
+          "example": ""
+        }
+      ],
+      "envFile": "src/env/analytics.ts",
+      "dbSchema": [],
+      "slots": {},
+      "contributes": {
+        "slots": [
+          {
+            "slot": "body-end",
+            "import": "Analytics",
+            "from": "src/components/analytics/analytics.tsx",
+            "order": 10
+          }
+        ],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {
+            "script-src": [
+              "$NEXT_PUBLIC_PLAUSIBLE_SRC",
+              "$NEXT_PUBLIC_PLAUSIBLE_DOMAIN?https://plausible.io",
+              "$NEXT_PUBLIC_POSTHOG_KEY?https://us-assets.i.posthog.com",
+              "$NEXT_PUBLIC_POSTHOG_KEY?https://eu-assets.i.posthog.com",
+              "$NEXT_PUBLIC_GA_MEASUREMENT_ID?https://www.googletagmanager.com",
+              "$NEXT_PUBLIC_UMAMI_SRC",
+              "$NEXT_PUBLIC_UMAMI_WEBSITE_ID?https://cloud.umami.is"
+            ],
+            "connect-src": [
+              "$NEXT_PUBLIC_PLAUSIBLE_SRC",
+              "$NEXT_PUBLIC_PLAUSIBLE_DOMAIN?https://plausible.io",
+              "$NEXT_PUBLIC_POSTHOG_HOST",
+              "$NEXT_PUBLIC_POSTHOG_KEY?https://us.i.posthog.com",
+              "$NEXT_PUBLIC_POSTHOG_KEY?https://us-assets.i.posthog.com",
+              "$NEXT_PUBLIC_POSTHOG_KEY?https://eu.i.posthog.com",
+              "$NEXT_PUBLIC_POSTHOG_KEY?https://eu-assets.i.posthog.com",
+              "$NEXT_PUBLIC_GA_MEASUREMENT_ID?https://*.google-analytics.com",
+              "$NEXT_PUBLIC_GA_MEASUREMENT_ID?https://*.analytics.google.com",
+              "$NEXT_PUBLIC_GA_MEASUREMENT_ID?https://www.googletagmanager.com",
+              "$NEXT_PUBLIC_UMAMI_SRC",
+              "$NEXT_PUBLIC_UMAMI_WEBSITE_ID?https://cloud.umami.is",
+              "$NEXT_PUBLIC_UMAMI_WEBSITE_ID?https://api-gateway.umami.dev"
+            ],
+            "img-src": [
+              "$NEXT_PUBLIC_GA_MEASUREMENT_ID?https://*.google-analytics.com",
+              "$NEXT_PUBLIC_GA_MEASUREMENT_ID?https://www.googletagmanager.com"
+            ]
+          }
+        },
+        "nav": [],
+        "siteConfig": {
+          "analytics": {
+            "consent": "cookieless-exempt"
+          }
+        },
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [],
+      "postInstall": [
+        "Set the env var for one provider (e.g. NEXT_PUBLIC_PLAUSIBLE_DOMAIN). Without any, track() logs to the browser console in development.",
+        "Custom events: import { track } from \"@/lib/analytics/track\"; track(\"signup\", { plan: \"pro\" })."
+      ]
+    },
+    "ci": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "ci",
+      "version": "1.0.0",
+      "title": "GitHub Actions CI",
+      "description": "Lint, typecheck, test and build on every push and pull request, with cached installs and Next.js builds, least-privilege tokens and grouped Dependabot updates.",
+      "category": "seo-ops",
+      "requires": [],
+      "conflicts": [],
+      "ui": [],
+      "sections": [],
+      "files": [
+        {
+          "from": ".github/workflows/ci.yml",
+          "to": ".github/workflows/ci.yml"
+        },
+        {
+          "from": ".github/dependabot.yml",
+          "to": ".github/dependabot.yml"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [],
+      "slots": {},
+      "contributes": {
+        "slots": [],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [],
+        "siteConfig": {},
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [],
+      "postInstall": [
+        "Push to GitHub: CI runs on pushes to main and on every pull request."
+      ]
+    },
+    "vercel": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "vercel",
+      "version": "1.0.0",
+      "title": "Vercel deployment",
+      "description": "vercel.json that checks production env vars before building, security-minded defaults, and a step-by-step deploy guide.",
+      "category": "seo-ops",
+      "requires": [],
+      "conflicts": [],
+      "ui": [],
+      "sections": [],
+      "files": [
+        {
+          "from": "vercel.json",
+          "to": "vercel.json"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [],
+      "slots": {},
+      "contributes": {
+        "slots": [],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [],
+        "siteConfig": {},
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [],
+      "postInstall": [
+        "Import the repository at vercel.com/new, add the variables from .env.example, and deploy."
+      ]
+    },
+    "cookie-consent": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "cookie-consent",
+      "version": "1.0.0",
+      "title": "Cookie consent",
+      "description": "GDPR-style consent banner with equal accept/reject, per-category choices, and a cookie contract other modules read.",
+      "category": "marketing",
+      "requires": [],
+      "conflicts": [],
+      "ui": [
+        "button",
+        "switch"
+      ],
+      "sections": [],
+      "files": [
+        {
+          "from": "src/lib/consent/consent.ts",
+          "to": "src/lib/consent/consent.ts"
+        },
+        {
+          "from": "src/lib/consent/server.ts",
+          "to": "src/lib/consent/server.ts"
+        },
+        {
+          "from": "src/lib/consent/config.ts",
+          "to": "src/lib/consent/config.ts"
+        },
+        {
+          "from": "src/components/consent/cookie-banner.tsx",
+          "to": "src/components/consent/cookie-banner.tsx"
+        },
+        {
+          "from": "src/components/consent/use-consent.ts",
+          "to": "src/components/consent/use-consent.ts"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [],
+      "slots": {},
+      "contributes": {
+        "slots": [
+          {
+            "slot": "body-end",
+            "import": "CookieBanner",
+            "from": "src/components/consent/cookie-banner.tsx",
+            "order": 90
+          }
+        ],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [
+          {
+            "location": "legal",
+            "label": "Cookie settings",
+            "href": "#cookie-settings"
+          }
+        ],
+        "siteConfig": {
+          "cookieConsent": {
+            "title": "Cookies",
+            "description": "We use essential cookies to run this site, and optional ones to understand usage and improve it. You choose.",
+            "policyHref": "/legal/cookies",
+            "categories": {
+              "analytics": "Analytics: anonymous usage statistics",
+              "marketing": "Marketing: campaign measurement"
+            }
+          }
+        },
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [],
+      "postInstall": [
+        "Consent is stored in the `site_consent` cookie ({\"v\":1,\"analytics\":bool,\"marketing\":bool}).",
+        "Any link to #cookie-settings reopens the banner (one is added to the legal footer links)."
+      ]
+    },
+    "mdx": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "mdx",
+      "version": "1.0.1",
+      "title": "MDX content",
+      "description": "Typed MDX collections: Zod-validated frontmatter, drafts, TOC, reading time, token-themed code highlighting, RSS helper.",
+      "category": "content",
+      "requires": [],
+      "conflicts": [],
+      "ui": [
+        "prose"
+      ],
+      "sections": [],
+      "files": [
+        {
+          "from": "src/lib/mdx/collection.ts",
+          "to": "src/lib/mdx/collection.ts"
+        },
+        {
+          "from": "src/lib/mdx/render.tsx",
+          "to": "src/lib/mdx/render.tsx"
+        },
+        {
+          "from": "src/lib/mdx/rss.ts",
+          "to": "src/lib/mdx/rss.ts"
+        },
+        {
+          "from": "src/lib/mdx/text.ts",
+          "to": "src/lib/mdx/text.ts"
+        },
+        {
+          "from": "src/components/mdx/mdx-components.tsx",
+          "to": "src/components/mdx/mdx-components.tsx"
+        },
+        {
+          "from": "src/components/mdx/callout.tsx",
+          "to": "src/components/mdx/callout.tsx"
+        },
+        {
+          "from": "src/components/mdx/code-block.tsx",
+          "to": "src/components/mdx/code-block.tsx"
+        },
+        {
+          "from": "src/components/mdx/copy-button.tsx",
+          "to": "src/components/mdx/copy-button.tsx"
+        },
+        {
+          "from": "src/components/mdx/table-of-contents.tsx",
+          "to": "src/components/mdx/table-of-contents.tsx"
+        }
+      ],
+      "dependencies": {
+        "github-slugger": "^2.0.0",
+        "next-mdx-remote-client": "^2.1.0",
+        "rehype-autolink-headings": "^7.1.0",
+        "rehype-pretty-code": "^0.14.0",
+        "rehype-slug": "^6.0.0",
+        "remark-gfm": "^4.0.0",
+        "server-only": "^0.0.1",
+        "shiki": "^4.0.0",
+        "yaml": "^2.8.0"
+      },
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [],
+      "slots": {},
+      "contributes": {
+        "slots": [],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [],
+        "siteConfig": {},
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [],
+      "postInstall": [
+        "Content lives in /content. Define a collection with defineCollection({ directory, schema }).",
+        "Code highlighting is driven by theme tokens (primary, success, warning, ring): no extra CSS."
+      ]
+    },
+    "legal": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "legal",
+      "version": "1.0.0",
+      "title": "Legal pages",
+      "description": "Privacy policy, terms of service and cookie policy as editable MDX templates filled from site.config.",
+      "category": "content",
+      "requires": [
+        "mdx"
+      ],
+      "conflicts": [],
+      "ui": [
+        "prose"
+      ],
+      "sections": [
+        "page-header"
+      ],
+      "files": [
+        {
+          "from": "content/legal/privacy.mdx",
+          "to": "content/legal/privacy.mdx"
+        },
+        {
+          "from": "content/legal/terms.mdx",
+          "to": "content/legal/terms.mdx"
+        },
+        {
+          "from": "content/legal/cookies.mdx",
+          "to": "content/legal/cookies.mdx"
+        },
+        {
+          "from": "src/lib/legal/pages.ts",
+          "to": "src/lib/legal/pages.ts"
+        },
+        {
+          "from": "src/app/(site)/legal/[slug]/page.tsx",
+          "to": "src/app/(site)/legal/[slug]/page.tsx"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [],
+      "slots": {},
+      "contributes": {
+        "slots": [],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [
+          {
+            "location": "legal",
+            "label": "Privacy",
+            "href": "/legal/privacy"
+          },
+          {
+            "location": "legal",
+            "label": "Terms",
+            "href": "/legal/terms"
+          },
+          {
+            "location": "legal",
+            "label": "Cookies",
+            "href": "/legal/cookies"
+          }
+        ],
+        "siteConfig": {
+          "legal": {
+            "companyName": "",
+            "contactEmail": "",
+            "jurisdiction": "",
+            "address": ""
+          }
+        },
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/legal/privacy",
+        "/legal/terms",
+        "/legal/cookies"
+      ],
+      "postInstall": [
+        "Fill the `legal` block in site.config.ts: the templates use those values.",
+        "The templates are a starting point, not legal advice. Have them reviewed for your jurisdiction."
+      ]
+    },
+    "email": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "email",
+      "version": "1.1.0",
+      "title": "Email",
+      "description": "Send React Email templates through Resend. In development, mail lands in a local outbox at /dev/outbox.",
+      "category": "infrastructure",
+      "requires": [],
+      "conflicts": [],
+      "ui": [],
+      "sections": [],
+      "files": [
+        {
+          "from": "src/env/email.ts",
+          "to": "src/env/email.ts"
+        },
+        {
+          "from": "src/lib/email/send.ts",
+          "to": "src/lib/email/send.ts"
+        },
+        {
+          "from": "src/lib/email/outbox.ts",
+          "to": "src/lib/email/outbox.ts"
+        },
+        {
+          "from": "src/emails/theme.ts",
+          "to": "src/emails/theme.ts"
+        },
+        {
+          "from": "src/emails/components/email-layout.tsx",
+          "to": "src/emails/components/email-layout.tsx"
+        },
+        {
+          "from": "src/app/dev/outbox/page.tsx",
+          "to": "src/app/dev/outbox/page.tsx"
+        },
+        {
+          "from": "src/app/dev/outbox/[id]/page.tsx",
+          "to": "src/app/dev/outbox/[id]/page.tsx"
+        }
+      ],
+      "dependencies": {
+        "@react-email/components": "^1.0.0",
+        "@react-email/render": "^2.0.0",
+        "resend": "^6.0.0",
+        "server-only": "^0.0.1"
+      },
+      "devDependencies": {},
+      "env": [
+        {
+          "name": "RESEND_API_KEY",
+          "description": "Resend API key. Without it (in development) emails are saved to the local outbox",
+          "required": true,
+          "scope": "server",
+          "example": "re_xxxxxxxx",
+          "howTo": "https://resend.com/api-keys"
+        },
+        {
+          "name": "EMAIL_FROM",
+          "description": "Default sender, on a domain verified in Resend",
+          "required": true,
+          "scope": "server",
+          "example": "Acme <hello@acme.com>",
+          "howTo": "https://resend.com/domains"
+        },
+        {
+          "name": "EMAIL_OUTBOX",
+          "description": "Set to 1 to capture every email in the outbox instead of sending (previews, staging, CI). /dev/outbox then works in production builds too",
+          "required": false,
+          "scope": "server",
+          "example": ""
+        }
+      ],
+      "envFile": "src/env/email.ts",
+      "dbSchema": [],
+      "slots": {},
+      "contributes": {
+        "slots": [],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [],
+        "siteConfig": {},
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/dev/outbox"
+      ],
+      "postInstall": [
+        "In development, open /dev/outbox to read every email the site sends.",
+        "For production, verify your domain in Resend and set RESEND_API_KEY + EMAIL_FROM.",
+        "Email colors live in src/emails/theme.ts (email clients can't read CSS variables)."
+      ]
+    },
+    "rate-limit": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "rate-limit",
+      "version": "1.0.0",
+      "title": "Rate limiting",
+      "description": "Sliding-window rate limits for actions and API routes. Upstash Redis in production, in-memory locally.",
+      "category": "infrastructure",
+      "requires": [],
+      "conflicts": [],
+      "ui": [],
+      "sections": [],
+      "files": [
+        {
+          "from": "src/lib/rate-limit.ts",
+          "to": "src/lib/rate-limit.ts"
+        },
+        {
+          "from": "src/env/rate-limit.ts",
+          "to": "src/env/rate-limit.ts"
+        }
+      ],
+      "dependencies": {
+        "@upstash/ratelimit": "^2.0.0",
+        "@upstash/redis": "^1.35.0",
+        "server-only": "^0.0.1"
+      },
+      "devDependencies": {},
+      "env": [
+        {
+          "name": "UPSTASH_REDIS_REST_URL",
+          "description": "Upstash Redis REST URL. Without it, limits are kept in memory (per server instance)",
+          "required": false,
+          "scope": "server",
+          "example": "https://your-db.upstash.io",
+          "howTo": "https://console.upstash.com → Redis → REST API"
+        },
+        {
+          "name": "UPSTASH_REDIS_REST_TOKEN",
+          "description": "Upstash Redis REST token",
+          "required": false,
+          "scope": "server",
+          "example": "",
+          "howTo": "Same page as the URL"
+        }
+      ],
+      "envFile": "src/env/rate-limit.ts",
+      "dbSchema": [],
+      "slots": {},
+      "contributes": {
+        "slots": [],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [],
+        "siteConfig": {},
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [],
+      "postInstall": []
+    },
+    "contact": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "contact",
+      "version": "1.1.0",
+      "title": "Contact form",
+      "description": "Contact page and form with layered spam protection (honeypot, timing, rate limit, optional Turnstile) and email delivery.",
+      "category": "marketing",
+      "requires": [
+        "email",
+        "rate-limit"
+      ],
+      "conflicts": [],
+      "ui": [
+        "button",
+        "input",
+        "textarea",
+        "field"
+      ],
+      "sections": [],
+      "files": [
+        {
+          "from": "src/app/(site)/contact/page.tsx",
+          "to": "src/app/(site)/contact/page.tsx"
+        },
+        {
+          "from": "src/components/contact/contact-form.tsx",
+          "to": "src/components/contact/contact-form.tsx"
+        },
+        {
+          "from": "src/components/contact/turnstile.tsx",
+          "to": "src/components/contact/turnstile.tsx"
+        },
+        {
+          "from": "src/lib/contact/schema.ts",
+          "to": "src/lib/contact/schema.ts"
+        },
+        {
+          "from": "src/lib/contact/actions.tsx",
+          "to": "src/lib/contact/actions.tsx"
+        },
+        {
+          "from": "src/lib/contact/spam.ts",
+          "to": "src/lib/contact/spam.ts"
+        },
+        {
+          "from": "src/lib/contact/config.ts",
+          "to": "src/lib/contact/config.ts"
+        },
+        {
+          "from": "src/emails/contact-notification.tsx",
+          "to": "src/emails/contact-notification.tsx"
+        },
+        {
+          "from": "src/env/contact.ts",
+          "to": "src/env/contact.ts"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [
+        {
+          "name": "CONTACT_TO_EMAIL",
+          "description": "Inbox that receives contact form submissions",
+          "required": true,
+          "scope": "server",
+          "example": "hello@example.com"
+        },
+        {
+          "name": "NEXT_PUBLIC_TURNSTILE_SITE_KEY",
+          "description": "Cloudflare Turnstile site key. Set both Turnstile keys to add an invisible challenge",
+          "required": false,
+          "scope": "client",
+          "example": "",
+          "howTo": "https://dash.cloudflare.com → Turnstile → Add site"
+        },
+        {
+          "name": "TURNSTILE_SECRET_KEY",
+          "description": "Cloudflare Turnstile secret key",
+          "required": false,
+          "scope": "server",
+          "example": ""
+        }
+      ],
+      "envFile": "src/env/contact.ts",
+      "dbSchema": [],
+      "slots": {},
+      "contributes": {
+        "slots": [
+          {
+            "slot": "email-templates",
+            "import": "ContactNotificationEmail",
+            "from": "src/emails/contact-notification.tsx",
+            "order": 100
+          }
+        ],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {
+            "script-src": [
+              "https://challenges.cloudflare.com"
+            ],
+            "frame-src": [
+              "https://challenges.cloudflare.com"
+            ],
+            "connect-src": [
+              "https://challenges.cloudflare.com"
+            ]
+          }
+        },
+        "nav": [
+          {
+            "location": "footer",
+            "group": "Company",
+            "label": "Contact",
+            "href": "/contact"
+          }
+        ],
+        "siteConfig": {
+          "contact": {
+            "title": "Get in touch",
+            "description": "Questions, ideas or feedback. We read every message and reply by email.",
+            "successMessage": "Thanks! Your message is on its way. We'll get back to you by email.",
+            "subjectPrefix": "[Contact]"
+          }
+        },
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/contact"
+      ],
+      "postInstall": [
+        "Set CONTACT_TO_EMAIL to the inbox that should receive messages.",
+        "Page copy lives in site.config.ts under `contact`.",
+        "Optional: add Cloudflare Turnstile keys for an invisible bot challenge."
+      ]
+    },
+    "blog": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "blog",
+      "version": "1.0.0",
+      "title": "Blog",
+      "description": "MDX blog with static pagination, tags, reading time, per-post OG images, RSS, JSON-LD and sitemap entries.",
+      "category": "content",
+      "requires": [
+        "mdx",
+        "seo"
+      ],
+      "conflicts": [],
+      "ui": [
+        "prose",
+        "pagination"
+      ],
+      "sections": [
+        "blog-list",
+        "page-header"
+      ],
+      "files": [
+        {
+          "from": "content/blog/welcome.mdx",
+          "to": "content/blog/welcome.mdx"
+        },
+        {
+          "from": "src/lib/blog/posts.ts",
+          "to": "src/lib/blog/posts.ts"
+        },
+        {
+          "from": "src/lib/blog/config.ts",
+          "to": "src/lib/blog/config.ts"
+        },
+        {
+          "from": "src/lib/blog/sitemap.ts",
+          "to": "src/lib/blog/sitemap.ts"
+        },
+        {
+          "from": "src/app/(site)/blog/page.tsx",
+          "to": "src/app/(site)/blog/page.tsx"
+        },
+        {
+          "from": "src/app/(site)/blog/page/[page]/page.tsx",
+          "to": "src/app/(site)/blog/page/[page]/page.tsx"
+        },
+        {
+          "from": "src/app/(site)/blog/[slug]/page.tsx",
+          "to": "src/app/(site)/blog/[slug]/page.tsx"
+        },
+        {
+          "from": "src/app/(site)/blog/[slug]/opengraph-image.tsx",
+          "to": "src/app/(site)/blog/[slug]/opengraph-image.tsx"
+        },
+        {
+          "from": "src/app/(site)/blog/tags/[tag]/page.tsx",
+          "to": "src/app/(site)/blog/tags/[tag]/page.tsx"
+        },
+        {
+          "from": "src/app/(site)/blog/rss.xml/route.ts",
+          "to": "src/app/(site)/blog/rss.xml/route.ts"
+        },
+        {
+          "from": "src/components/blog/post-index.tsx",
+          "to": "src/components/blog/post-index.tsx"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [],
+      "slots": {},
+      "contributes": {
+        "slots": [
+          {
+            "slot": "sitemap",
+            "import": "blogSitemap",
+            "from": "src/lib/blog/sitemap.ts",
+            "order": 100
+          }
+        ],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [
+          {
+            "location": "header",
+            "label": "Blog",
+            "href": "/blog"
+          }
+        ],
+        "siteConfig": {
+          "blog": {
+            "title": "Blog",
+            "description": "Notes, announcements and long reads.",
+            "postsPerPage": 12
+          }
+        },
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/blog",
+        "/blog/[slug]",
+        "/blog/tags/[tag]",
+        "/blog/page/[page]",
+        "/blog/rss.xml"
+      ],
+      "postInstall": [
+        "Write posts in content/blog/*.mdx. Frontmatter: title, date, description?, tags?, image?, draft?",
+        "Delete content/blog/welcome.mdx once you have a real post."
+      ]
+    },
+    "changelog": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "changelog",
+      "version": "1.0.0",
+      "title": "Changelog",
+      "description": "Release notes from MDX: dated entries with versions and change types, deep links, RSS feed.",
+      "category": "content",
+      "requires": [
+        "mdx"
+      ],
+      "conflicts": [],
+      "ui": [
+        "prose",
+        "badge"
+      ],
+      "sections": [
+        "page-header"
+      ],
+      "files": [
+        {
+          "from": "content/changelog/2026-01-01-first-release.mdx",
+          "to": "content/changelog/2026-01-01-first-release.mdx"
+        },
+        {
+          "from": "src/lib/changelog/entries.ts",
+          "to": "src/lib/changelog/entries.ts"
+        },
+        {
+          "from": "src/app/(site)/changelog/page.tsx",
+          "to": "src/app/(site)/changelog/page.tsx"
+        },
+        {
+          "from": "src/app/(site)/changelog/rss.xml/route.ts",
+          "to": "src/app/(site)/changelog/rss.xml/route.ts"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [],
+      "slots": {},
+      "contributes": {
+        "slots": [],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [
+          {
+            "location": "footer",
+            "group": "Product",
+            "label": "Changelog",
+            "href": "/changelog"
+          }
+        ],
+        "siteConfig": {
+          "changelog": {
+            "title": "Changelog",
+            "description": "New features, improvements and fixes."
+          }
+        },
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/changelog",
+        "/changelog/rss.xml"
+      ],
+      "postInstall": [
+        "Add entries as content/changelog/<date>-<slug>.mdx with title, date, version? and type?."
+      ]
+    },
+    "faq": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "faq",
+      "version": "1.0.0",
+      "title": "FAQ",
+      "description": "Typed FAQ data source (content/faq.json) grouped by category, a /faq page and FAQPage structured data.",
+      "category": "marketing",
+      "requires": [
+        "seo"
+      ],
+      "conflicts": [],
+      "ui": [],
+      "sections": [
+        "faq",
+        "page-header"
+      ],
+      "files": [
+        {
+          "from": "content/faq.json",
+          "to": "content/faq.json"
+        },
+        {
+          "from": "src/lib/faq.ts",
+          "to": "src/lib/faq.ts"
+        },
+        {
+          "from": "src/app/(site)/faq/page.tsx",
+          "to": "src/app/(site)/faq/page.tsx"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [],
+      "slots": {},
+      "contributes": {
+        "slots": [],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [
+          {
+            "location": "footer",
+            "group": "Support",
+            "label": "FAQ",
+            "href": "/faq"
+          }
+        ],
+        "siteConfig": {
+          "faq": {
+            "title": "Frequently asked questions",
+            "description": "Quick answers to common questions."
+          }
+        },
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/faq"
+      ],
+      "postInstall": [
+        "Edit content/faq.json. Use getFaqs() with the faq section on any page (e.g. pricing)."
+      ]
+    },
+    "database": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "database",
+      "version": "1.1.1",
+      "title": "Database",
+      "description": "Drizzle ORM on Postgres (Neon, Supabase or any Postgres). Zero-setup embedded PGlite in development with automatic schema push.",
+      "category": "saas",
+      "requires": [],
+      "conflicts": [],
+      "ui": [],
+      "sections": [],
+      "files": [
+        {
+          "from": "src/db/index.ts",
+          "to": "src/db/index.ts"
+        },
+        {
+          "from": "src/env/database.ts",
+          "to": "src/env/database.ts"
+        },
+        {
+          "from": "drizzle.config.ts",
+          "to": "drizzle.config.ts"
+        },
+        {
+          "from": "scripts/dev-db.ts",
+          "to": "scripts/dev-db.ts"
+        }
+      ],
+      "dependencies": {
+        "@electric-sql/pglite": "^0.5.0",
+        "drizzle-orm": "^0.45.0",
+        "postgres": "^3.4.0",
+        "server-only": "^0.0.1"
+      },
+      "devDependencies": {
+        "drizzle-kit": "^0.31.0"
+      },
+      "env": [
+        {
+          "name": "DATABASE_URL",
+          "description": "Postgres connection string. Unset in development = embedded PGlite in .site/dev/pglite",
+          "required": true,
+          "scope": "server",
+          "example": "postgres://user:password@host:5432/db?sslmode=require",
+          "howTo": "Neon: console.neon.tech → Connection string (pooled). Supabase: Project settings → Database → Transaction pooler"
+        }
+      ],
+      "envFile": "src/env/database.ts",
+      "dbSchema": [],
+      "slots": {},
+      "contributes": {
+        "slots": [],
+        "next": {
+          "serverExternalPackages": [
+            "@electric-sql/pglite"
+          ],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [],
+        "siteConfig": {},
+        "features": {},
+        "scripts": {
+          "predev": "tsx scripts/dev-db.ts",
+          "db:generate": "drizzle-kit generate",
+          "db:migrate": "drizzle-kit migrate",
+          "db:push": "drizzle-kit push",
+          "db:studio": "drizzle-kit studio",
+          "db:dev": "tsx scripts/dev-db.ts"
+        },
+        "gitignore": [
+          ".site/dev/"
+        ],
+        "allowBuilds": []
+      },
+      "routes": [],
+      "postInstall": [
+        "Development needs nothing: `pnpm dev` pushes the schema into an embedded PGlite database.",
+        "Production: set DATABASE_URL, then `pnpm db:generate` and `pnpm db:migrate` (commit the /drizzle folder)."
+      ]
+    },
+    "auth": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "auth",
+      "version": "1.1.0",
+      "title": "Authentication",
+      "description": "Better Auth: email + password with verification, magic links, Google and GitHub OAuth, password reset, protected routes.",
+      "category": "saas",
+      "requires": [
+        "database",
+        "email",
+        "rate-limit"
+      ],
+      "conflicts": [],
+      "ui": [
+        "button",
+        "input",
+        "field",
+        "separator",
+        "alert",
+        "dropdown-menu",
+        "avatar"
+      ],
+      "sections": [
+        "auth-card"
+      ],
+      "files": [
+        {
+          "from": "src/db/schema/auth.ts",
+          "to": "src/db/schema/auth.ts"
+        },
+        {
+          "from": "src/env/auth.ts",
+          "to": "src/env/auth.ts"
+        },
+        {
+          "from": "src/lib/auth/auth.ts",
+          "to": "src/lib/auth/auth.ts"
+        },
+        {
+          "from": "src/lib/auth/client.ts",
+          "to": "src/lib/auth/client.ts"
+        },
+        {
+          "from": "src/lib/auth/config.ts",
+          "to": "src/lib/auth/config.ts"
+        },
+        {
+          "from": "src/lib/auth/session.ts",
+          "to": "src/lib/auth/session.ts"
+        },
+        {
+          "from": "src/lib/auth/actions.ts",
+          "to": "src/lib/auth/actions.ts"
+        },
+        {
+          "from": "src/lib/auth/events.ts",
+          "to": "src/lib/auth/events.ts"
+        },
+        {
+          "from": "src/lib/auth/proxy.ts",
+          "to": "src/lib/auth/proxy.ts"
+        },
+        {
+          "from": "src/lib/auth/redirect.ts",
+          "to": "src/lib/auth/redirect.ts"
+        },
+        {
+          "from": "src/components/auth/auth-form.tsx",
+          "to": "src/components/auth/auth-form.tsx"
+        },
+        {
+          "from": "src/components/auth/sign-in-form.tsx",
+          "to": "src/components/auth/sign-in-form.tsx"
+        },
+        {
+          "from": "src/components/auth/sign-up-form.tsx",
+          "to": "src/components/auth/sign-up-form.tsx"
+        },
+        {
+          "from": "src/components/auth/password-reset-forms.tsx",
+          "to": "src/components/auth/password-reset-forms.tsx"
+        },
+        {
+          "from": "src/components/auth/social-buttons.tsx",
+          "to": "src/components/auth/social-buttons.tsx"
+        },
+        {
+          "from": "src/components/auth/user-menu.tsx",
+          "to": "src/components/auth/user-menu.tsx"
+        },
+        {
+          "from": "src/components/auth/auth-header-actions.tsx",
+          "to": "src/components/auth/auth-header-actions.tsx"
+        },
+        {
+          "from": "src/emails/auth/verify-email.tsx",
+          "to": "src/emails/auth/verify-email.tsx"
+        },
+        {
+          "from": "src/emails/auth/reset-password.tsx",
+          "to": "src/emails/auth/reset-password.tsx"
+        },
+        {
+          "from": "src/emails/auth/magic-link.tsx",
+          "to": "src/emails/auth/magic-link.tsx"
+        },
+        {
+          "from": "src/app/(auth)/layout.tsx",
+          "to": "src/app/(auth)/layout.tsx"
+        },
+        {
+          "from": "src/app/(auth)/sign-in/page.tsx",
+          "to": "src/app/(auth)/sign-in/page.tsx"
+        },
+        {
+          "from": "src/app/(auth)/sign-up/page.tsx",
+          "to": "src/app/(auth)/sign-up/page.tsx"
+        },
+        {
+          "from": "src/app/(auth)/forgot-password/page.tsx",
+          "to": "src/app/(auth)/forgot-password/page.tsx"
+        },
+        {
+          "from": "src/app/(auth)/reset-password/page.tsx",
+          "to": "src/app/(auth)/reset-password/page.tsx"
+        },
+        {
+          "from": "src/app/(auth)/verify-email/page.tsx",
+          "to": "src/app/(auth)/verify-email/page.tsx"
+        },
+        {
+          "from": "src/app/api/auth/[...all]/route.ts",
+          "to": "src/app/api/auth/[...all]/route.ts"
+        }
+      ],
+      "dependencies": {
+        "better-auth": "^1.7.0"
+      },
+      "devDependencies": {},
+      "env": [
+        {
+          "name": "BETTER_AUTH_SECRET",
+          "description": "Secret for signing sessions and tokens (32+ random characters)",
+          "required": true,
+          "scope": "server",
+          "example": "",
+          "howTo": "openssl rand -base64 32"
+        },
+        {
+          "name": "BETTER_AUTH_URL",
+          "description": "Public base URL for auth callbacks. Defaults to the site URL in production and the request origin in development",
+          "required": false,
+          "scope": "server",
+          "example": "https://example.com"
+        },
+        {
+          "name": "GOOGLE_CLIENT_ID",
+          "description": "Google OAuth client ID (enables “Continue with Google”)",
+          "required": false,
+          "scope": "server",
+          "example": "",
+          "howTo": "console.cloud.google.com → APIs & Services → Credentials; redirect URI: <site>/api/auth/callback/google"
+        },
+        {
+          "name": "GOOGLE_CLIENT_SECRET",
+          "description": "Google OAuth client secret",
+          "required": false,
+          "scope": "server",
+          "example": ""
+        },
+        {
+          "name": "GITHUB_CLIENT_ID",
+          "description": "GitHub OAuth app client ID (enables “Continue with GitHub”)",
+          "required": false,
+          "scope": "server",
+          "example": "",
+          "howTo": "github.com/settings/developers → OAuth Apps; callback: <site>/api/auth/callback/github"
+        },
+        {
+          "name": "GITHUB_CLIENT_SECRET",
+          "description": "GitHub OAuth app client secret",
+          "required": false,
+          "scope": "server",
+          "example": ""
+        }
+      ],
+      "envFile": "src/env/auth.ts",
+      "dbSchema": [
+        "src/db/schema/auth.ts"
+      ],
+      "slots": {
+        "auth-plugins": {
+          "file": "src/generated/auth-plugins.ts",
+          "export": "authPlugins",
+          "type": "BetterAuthPlugin",
+          "typeImports": [
+            "import type { BetterAuthPlugin } from \"better-auth\";"
+          ],
+          "description": "Better Auth server plugins contributed by modules (teams → organization, admin → admin).",
+          "inferred": true
+        },
+        "auth-client-plugins": {
+          "file": "src/generated/auth-client-plugins.ts",
+          "export": "authClientPlugins",
+          "type": "BetterAuthClientPlugin",
+          "typeImports": [
+            "import type { BetterAuthClientPlugin } from \"better-auth\";"
+          ],
+          "description": "Better Auth client plugins matching the server plugins.",
+          "inferred": true
+        },
+        "auth-events": {
+          "file": "src/generated/auth-events.ts",
+          "export": "authEvents",
+          "type": "(event: AuthEvent) => Promise<void>",
+          "typeImports": [
+            "import type { AuthEvent } from \"../lib/auth/events\";"
+          ],
+          "description": "Handlers for user lifecycle events (welcome email, notifications, onboarding).",
+          "inferred": false
+        }
+      },
+      "contributes": {
+        "slots": [
+          {
+            "slot": "proxy",
+            "import": "authProxy",
+            "from": "src/lib/auth/proxy.ts",
+            "order": 50
+          },
+          {
+            "slot": "header-actions",
+            "import": "AuthHeaderActions",
+            "from": "src/components/auth/auth-header-actions.tsx",
+            "order": 100
+          },
+          {
+            "slot": "email-templates",
+            "import": "VerifyEmail",
+            "from": "src/emails/auth/verify-email.tsx",
+            "order": 100
+          },
+          {
+            "slot": "email-templates",
+            "import": "ResetPasswordEmail",
+            "from": "src/emails/auth/reset-password.tsx",
+            "order": 100
+          },
+          {
+            "slot": "email-templates",
+            "import": "MagicLinkEmail",
+            "from": "src/emails/auth/magic-link.tsx",
+            "order": 100
+          }
+        ],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [
+            {
+              "protocol": "https",
+              "hostname": "lh3.googleusercontent.com"
+            },
+            {
+              "protocol": "https",
+              "hostname": "avatars.githubusercontent.com"
+            }
+          ],
+          "csp": {
+            "img-src": [
+              "https://lh3.googleusercontent.com",
+              "https://avatars.githubusercontent.com"
+            ]
+          }
+        },
+        "nav": [],
+        "siteConfig": {
+          "auth": {
+            "afterSignIn": "/dashboard",
+            "protectedPaths": [
+              "/dashboard",
+              "/settings",
+              "/admin",
+              "/onboarding"
+            ],
+            "requireEmailVerification": true,
+            "magicLink": true
+          }
+        },
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/sign-in",
+        "/sign-up",
+        "/forgot-password",
+        "/reset-password",
+        "/verify-email",
+        "/api/auth/*"
+      ],
+      "postInstall": [
+        "Development works immediately: verification and magic-link emails land in /dev/outbox.",
+        "Production: set BETTER_AUTH_SECRET; add Google/GitHub credentials to show their buttons.",
+        "Protect a page with `await requireSession()` from @/lib/auth/session (the proxy also redirects protectedPaths)."
+      ]
+    },
+    "dashboard": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "dashboard",
+      "version": "1.0.0",
+      "title": "Dashboard shell",
+      "description": "Signed-in app area: sidebar + topbar layout, nav from site.config, overview with widget and topbar slots for other modules.",
+      "category": "saas",
+      "requires": [
+        "auth"
+      ],
+      "conflicts": [],
+      "ui": [
+        "card",
+        "badge"
+      ],
+      "sections": [
+        "dashboard-shell",
+        "empty-state"
+      ],
+      "files": [
+        {
+          "from": "src/app/(app)/layout.tsx",
+          "to": "src/app/(app)/layout.tsx"
+        },
+        {
+          "from": "src/app/(app)/dashboard/page.tsx",
+          "to": "src/app/(app)/dashboard/page.tsx"
+        },
+        {
+          "from": "src/app/(app)/dashboard/loading.tsx",
+          "to": "src/app/(app)/dashboard/loading.tsx"
+        },
+        {
+          "from": "src/lib/dashboard/icons.tsx",
+          "to": "src/lib/dashboard/icons.tsx"
+        },
+        {
+          "from": "src/lib/dashboard/nav.ts",
+          "to": "src/lib/dashboard/nav.ts"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [],
+      "slots": {
+        "dashboard-widgets": {
+          "file": "src/generated/dashboard-widgets.ts",
+          "export": "dashboardWidgets",
+          "type": "(props: { userId: string }) => ReactNode | Promise<ReactNode>",
+          "typeImports": [
+            "import type { ReactNode } from \"react\";"
+          ],
+          "description": "Cards on the dashboard overview (plan, team, notifications …). Server components.",
+          "inferred": false
+        },
+        "dashboard-topbar": {
+          "file": "src/generated/dashboard-topbar.ts",
+          "export": "dashboardTopbar",
+          "type": "(props: { userId: string }) => ReactNode | Promise<ReactNode>",
+          "typeImports": [
+            "import type { ReactNode } from \"react\";"
+          ],
+          "description": "Items in the app top bar (team switcher, notifications …). Server components.",
+          "inferred": false
+        }
+      },
+      "contributes": {
+        "slots": [],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [
+          {
+            "location": "dashboard",
+            "label": "Overview",
+            "href": "/dashboard",
+            "icon": "layout-dashboard"
+          },
+          {
+            "location": "footer",
+            "group": "Product",
+            "label": "Dashboard",
+            "href": "/dashboard"
+          }
+        ],
+        "siteConfig": {},
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/dashboard"
+      ],
+      "postInstall": [
+        "Build your app under src/app/(app)/: every page there gets the shell and requires a session.",
+        "Add sidebar links in site.config.ts → nav.dashboard (icon names from lucide, e.g. \"bar-chart-3\")."
+      ]
+    },
+    "settings": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "settings",
+      "version": "1.0.0",
+      "title": "Profile & settings",
+      "description": "Account settings: profile, email change, password, active sessions with revoke, account deletion. Tabs other modules extend.",
+      "category": "saas",
+      "requires": [
+        "auth",
+        "dashboard"
+      ],
+      "conflicts": [],
+      "ui": [
+        "button",
+        "input",
+        "field",
+        "card",
+        "alert",
+        "badge",
+        "dialog"
+      ],
+      "sections": [],
+      "files": [
+        {
+          "from": "src/lib/settings/actions.ts",
+          "to": "src/lib/settings/actions.ts"
+        },
+        {
+          "from": "src/components/settings/settings-tabs.tsx",
+          "to": "src/components/settings/settings-tabs.tsx"
+        },
+        {
+          "from": "src/components/settings/form-status.tsx",
+          "to": "src/components/settings/form-status.tsx"
+        },
+        {
+          "from": "src/components/settings/profile-form.tsx",
+          "to": "src/components/settings/profile-form.tsx"
+        },
+        {
+          "from": "src/components/settings/email-form.tsx",
+          "to": "src/components/settings/email-form.tsx"
+        },
+        {
+          "from": "src/components/settings/password-form.tsx",
+          "to": "src/components/settings/password-form.tsx"
+        },
+        {
+          "from": "src/components/settings/sessions-list.tsx",
+          "to": "src/components/settings/sessions-list.tsx"
+        },
+        {
+          "from": "src/components/settings/delete-account.tsx",
+          "to": "src/components/settings/delete-account.tsx"
+        },
+        {
+          "from": "src/app/(app)/settings/layout.tsx",
+          "to": "src/app/(app)/settings/layout.tsx"
+        },
+        {
+          "from": "src/app/(app)/settings/page.tsx",
+          "to": "src/app/(app)/settings/page.tsx"
+        },
+        {
+          "from": "src/app/(app)/settings/security/page.tsx",
+          "to": "src/app/(app)/settings/security/page.tsx"
+        },
+        {
+          "from": "src/app/(app)/settings/account/page.tsx",
+          "to": "src/app/(app)/settings/account/page.tsx"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [],
+      "slots": {},
+      "contributes": {
+        "slots": [],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [
+          {
+            "location": "settings",
+            "label": "Profile",
+            "href": "/settings",
+            "icon": "user"
+          },
+          {
+            "location": "settings",
+            "label": "Security",
+            "href": "/settings/security",
+            "icon": "shield"
+          },
+          {
+            "location": "settings",
+            "label": "Account",
+            "href": "/settings/account",
+            "icon": "settings"
+          }
+        ],
+        "siteConfig": {},
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/settings",
+        "/settings/security",
+        "/settings/account"
+      ],
+      "postInstall": [
+        "Other modules add tabs through nav.settings (billing, team, API keys, notifications)."
+      ]
+    },
+    "payments": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "payments",
+      "version": "1.1.0",
+      "title": "Payments",
+      "description": "Provider-agnostic checkout, customer portal and webhooks (Stripe adapter), with a mock provider so billing works locally with zero keys.",
+      "category": "commerce",
+      "requires": [],
+      "conflicts": [],
+      "ui": [
+        "button",
+        "card",
+        "badge"
+      ],
+      "sections": [],
+      "files": [
+        {
+          "from": "src/env/payments.ts",
+          "to": "src/env/payments.ts"
+        },
+        {
+          "from": "src/lib/payments/types.ts",
+          "to": "src/lib/payments/types.ts"
+        },
+        {
+          "from": "src/lib/payments/index.ts",
+          "to": "src/lib/payments/index.ts"
+        },
+        {
+          "from": "src/lib/payments/stripe.ts",
+          "to": "src/lib/payments/stripe.ts"
+        },
+        {
+          "from": "src/lib/payments/mock.ts",
+          "to": "src/lib/payments/mock.ts"
+        },
+        {
+          "from": "src/lib/payments/mock-actions.ts",
+          "to": "src/lib/payments/mock-actions.ts"
+        },
+        {
+          "from": "src/lib/payments/dispatch.ts",
+          "to": "src/lib/payments/dispatch.ts"
+        },
+        {
+          "from": "src/app/api/payments/webhook/route.ts",
+          "to": "src/app/api/payments/webhook/route.ts"
+        },
+        {
+          "from": "src/app/dev/checkout/[id]/page.tsx",
+          "to": "src/app/dev/checkout/[id]/page.tsx"
+        },
+        {
+          "from": "src/app/dev/billing-portal/page.tsx",
+          "to": "src/app/dev/billing-portal/page.tsx"
+        }
+      ],
+      "dependencies": {
+        "server-only": "^0.0.1",
+        "stripe": "^22.0.0"
+      },
+      "devDependencies": {},
+      "env": [
+        {
+          "name": "STRIPE_SECRET_KEY",
+          "description": "Stripe secret key. Unset in development = mock provider with a fake checkout at /dev/checkout",
+          "required": true,
+          "scope": "server",
+          "example": "sk_test_…",
+          "howTo": "https://dashboard.stripe.com/apikeys"
+        },
+        {
+          "name": "STRIPE_WEBHOOK_SECRET",
+          "description": "Signing secret of the webhook endpoint <site>/api/payments/webhook",
+          "required": true,
+          "scope": "server",
+          "example": "whsec_…",
+          "howTo": "Dashboard → Developers → Webhooks, or `stripe listen --forward-to localhost:3000/api/payments/webhook`"
+        }
+      ],
+      "envFile": "src/env/payments.ts",
+      "dbSchema": [],
+      "slots": {
+        "payment-webhooks": {
+          "file": "src/generated/payment-webhooks.ts",
+          "export": "paymentWebhookHandlers",
+          "type": "(event: PaymentEvent) => Promise<void>",
+          "typeImports": [
+            "import type { PaymentEvent } from \"../lib/payments/types\";"
+          ],
+          "description": "Handlers for normalized payment events (billing → subscriptions, store → orders).",
+          "inferred": false
+        }
+      },
+      "contributes": {
+        "slots": [],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {
+            "form-action": [
+              "https://checkout.stripe.com",
+              "https://billing.stripe.com"
+            ]
+          }
+        },
+        "nav": [],
+        "siteConfig": {},
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/api/payments/webhook",
+        "/dev/checkout/[id]",
+        "/dev/billing-portal"
+      ],
+      "postInstall": [
+        "Development: no keys needed. Checkouts open a mock payment page at /dev/checkout.",
+        "Production: set STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET; subscribe the webhook to checkout.session.completed, customer.subscription.* and invoice.payment_failed."
+      ]
+    },
+    "billing": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "billing",
+      "version": "1.2.1",
+      "title": "Billing",
+      "description": "Subscriptions from plans in site.config: pricing page, checkout, webhooks, customer portal, entitlements and limits.",
+      "category": "saas",
+      "requires": [
+        "auth",
+        "database",
+        "payments",
+        "dashboard"
+      ],
+      "conflicts": [],
+      "ui": [
+        "button",
+        "card",
+        "badge",
+        "progress"
+      ],
+      "sections": [
+        "pricing-table",
+        "page-header"
+      ],
+      "files": [
+        {
+          "from": "src/db/schema/billing.ts",
+          "to": "src/db/schema/billing.ts"
+        },
+        {
+          "from": "src/lib/billing/config.ts",
+          "to": "src/lib/billing/config.ts"
+        },
+        {
+          "from": "src/lib/billing/plans.ts",
+          "to": "src/lib/billing/plans.ts"
+        },
+        {
+          "from": "src/lib/billing/entitlements.ts",
+          "to": "src/lib/billing/entitlements.ts"
+        },
+        {
+          "from": "src/lib/billing/customer.ts",
+          "to": "src/lib/billing/customer.ts"
+        },
+        {
+          "from": "src/lib/billing/webhooks.ts",
+          "to": "src/lib/billing/webhooks.ts"
+        },
+        {
+          "from": "src/emails/payment-failed.tsx",
+          "to": "src/emails/payment-failed.tsx"
+        },
+        {
+          "from": "src/components/billing/plan-widget.tsx",
+          "to": "src/components/billing/plan-widget.tsx"
+        },
+        {
+          "from": "src/app/(site)/pricing/page.tsx",
+          "to": "src/app/(site)/pricing/page.tsx"
+        },
+        {
+          "from": "src/app/(app)/settings/billing/page.tsx",
+          "to": "src/app/(app)/settings/billing/page.tsx"
+        },
+        {
+          "from": "src/app/billing/checkout/route.ts",
+          "to": "src/app/billing/checkout/route.ts"
+        },
+        {
+          "from": "src/app/billing/portal/route.ts",
+          "to": "src/app/billing/portal/route.ts"
+        },
+        {
+          "from": "scripts/billing-sync.ts",
+          "to": "scripts/billing-sync.ts"
+        },
+        {
+          "from": "src/lib/billing/onboarding.ts",
+          "to": "src/lib/billing/onboarding.ts"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [
+        "src/db/schema/billing.ts"
+      ],
+      "slots": {},
+      "contributes": {
+        "slots": [
+          {
+            "slot": "payment-webhooks",
+            "import": "billingWebhookHandler",
+            "from": "src/lib/billing/webhooks.ts",
+            "order": 100
+          },
+          {
+            "slot": "dashboard-widgets",
+            "import": "PlanWidget",
+            "from": "src/components/billing/plan-widget.tsx",
+            "order": 10
+          },
+          {
+            "slot": "email-templates",
+            "import": "PaymentFailedEmail",
+            "from": "src/emails/payment-failed.tsx",
+            "order": 100
+          },
+          {
+            "slot": "onboarding-tasks",
+            "import": "billingOnboardingTask",
+            "from": "src/lib/billing/onboarding.ts",
+            "order": 20
+          }
+        ],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [
+          {
+            "location": "header",
+            "label": "Pricing",
+            "href": "/pricing"
+          },
+          {
+            "location": "settings",
+            "label": "Billing",
+            "href": "/settings/billing",
+            "icon": "credit-card"
+          }
+        ],
+        "siteConfig": {
+          "billing": {
+            "currency": "usd",
+            "trialDays": 14,
+            "plans": [
+              {
+                "id": "free",
+                "name": "Free",
+                "description": "For trying things out.",
+                "price": {
+                  "monthly": 0,
+                  "yearly": 0
+                },
+                "features": [
+                  "1 project",
+                  "Community support"
+                ],
+                "limits": {
+                  "projects": 1
+                }
+              },
+              {
+                "id": "pro",
+                "name": "Pro",
+                "description": "For professionals and small teams.",
+                "price": {
+                  "monthly": 19,
+                  "yearly": 190
+                },
+                "features": [
+                  "Unlimited projects",
+                  "Priority email support",
+                  "Advanced analytics"
+                ],
+                "limits": {
+                  "projects": 1000
+                },
+                "highlighted": true,
+                "badge": "Most popular"
+              },
+              {
+                "id": "enterprise",
+                "name": "Enterprise",
+                "description": "For organizations with custom needs.",
+                "price": {
+                  "monthly": null
+                },
+                "features": [
+                  "Everything in Pro",
+                  "SSO and audit log",
+                  "Dedicated support"
+                ],
+                "contactHref": "/contact"
+              }
+            ]
+          }
+        },
+        "features": {},
+        "scripts": {
+          "billing:sync": "tsx scripts/billing-sync.ts"
+        },
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/pricing",
+        "/settings/billing",
+        "/billing/checkout",
+        "/billing/portal"
+      ],
+      "postInstall": [
+        "Plans, prices, features and limits live in site.config.ts → billing.plans.",
+        "Development: checkout uses the mock provider (/dev/checkout). Production: `pnpm billing:sync` creates the Stripe products and prices (lookup keys <plan>_monthly / <plan>_yearly)."
+      ]
+    },
+    "teams": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "teams",
+      "version": "1.2.0",
+      "title": "Teams",
+      "description": "Organizations with roles (owner, admin, member), email invitations, team switcher and team settings, on Better Auth's organization plugin.",
+      "category": "saas",
+      "requires": [
+        "auth",
+        "dashboard",
+        "database",
+        "email"
+      ],
+      "conflicts": [],
+      "ui": [
+        "button",
+        "input",
+        "field",
+        "card",
+        "badge",
+        "dropdown-menu",
+        "dialog",
+        "native-select",
+        "alert",
+        "avatar"
+      ],
+      "sections": [
+        "empty-state"
+      ],
+      "files": [
+        {
+          "from": "src/db/schema/teams.ts",
+          "to": "src/db/schema/teams.ts"
+        },
+        {
+          "from": "src/lib/teams/auth-plugin.ts",
+          "to": "src/lib/teams/auth-plugin.ts"
+        },
+        {
+          "from": "src/lib/teams/auth-client-plugin.ts",
+          "to": "src/lib/teams/auth-client-plugin.ts"
+        },
+        {
+          "from": "src/lib/teams/queries.ts",
+          "to": "src/lib/teams/queries.ts"
+        },
+        {
+          "from": "src/lib/teams/actions.ts",
+          "to": "src/lib/teams/actions.ts"
+        },
+        {
+          "from": "src/components/teams/team-switcher.tsx",
+          "to": "src/components/teams/team-switcher.tsx"
+        },
+        {
+          "from": "src/components/teams/team-switcher-slot.tsx",
+          "to": "src/components/teams/team-switcher-slot.tsx"
+        },
+        {
+          "from": "src/components/teams/create-team-dialog.tsx",
+          "to": "src/components/teams/create-team-dialog.tsx"
+        },
+        {
+          "from": "src/components/teams/invite-form.tsx",
+          "to": "src/components/teams/invite-form.tsx"
+        },
+        {
+          "from": "src/components/teams/team-form.tsx",
+          "to": "src/components/teams/team-form.tsx"
+        },
+        {
+          "from": "src/components/teams/team-widget.tsx",
+          "to": "src/components/teams/team-widget.tsx"
+        },
+        {
+          "from": "src/emails/team-invite.tsx",
+          "to": "src/emails/team-invite.tsx"
+        },
+        {
+          "from": "src/app/(app)/settings/team/page.tsx",
+          "to": "src/app/(app)/settings/team/page.tsx"
+        },
+        {
+          "from": "src/app/(app)/invite/[id]/page.tsx",
+          "to": "src/app/(app)/invite/[id]/page.tsx"
+        },
+        {
+          "from": "src/lib/teams/onboarding.ts",
+          "to": "src/lib/teams/onboarding.ts"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [
+        "src/db/schema/teams.ts"
+      ],
+      "slots": {},
+      "contributes": {
+        "slots": [
+          {
+            "slot": "auth-plugins",
+            "import": "teamsPlugin",
+            "from": "src/lib/teams/auth-plugin.ts",
+            "order": 100
+          },
+          {
+            "slot": "auth-client-plugins",
+            "import": "teamsClientPlugin",
+            "from": "src/lib/teams/auth-client-plugin.ts",
+            "order": 100
+          },
+          {
+            "slot": "dashboard-topbar",
+            "import": "TeamSwitcherSlot",
+            "from": "src/components/teams/team-switcher-slot.tsx",
+            "order": 10
+          },
+          {
+            "slot": "dashboard-widgets",
+            "import": "TeamWidget",
+            "from": "src/components/teams/team-widget.tsx",
+            "order": 20
+          },
+          {
+            "slot": "email-templates",
+            "import": "TeamInviteEmail",
+            "from": "src/emails/team-invite.tsx",
+            "order": 100
+          },
+          {
+            "slot": "onboarding-tasks",
+            "import": "teamsOnboardingTask",
+            "from": "src/lib/teams/onboarding.ts",
+            "order": 30
+          }
+        ],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [
+          {
+            "location": "settings",
+            "label": "Team",
+            "href": "/settings/team",
+            "icon": "users"
+          }
+        ],
+        "siteConfig": {
+          "teams": {
+            "membershipLimit": 50,
+            "invitationExpiresInDays": 7
+          }
+        },
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/settings/team",
+        "/invite/[id]"
+      ],
+      "postInstall": [
+        "Create a team from the switcher in the top bar. Invitations are emailed (see /dev/outbox in development)."
+      ]
+    },
+    "admin": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "admin",
+      "version": "1.0.1",
+      "title": "Admin panel",
+      "description": "Admin area on Better Auth's admin plugin: user search, roles, ban/unban, session revocation, impersonation with a stop banner.",
+      "category": "saas",
+      "requires": [
+        "auth",
+        "dashboard",
+        "database"
+      ],
+      "conflicts": [],
+      "ui": [
+        "button",
+        "input",
+        "card",
+        "badge",
+        "table",
+        "native-select",
+        "pagination",
+        "alert"
+      ],
+      "sections": [],
+      "files": [
+        {
+          "from": "src/env/admin.ts",
+          "to": "src/env/admin.ts"
+        },
+        {
+          "from": "src/lib/admin/auth-plugin.ts",
+          "to": "src/lib/admin/auth-plugin.ts"
+        },
+        {
+          "from": "src/lib/admin/auth-client-plugin.ts",
+          "to": "src/lib/admin/auth-client-plugin.ts"
+        },
+        {
+          "from": "src/lib/admin/guard.ts",
+          "to": "src/lib/admin/guard.ts"
+        },
+        {
+          "from": "src/lib/admin/actions.ts",
+          "to": "src/lib/admin/actions.ts"
+        },
+        {
+          "from": "src/lib/admin/stats.ts",
+          "to": "src/lib/admin/stats.ts"
+        },
+        {
+          "from": "src/components/admin/impersonation-banner.tsx",
+          "to": "src/components/admin/impersonation-banner.tsx"
+        },
+        {
+          "from": "src/app/(app)/admin/page.tsx",
+          "to": "src/app/(app)/admin/page.tsx"
+        },
+        {
+          "from": "src/app/(app)/admin/users/page.tsx",
+          "to": "src/app/(app)/admin/users/page.tsx"
+        },
+        {
+          "from": "scripts/grant-admin.ts",
+          "to": "scripts/grant-admin.ts"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [
+        {
+          "name": "ADMIN_EMAILS",
+          "description": "Comma-separated emails that are promoted to admin the first time they open /admin",
+          "required": false,
+          "scope": "server",
+          "example": "you@example.com"
+        }
+      ],
+      "envFile": "src/env/admin.ts",
+      "dbSchema": [],
+      "slots": {},
+      "contributes": {
+        "slots": [
+          {
+            "slot": "auth-plugins",
+            "import": "adminPlugin",
+            "from": "src/lib/admin/auth-plugin.ts",
+            "order": 100
+          },
+          {
+            "slot": "auth-client-plugins",
+            "import": "adminClientPlugin",
+            "from": "src/lib/admin/auth-client-plugin.ts",
+            "order": 100
+          },
+          {
+            "slot": "dashboard-topbar",
+            "import": "ImpersonationBanner",
+            "from": "src/components/admin/impersonation-banner.tsx",
+            "order": 1
+          }
+        ],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [
+          {
+            "location": "admin",
+            "label": "Overview",
+            "href": "/admin",
+            "icon": "shield"
+          },
+          {
+            "location": "admin",
+            "label": "Users",
+            "href": "/admin/users",
+            "icon": "users"
+          }
+        ],
+        "siteConfig": {},
+        "features": {},
+        "scripts": {
+          "admin:grant": "tsx scripts/grant-admin.ts"
+        },
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/admin",
+        "/admin/users"
+      ],
+      "postInstall": [
+        "Make yourself admin: set ADMIN_EMAILS=you@example.com, or run `pnpm admin:grant you@example.com`.",
+        "Non-admins get a 404 at /admin (the area's existence isn't revealed)."
+      ]
+    },
+    "notifications": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "notifications",
+      "version": "1.0.0",
+      "title": "In-app notifications",
+      "description": "Notification inbox: notify(userId, …) from anywhere, a bell with unread count in the top bar, and a /notifications page.",
+      "category": "saas",
+      "requires": [
+        "auth",
+        "dashboard",
+        "database"
+      ],
+      "conflicts": [],
+      "ui": [
+        "button",
+        "popover",
+        "badge"
+      ],
+      "sections": [
+        "empty-state"
+      ],
+      "files": [
+        {
+          "from": "src/db/schema/notifications.ts",
+          "to": "src/db/schema/notifications.ts"
+        },
+        {
+          "from": "src/lib/notifications/notify.ts",
+          "to": "src/lib/notifications/notify.ts"
+        },
+        {
+          "from": "src/lib/notifications/actions.ts",
+          "to": "src/lib/notifications/actions.ts"
+        },
+        {
+          "from": "src/lib/notifications/welcome.ts",
+          "to": "src/lib/notifications/welcome.ts"
+        },
+        {
+          "from": "src/components/notifications/notification-bell.tsx",
+          "to": "src/components/notifications/notification-bell.tsx"
+        },
+        {
+          "from": "src/components/notifications/notification-list.tsx",
+          "to": "src/components/notifications/notification-list.tsx"
+        },
+        {
+          "from": "src/app/(app)/notifications/page.tsx",
+          "to": "src/app/(app)/notifications/page.tsx"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [
+        "src/db/schema/notifications.ts"
+      ],
+      "slots": {},
+      "contributes": {
+        "slots": [
+          {
+            "slot": "dashboard-topbar",
+            "import": "NotificationBell",
+            "from": "src/components/notifications/notification-bell.tsx",
+            "order": 20
+          },
+          {
+            "slot": "auth-events",
+            "import": "welcomeNotification",
+            "from": "src/lib/notifications/welcome.ts",
+            "order": 100
+          }
+        ],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [],
+        "siteConfig": {},
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/notifications"
+      ],
+      "postInstall": [
+        "Send one from any server code: await notify(user.id, { title: \"Export ready\", href: \"/exports/42\" })."
+      ]
+    },
+    "transactional-emails": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "transactional-emails",
+      "version": "1.0.0",
+      "title": "Transactional emails",
+      "description": "Welcome email after verification, plus /dev/emails: a gallery previewing every email template installed by any module.",
+      "category": "saas",
+      "requires": [
+        "auth",
+        "email"
+      ],
+      "conflicts": [],
+      "ui": [],
+      "sections": [],
+      "files": [
+        {
+          "from": "src/emails/welcome.tsx",
+          "to": "src/emails/welcome.tsx"
+        },
+        {
+          "from": "src/lib/transactional/welcome.ts",
+          "to": "src/lib/transactional/welcome.ts"
+        },
+        {
+          "from": "src/lib/transactional/templates.ts",
+          "to": "src/lib/transactional/templates.ts"
+        },
+        {
+          "from": "src/app/dev/emails/page.tsx",
+          "to": "src/app/dev/emails/page.tsx"
+        },
+        {
+          "from": "src/app/dev/emails/[name]/route.ts",
+          "to": "src/app/dev/emails/[name]/route.ts"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [],
+      "slots": {
+        "email-templates": {
+          "file": "src/generated/email-templates.ts",
+          "export": "emailTemplates",
+          "type": "EmailTemplate",
+          "typeImports": [
+            "import type { EmailTemplate } from \"../lib/transactional/templates\";"
+          ],
+          "description": "Email templates (with PreviewProps) shown in the /dev/emails gallery.",
+          "inferred": false
+        }
+      },
+      "contributes": {
+        "slots": [
+          {
+            "slot": "auth-events",
+            "import": "sendWelcomeEmail",
+            "from": "src/lib/transactional/welcome.ts",
+            "order": 100
+          },
+          {
+            "slot": "email-templates",
+            "import": "WelcomeEmail",
+            "from": "src/emails/welcome.tsx",
+            "order": 100
+          }
+        ],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [],
+        "siteConfig": {},
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/dev/emails"
+      ],
+      "postInstall": [
+        "Open /dev/emails in development to preview every template with sample data."
+      ]
+    },
+    "onboarding": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "onboarding",
+      "version": "1.0.0",
+      "title": "Onboarding",
+      "description": "A focused first-run questionnaire configured in site.config.ts, plus a setup checklist on the dashboard that other modules add tasks to.",
+      "category": "saas",
+      "requires": [
+        "auth",
+        "dashboard",
+        "database"
+      ],
+      "conflicts": [],
+      "ui": [
+        "button",
+        "input",
+        "card",
+        "progress",
+        "kbd"
+      ],
+      "sections": [],
+      "files": [
+        {
+          "from": "src/db/schema/onboarding.ts",
+          "to": "src/db/schema/onboarding.ts"
+        },
+        {
+          "from": "src/lib/onboarding/config.ts",
+          "to": "src/lib/onboarding/config.ts"
+        },
+        {
+          "from": "src/lib/onboarding/types.ts",
+          "to": "src/lib/onboarding/types.ts"
+        },
+        {
+          "from": "src/lib/onboarding/state.ts",
+          "to": "src/lib/onboarding/state.ts"
+        },
+        {
+          "from": "src/lib/onboarding/actions.ts",
+          "to": "src/lib/onboarding/actions.ts"
+        },
+        {
+          "from": "src/components/onboarding/wizard.tsx",
+          "to": "src/components/onboarding/wizard.tsx"
+        },
+        {
+          "from": "src/components/onboarding/checklist-widget.tsx",
+          "to": "src/components/onboarding/checklist-widget.tsx"
+        },
+        {
+          "from": "src/components/onboarding/send-to-onboarding.tsx",
+          "to": "src/components/onboarding/send-to-onboarding.tsx"
+        },
+        {
+          "from": "src/app/(onboarding)/onboarding/page.tsx",
+          "to": "src/app/(onboarding)/onboarding/page.tsx"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [
+        "src/db/schema/onboarding.ts"
+      ],
+      "slots": {
+        "onboarding-tasks": {
+          "file": "src/generated/onboarding-tasks.ts",
+          "export": "onboardingTasks",
+          "type": "OnboardingTask",
+          "typeImports": [
+            "import type { OnboardingTask } from \"@/lib/onboarding/types\";"
+          ],
+          "description": "Setup checklist items on the dashboard (choose a plan, invite a teammate …), each with a done(userId) check.",
+          "inferred": false
+        }
+      },
+      "contributes": {
+        "slots": [
+          {
+            "slot": "dashboard-widgets",
+            "import": "OnboardingChecklist",
+            "from": "src/components/onboarding/checklist-widget.tsx",
+            "order": 0
+          }
+        ],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [],
+        "siteConfig": {
+          "onboarding": {
+            "redirectNewUsers": true,
+            "questions": [
+              {
+                "id": "role",
+                "type": "choice",
+                "title": "What best describes you?",
+                "options": [
+                  "Founder",
+                  "Engineer",
+                  "Designer",
+                  "Marketer",
+                  "Something else"
+                ]
+              },
+              {
+                "id": "teamSize",
+                "type": "choice",
+                "title": "How many people will use it?",
+                "options": [
+                  "Just me",
+                  "2–10",
+                  "11–50",
+                  "More than 50"
+                ]
+              },
+              {
+                "id": "goal",
+                "type": "text",
+                "title": "What do you want to get done first?",
+                "placeholder": "e.g. launch our beta by June"
+              }
+            ]
+          }
+        },
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/onboarding"
+      ],
+      "postInstall": [
+        "Edit the questions in site.config.ts → onboarding.questions; read answers with getOnboardingAnswers(userId).",
+        "Modules add checklist items through the onboarding-tasks slot; add your own in src/lib/onboarding/state.ts."
+      ]
+    },
+    "api": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "api",
+      "version": "1.0.0",
+      "title": "Public API",
+      "description": "Hashed API keys with scopes and expiry, an apiRoute() helper (auth, Zod validation, rate limits, problem+json errors), /api/v1/me and an API keys settings tab.",
+      "category": "developer",
+      "requires": [
+        "auth",
+        "database",
+        "rate-limit",
+        "settings"
+      ],
+      "conflicts": [],
+      "ui": [
+        "button",
+        "input",
+        "field",
+        "card",
+        "badge",
+        "checkbox",
+        "label",
+        "native-select",
+        "table",
+        "alert",
+        "copy-button"
+      ],
+      "sections": [
+        "empty-state"
+      ],
+      "files": [
+        {
+          "from": "src/db/schema/api.ts",
+          "to": "src/db/schema/api.ts"
+        },
+        {
+          "from": "src/lib/api/config.ts",
+          "to": "src/lib/api/config.ts"
+        },
+        {
+          "from": "src/lib/api/keys.ts",
+          "to": "src/lib/api/keys.ts"
+        },
+        {
+          "from": "src/lib/api/route.ts",
+          "to": "src/lib/api/route.ts"
+        },
+        {
+          "from": "src/lib/api/actions.ts",
+          "to": "src/lib/api/actions.ts"
+        },
+        {
+          "from": "src/lib/api/onboarding.ts",
+          "to": "src/lib/api/onboarding.ts"
+        },
+        {
+          "from": "src/components/api/create-key-form.tsx",
+          "to": "src/components/api/create-key-form.tsx"
+        },
+        {
+          "from": "src/components/api/key-list.tsx",
+          "to": "src/components/api/key-list.tsx"
+        },
+        {
+          "from": "src/app/(app)/settings/api-keys/page.tsx",
+          "to": "src/app/(app)/settings/api-keys/page.tsx"
+        },
+        {
+          "from": "src/app/api/v1/me/route.ts",
+          "to": "src/app/api/v1/me/route.ts"
+        }
+      ],
+      "dependencies": {},
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [
+        "src/db/schema/api.ts"
+      ],
+      "slots": {},
+      "contributes": {
+        "slots": [
+          {
+            "slot": "onboarding-tasks",
+            "import": "apiOnboardingTask",
+            "from": "src/lib/api/onboarding.ts",
+            "order": 40
+          }
+        ],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [
+          {
+            "location": "settings",
+            "label": "API keys",
+            "href": "/settings/api-keys",
+            "icon": "key-round"
+          }
+        ],
+        "siteConfig": {
+          "api": {
+            "keyPrefix": "sk",
+            "scopes": {
+              "read": "Read your account data",
+              "write": "Create and change data"
+            },
+            "rateLimit": {
+              "limit": 60,
+              "window": "1 m"
+            }
+          }
+        },
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/settings/api-keys",
+        "/api/v1/me"
+      ],
+      "postInstall": [
+        "Create a key at /settings/api-keys, then: curl -H \"Authorization: Bearer <key>\" <site>/api/v1/me",
+        "New endpoint: export const GET = apiRoute({ scope: \"read\" }, async ({ principal }) => ({ … })) in src/app/api/v1/<name>/route.ts."
+      ]
+    },
+    "docs": {
+      "$schema": "../../schema/module.schema.json",
+      "name": "docs",
+      "version": "1.0.0",
+      "title": "Docs",
+      "description": "Documentation from MDX folders: sidebar, prev/next, TOC, edit links and ⌘K client-side search (static index, lazy-loaded).",
+      "category": "content",
+      "requires": [
+        "mdx",
+        "seo"
+      ],
+      "conflicts": [],
+      "ui": [
+        "prose",
+        "dialog",
+        "kbd"
+      ],
+      "sections": [],
+      "files": [
+        {
+          "from": "content/docs/index.mdx",
+          "to": "content/docs/index.mdx"
+        },
+        {
+          "from": "content/docs/guides/writing-pages.mdx",
+          "to": "content/docs/guides/writing-pages.mdx"
+        },
+        {
+          "from": "content/docs/guides/organizing.mdx",
+          "to": "content/docs/guides/organizing.mdx"
+        },
+        {
+          "from": "src/lib/docs/docs.ts",
+          "to": "src/lib/docs/docs.ts"
+        },
+        {
+          "from": "src/lib/docs/config.ts",
+          "to": "src/lib/docs/config.ts"
+        },
+        {
+          "from": "src/lib/docs/sitemap.ts",
+          "to": "src/lib/docs/sitemap.ts"
+        },
+        {
+          "from": "src/components/docs/docs-sidebar.tsx",
+          "to": "src/components/docs/docs-sidebar.tsx"
+        },
+        {
+          "from": "src/components/docs/docs-search.tsx",
+          "to": "src/components/docs/docs-search.tsx"
+        },
+        {
+          "from": "src/components/docs/doc-page.tsx",
+          "to": "src/components/docs/doc-page.tsx"
+        },
+        {
+          "from": "src/app/(site)/docs/layout.tsx",
+          "to": "src/app/(site)/docs/layout.tsx"
+        },
+        {
+          "from": "src/app/(site)/docs/page.tsx",
+          "to": "src/app/(site)/docs/page.tsx"
+        },
+        {
+          "from": "src/app/(site)/docs/opengraph-image.tsx",
+          "to": "src/app/(site)/docs/opengraph-image.tsx"
+        },
+        {
+          "from": "src/app/(site)/docs/[slug]/page.tsx",
+          "to": "src/app/(site)/docs/[slug]/page.tsx"
+        },
+        {
+          "from": "src/app/(site)/docs/[slug]/opengraph-image.tsx",
+          "to": "src/app/(site)/docs/[slug]/opengraph-image.tsx"
+        },
+        {
+          "from": "src/app/(site)/docs/[slug]/[page]/page.tsx",
+          "to": "src/app/(site)/docs/[slug]/[page]/page.tsx"
+        },
+        {
+          "from": "src/app/(site)/docs/[slug]/[page]/opengraph-image.tsx",
+          "to": "src/app/(site)/docs/[slug]/[page]/opengraph-image.tsx"
+        },
+        {
+          "from": "src/app/(site)/docs/search-index.json/route.ts",
+          "to": "src/app/(site)/docs/search-index.json/route.ts"
+        }
+      ],
+      "dependencies": {
+        "minisearch": "^7.1.0"
+      },
+      "devDependencies": {},
+      "env": [],
+      "dbSchema": [],
+      "slots": {},
+      "contributes": {
+        "slots": [
+          {
+            "slot": "sitemap",
+            "import": "docsSitemap",
+            "from": "src/lib/docs/sitemap.ts",
+            "order": 100
+          }
+        ],
+        "next": {
+          "serverExternalPackages": [],
+          "imageRemotePatterns": [],
+          "csp": {}
+        },
+        "nav": [
+          {
+            "location": "header",
+            "label": "Docs",
+            "href": "/docs"
+          }
+        ],
+        "siteConfig": {
+          "docs": {
+            "title": "Documentation",
+            "description": "Guides and reference.",
+            "editUrl": ""
+          }
+        },
+        "features": {},
+        "scripts": {},
+        "gitignore": [],
+        "allowBuilds": []
+      },
+      "routes": [
+        "/docs",
+        "/docs/[slug]",
+        "/docs/[slug]/[page]",
+        "/docs/search-index.json"
+      ],
+      "postInstall": [
+        "Pages live in content/docs. Folders become sidebar groups; `order` in frontmatter sorts pages.",
+        "Set docs.editUrl in site.config.ts (e.g. https://github.com/you/repo/edit/main/) for edit links."
+      ]
+    }
+  },
+  "ui": {
+    "alert": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "alert",
+      "version": "1.0.0",
+      "description": "Inline message for info, success, warning and errors, announced to screen readers.",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/alert.tsx",
+          "to": "src/components/ui/alert.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "avatar": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "avatar",
+      "version": "1.0.0",
+      "description": "Image avatar with initials fallback while loading or on error.",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/avatar.tsx",
+          "to": "src/components/ui/avatar.tsx"
+        }
+      ],
+      "dependencies": {
+        "radix-ui": "^1.6.0"
+      }
+    },
+    "badge": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "badge",
+      "version": "1.0.0",
+      "description": "Small status label with neutral, outline and semantic variants.",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/badge.tsx",
+          "to": "src/components/ui/badge.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "button": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "button",
+      "version": "1.0.0",
+      "description": "Button with variants and sizes; renders any element via asChild (links, triggers).",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/button.tsx",
+          "to": "src/components/ui/button.tsx"
+        }
+      ],
+      "dependencies": {
+        "radix-ui": "^1.6.0"
+      }
+    },
+    "card": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "card",
+      "version": "1.0.0",
+      "description": "Surface for grouped content: header, title, description, content, footer.",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/card.tsx",
+          "to": "src/components/ui/card.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "checkbox": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "checkbox",
+      "version": "1.0.0",
+      "description": "Accessible checkbox (Radix) that submits with native forms.",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/checkbox.tsx",
+          "to": "src/components/ui/checkbox.tsx"
+        }
+      ],
+      "dependencies": {
+        "radix-ui": "^1.6.0"
+      }
+    },
+    "copy-button": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "copy-button",
+      "version": "1.0.0",
+      "description": "Button that copies a value to the clipboard and confirms it, announced to screen readers.",
+      "ui": [
+        "button"
+      ],
+      "files": [
+        {
+          "from": "src/components/ui/copy-button.tsx",
+          "to": "src/components/ui/copy-button.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "dialog": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "dialog",
+      "version": "1.0.0",
+      "description": "Modal dialog (Radix): focus trap, Esc to close, scroll lock.",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/dialog.tsx",
+          "to": "src/components/ui/dialog.tsx"
+        }
+      ],
+      "dependencies": {
+        "radix-ui": "^1.6.0"
+      }
+    },
+    "dropdown-menu": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "dropdown-menu",
+      "version": "1.0.0",
+      "description": "Menu with keyboard navigation, checkable items and sub-menus (Radix).",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/dropdown-menu.tsx",
+          "to": "src/components/ui/dropdown-menu.tsx"
+        }
+      ],
+      "dependencies": {
+        "radix-ui": "^1.6.0"
+      }
+    },
+    "field": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "field",
+      "version": "1.0.0",
+      "description": "Accessible form field: wires label, description and error to any control via ids.",
+      "ui": [
+        "label"
+      ],
+      "files": [
+        {
+          "from": "src/components/ui/field.tsx",
+          "to": "src/components/ui/field.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "input": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "input",
+      "version": "1.0.0",
+      "description": "Text input styled with tokens; supports aria-invalid and file inputs.",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/input.tsx",
+          "to": "src/components/ui/input.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "kbd": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "kbd",
+      "version": "1.0.0",
+      "description": "Keyboard key hint, e.g. ⌘K.",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/kbd.tsx",
+          "to": "src/components/ui/kbd.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "label": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "label",
+      "version": "1.0.0",
+      "description": "Native form label (no client JS) that dims with a disabled peer.",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/label.tsx",
+          "to": "src/components/ui/label.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "native-select": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "native-select",
+      "version": "1.0.0",
+      "description": "Styled native <select>: zero JS, best mobile UX, works in any form.",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/native-select.tsx",
+          "to": "src/components/ui/native-select.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "pagination": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "pagination",
+      "version": "1.0.0",
+      "description": "Link-based pagination for server-rendered lists.",
+      "ui": [
+        "button"
+      ],
+      "files": [
+        {
+          "from": "src/components/ui/pagination.tsx",
+          "to": "src/components/ui/pagination.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "popover": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "popover",
+      "version": "1.0.0",
+      "description": "Floating panel anchored to a trigger (Radix).",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/popover.tsx",
+          "to": "src/components/ui/popover.tsx"
+        }
+      ],
+      "dependencies": {
+        "radix-ui": "^1.6.0"
+      }
+    },
+    "progress": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "progress",
+      "version": "1.0.0",
+      "description": "Accessible progress bar (role=progressbar) with value and label.",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/progress.tsx",
+          "to": "src/components/ui/progress.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "prose": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "prose",
+      "version": "1.0.0",
+      "description": "Typography for rendered Markdown/MDX, fully driven by theme tokens.",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/prose.tsx",
+          "to": "src/components/ui/prose.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "separator": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "separator",
+      "version": "1.0.0",
+      "description": "Horizontal or vertical divider with correct separator semantics.",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/separator.tsx",
+          "to": "src/components/ui/separator.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "switch": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "switch",
+      "version": "1.0.0",
+      "description": "On/off toggle (Radix) that submits with native forms.",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/switch.tsx",
+          "to": "src/components/ui/switch.tsx"
+        }
+      ],
+      "dependencies": {
+        "radix-ui": "^1.6.0"
+      }
+    },
+    "table": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "table",
+      "version": "1.0.0",
+      "description": "Responsive data table parts with horizontal scrolling on small screens.",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/table.tsx",
+          "to": "src/components/ui/table.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "textarea": {
+      "$schema": "../../schema/ui.schema.json",
+      "name": "textarea",
+      "version": "1.0.0",
+      "description": "Multi-line text input that grows with its content where supported.",
+      "ui": [],
+      "files": [
+        {
+          "from": "src/components/ui/textarea.tsx",
+          "to": "src/components/ui/textarea.tsx"
+        }
+      ],
+      "dependencies": {}
+    }
+  },
+  "sections": {
+    "auth-card": {
+      "$schema": "../../schema/section.schema.json",
+      "name": "auth-card",
+      "version": "1.0.0",
+      "title": "Auth screen",
+      "description": "Centered or split-screen frame for sign-in, sign-up and reset flows.",
+      "group": "Application",
+      "ui": [],
+      "sections": [
+        "section-kit"
+      ],
+      "files": [
+        {
+          "from": "src/components/sections/auth-card.tsx",
+          "to": "src/components/sections/auth-card.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "blog-list": {
+      "$schema": "../../schema/section.schema.json",
+      "name": "blog-list",
+      "version": "1.0.0",
+      "title": "Blog list",
+      "description": "Post cards as a grid or a compact list, with dates, tags and reading time.",
+      "group": "Content",
+      "ui": [],
+      "sections": [
+        "section-kit"
+      ],
+      "files": [
+        {
+          "from": "src/components/sections/blog-list.tsx",
+          "to": "src/components/sections/blog-list.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "cta-band": {
+      "$schema": "../../schema/section.schema.json",
+      "name": "cta-band",
+      "version": "1.0.0",
+      "title": "CTA band",
+      "description": "Closing call to action; inverted, muted or bordered.",
+      "group": "Conversion",
+      "ui": [],
+      "sections": [
+        "section-kit"
+      ],
+      "files": [
+        {
+          "from": "src/components/sections/cta-band.tsx",
+          "to": "src/components/sections/cta-band.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "dashboard-shell": {
+      "$schema": "../../schema/section.schema.json",
+      "name": "dashboard-shell",
+      "version": "1.0.0",
+      "title": "Dashboard shell",
+      "description": "App layout: sidebar nav with active state, topbar, mobile drawer via the Popover API.",
+      "group": "Application",
+      "ui": [],
+      "sections": [
+        "section-kit"
+      ],
+      "files": [
+        {
+          "from": "src/components/sections/dashboard-shell.tsx",
+          "to": "src/components/sections/dashboard-shell.tsx"
+        },
+        {
+          "from": "src/components/sections/dashboard-nav.tsx",
+          "to": "src/components/sections/dashboard-nav.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "empty-state": {
+      "$schema": "../../schema/section.schema.json",
+      "name": "empty-state",
+      "version": "1.0.0",
+      "title": "Empty state",
+      "description": "Icon, message and next actions for empty lists and first-run screens.",
+      "group": "Application",
+      "ui": [],
+      "sections": [
+        "section-kit"
+      ],
+      "files": [
+        {
+          "from": "src/components/sections/empty-state.tsx",
+          "to": "src/components/sections/empty-state.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "faq": {
+      "$schema": "../../schema/section.schema.json",
+      "name": "faq",
+      "version": "1.0.0",
+      "title": "FAQ",
+      "description": "Questions as native <details> (exclusive, zero JS), with optional side intro.",
+      "group": "Content",
+      "ui": [],
+      "sections": [
+        "section-kit"
+      ],
+      "files": [
+        {
+          "from": "src/components/sections/faq.tsx",
+          "to": "src/components/sections/faq.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "feature-grid": {
+      "$schema": "../../schema/section.schema.json",
+      "name": "feature-grid",
+      "version": "1.0.0",
+      "title": "Feature grid",
+      "description": "2–4 column grid of features with icons and optional links.",
+      "group": "Features",
+      "ui": [],
+      "sections": [
+        "section-kit"
+      ],
+      "files": [
+        {
+          "from": "src/components/sections/feature-grid.tsx",
+          "to": "src/components/sections/feature-grid.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "feature-rows": {
+      "$schema": "../../schema/section.schema.json",
+      "name": "feature-rows",
+      "version": "1.0.0",
+      "title": "Feature rows",
+      "description": "Alternating media/text rows with bullets and actions.",
+      "group": "Features",
+      "ui": [],
+      "sections": [
+        "section-kit"
+      ],
+      "files": [
+        {
+          "from": "src/components/sections/feature-rows.tsx",
+          "to": "src/components/sections/feature-rows.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "hero-centered": {
+      "$schema": "../../schema/section.schema.json",
+      "name": "hero-centered",
+      "version": "1.0.0",
+      "title": "Hero: centered",
+      "description": "Centered headline, lead, actions and optional media below.",
+      "group": "Hero",
+      "ui": [],
+      "sections": [
+        "section-kit"
+      ],
+      "files": [
+        {
+          "from": "src/components/sections/hero-centered.tsx",
+          "to": "src/components/sections/hero-centered.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "page-header": {
+      "$schema": "../../schema/section.schema.json",
+      "name": "page-header",
+      "version": "1.0.0",
+      "title": "Page header",
+      "description": "Title block for inner pages with eyebrow, description, breadcrumbs and actions.",
+      "group": "Content",
+      "ui": [],
+      "sections": [
+        "section-kit"
+      ],
+      "files": [
+        {
+          "from": "src/components/sections/page-header.tsx",
+          "to": "src/components/sections/page-header.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "pricing-table": {
+      "$schema": "../../schema/section.schema.json",
+      "name": "pricing-table",
+      "version": "1.1.0",
+      "title": "Pricing table",
+      "description": "Plans with monthly/yearly toggle (CSS-only, no JS), features and CTAs. Reads plans from config.",
+      "group": "Pricing",
+      "ui": [],
+      "sections": [
+        "section-kit"
+      ],
+      "files": [
+        {
+          "from": "src/components/sections/pricing-table.tsx",
+          "to": "src/components/sections/pricing-table.tsx"
+        }
+      ],
+      "dependencies": {}
+    },
+    "section-kit": {
+      "$schema": "../../schema/section.schema.json",
+      "name": "section-kit",
+      "version": "1.0.0",
+      "title": "Section kit",
+      "description": "Shared building blocks for every section: Section wrapper with tones, SectionHeader, actions, media types.",
+      "group": "Foundation",
+      "ui": [
+        "button"
+      ],
+      "sections": [],
+      "files": [
+        {
+          "from": "src/components/sections/kit/section.tsx",
+          "to": "src/components/sections/kit/section.tsx"
+        },
+        {
+          "from": "src/components/sections/kit/section-header.tsx",
+          "to": "src/components/sections/kit/section-header.tsx"
+        },
+        {
+          "from": "src/components/sections/kit/section-actions.tsx",
+          "to": "src/components/sections/kit/section-actions.tsx"
+        },
+        {
+          "from": "src/components/sections/kit/section-media.tsx",
+          "to": "src/components/sections/kit/section-media.tsx"
+        },
+        {
+          "from": "src/components/sections/kit/types.ts",
+          "to": "src/components/sections/kit/types.ts"
+        }
+      ],
+      "dependencies": {}
+    },
+    "testimonials": {
+      "$schema": "../../schema/section.schema.json",
+      "name": "testimonials",
+      "version": "1.0.0",
+      "title": "Testimonials",
+      "description": "Quote cards in a masonry-like grid, with an optional featured quote.",
+      "group": "Social proof",
+      "ui": [],
+      "sections": [
+        "section-kit"
+      ],
+      "files": [
+        {
+          "from": "src/components/sections/testimonials.tsx",
+          "to": "src/components/sections/testimonials.tsx"
+        }
+      ],
+      "dependencies": {}
+    }
+  },
+  "files": {
+    ".github/dependabot.yml": {
+      "owner": "module:ci",
+      "hash": "ec39ce1d2470aa1db79305bb50c4ee559ecc540b4d853788f8fa092feeb3259e"
+    },
+    ".github/workflows/ci.yml": {
+      "owner": "module:ci",
+      "hash": "0892a0bd27db172e5cabf35b277480d445c2cd5049e8b8f36bbbc059c7bc18cb"
+    },
+    ".prettierignore": {
+      "owner": "starter",
+      "hash": "5c77e567586c6fde668a1b83ed0328734c43c165b8c63d8eb7d0ccb452bbc484"
+    },
+    "AGENTS.md": {
+      "owner": "starter",
+      "hash": "de57988e5ec4f605a63281ae4b3e391ea1290157938953a76c23c0188d50b5b9"
+    },
+    "CLAUDE.md": {
+      "owner": "starter",
+      "hash": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49"
+    },
+    "content/blog/welcome.mdx": {
+      "owner": "module:blog",
+      "hash": "fd6776d398c0bad4ae22029b5bee88ad87d943f36c7cec30cef2281b096a45d0"
+    },
+    "content/changelog/2026-01-01-first-release.mdx": {
+      "owner": "module:changelog",
+      "hash": "16295cd16ef6229e87bedef1af6702b8d00bc3574af7241837e4674346d9f616"
+    },
+    "content/docs/guides/organizing.mdx": {
+      "owner": "module:docs",
+      "hash": "aa814960f8b691b79c4f301fe9868fb4cb945989d516464bb26aeb6b7acda9cb"
+    },
+    "content/docs/guides/writing-pages.mdx": {
+      "owner": "module:docs",
+      "hash": "a0ccbb6cecd7c3cc8e5c5d5db6f75c0df32091a41ba0b4688161677578826cdf"
+    },
+    "content/docs/index.mdx": {
+      "owner": "module:docs",
+      "hash": "c4ea3e51ee6cd53a885948cb49c5d7a1f01c7cae34f2e3e890bce89d46a18ca3"
+    },
+    "content/faq.json": {
+      "owner": "module:faq",
+      "hash": "db003394f48955aaa5706c574a5f1ae11e0150f53a5bf32b5f40d7dc8f5aa1f5"
+    },
+    "content/legal/cookies.mdx": {
+      "owner": "module:legal",
+      "hash": "12ea2086c855a17bc3339c89a2792a3351922fe2f45ee93e55de1243d2c75882"
+    },
+    "content/legal/privacy.mdx": {
+      "owner": "module:legal",
+      "hash": "9fb3df2e0eb82f835991c74a17ea2ecd020d93b2e801d33599fade69f61dc2a3"
+    },
+    "content/legal/terms.mdx": {
+      "owner": "module:legal",
+      "hash": "22da5344a26e8e51d10fb8d065a0fa8f4a09e781073b23b134de651036820552"
+    },
+    "drizzle.config.ts": {
+      "owner": "module:database",
+      "hash": "fbddd4ae79b905ee28d52df8a0b6907334266436287fc9f1e18fab4948255be4"
+    },
+    "eslint.config.mjs": {
+      "owner": "starter",
+      "hash": "163b7126804176cf7b642b02ae095f0b58b67b95e47ddf9c1b3ff200a20a6b9e"
+    },
+    "next.config.ts": {
+      "owner": "starter",
+      "hash": "5d79ce8545988305a355282086d8830ed9fc929ae9006271027e0b7f73f37e47"
+    },
+    "postcss.config.mjs": {
+      "owner": "starter",
+      "hash": "dfac7ac2d86d326a0e5adb024e7943c181393ed17a5fcb8f0315b24c7da6ddde"
+    },
+    "prettier.config.mjs": {
+      "owner": "starter",
+      "hash": "5b8ab56ef5f2f2bbf475ec6d0d0a14d6d3e9c6e867c7431287da0447e991df30"
+    },
+    "scripts/billing-sync.ts": {
+      "owner": "module:billing",
+      "hash": "302a5348f656f2e08603f88e308466411f361717a32dbbf7922735c133c2fe5b"
+    },
+    "scripts/check-env.ts": {
+      "owner": "starter",
+      "hash": "abee49dd87ea3da52ac0d7c8defcb0be523fcf19b0650b4cf076ee8359203ba9"
+    },
+    "scripts/dev-db.ts": {
+      "owner": "module:database",
+      "hash": "47dbcb54185661d1574a109835d1b8833bded5a6f6f56e35fc2e1c336a22d3a1"
+    },
+    "scripts/grant-admin.ts": {
+      "owner": "module:admin",
+      "hash": "d9a8ff7ea7874d03f0f578fc5bf524f74c7591770a1941a20cef525b8930eeab"
+    },
+    "src/app/(app)/admin/page.tsx": {
+      "owner": "module:admin",
+      "hash": "dc514898476eca7d1e26a76f1600a4286d91fb9dd7cc7a189278dbf7f6250785"
+    },
+    "src/app/(app)/admin/users/page.tsx": {
+      "owner": "module:admin",
+      "hash": "ecb7892ec3f6a851fe51fb948ae1e169fb61aaa8a8df5676189e5219e20c2c4e"
+    },
+    "src/app/(app)/dashboard/loading.tsx": {
+      "owner": "module:dashboard",
+      "hash": "38e5a5710ffe4fe81949b8e69aed72c1ed81ac4a264b34e725fdf1c7de5e823b"
+    },
+    "src/app/(app)/dashboard/page.tsx": {
+      "owner": "module:dashboard",
+      "hash": "fd50c9f50469dd8fd46a727f57aebe270f02ce649eba5f2d86f313a790306155"
+    },
+    "src/app/(app)/invite/[id]/page.tsx": {
+      "owner": "module:teams",
+      "hash": "4dbdb6fbd439e39e0e0f9edea067009b8224b4b1d2b491bc846c91b8d27ae4a8"
+    },
+    "src/app/(app)/layout.tsx": {
+      "owner": "module:dashboard",
+      "hash": "0bdfc12ff30521c79cc7ee8369880351afa1c72ff2dee67ca1c9976ff6477099"
+    },
+    "src/app/(app)/notifications/page.tsx": {
+      "owner": "module:notifications",
+      "hash": "739aef16d5ce1d2c148b5b1e83e2128f2f2e2923bcaca6ccb01112b8a29b813d"
+    },
+    "src/app/(app)/settings/account/page.tsx": {
+      "owner": "module:settings",
+      "hash": "b7032ac79599228947c7a2a07565c20fe4b326a27727d30385b60bb701ba1f70"
+    },
+    "src/app/(app)/settings/api-keys/page.tsx": {
+      "owner": "module:api",
+      "hash": "b09dc7f424131efe737b3a6f78a89bf04e6856d59b8a7dbc25265c743e7dd781"
+    },
+    "src/app/(app)/settings/billing/page.tsx": {
+      "owner": "module:billing",
+      "hash": "6575c6fd705a35b0ba60e9afe3b3f2c4015f5fa30a4d3de5fa39b5fa98ae5daa"
+    },
+    "src/app/(app)/settings/layout.tsx": {
+      "owner": "module:settings",
+      "hash": "ae4ce8c7593aa7d9b33370b7388a441a78b8711cad5cc5e2af3c74c7a6eed7e4"
+    },
+    "src/app/(app)/settings/page.tsx": {
+      "owner": "module:settings",
+      "hash": "713dd34acda261717c1106dbf41dd6a27a69c68a80bcd1692291e09381e7d5a2"
+    },
+    "src/app/(app)/settings/security/page.tsx": {
+      "owner": "module:settings",
+      "hash": "4ba0a1fcbd3e5242949213dc1429ebbabd2fabca9cd57fd4efbe82567bc5bf0f"
+    },
+    "src/app/(app)/settings/team/page.tsx": {
+      "owner": "module:teams",
+      "hash": "4b8632d09c044022be5a9f7c4a4614e26d2fa6a779a77a774c82dc93c6327803"
+    },
+    "src/app/(auth)/forgot-password/page.tsx": {
+      "owner": "module:auth",
+      "hash": "522c0b0bb96b26f1c3cff38ef7cca2d6d3488d5f09ad71b2adb340413f9179c0"
+    },
+    "src/app/(auth)/layout.tsx": {
+      "owner": "module:auth",
+      "hash": "3bd32312d51aed2f4eebdf83b8f9e1293aa8d0f17ecac0644aebff8608e7c113"
+    },
+    "src/app/(auth)/reset-password/page.tsx": {
+      "owner": "module:auth",
+      "hash": "17a65d862f5b25e3395a8be31056d71e5127ab550086130f149266237b122792"
+    },
+    "src/app/(auth)/sign-in/page.tsx": {
+      "owner": "module:auth",
+      "hash": "90f83df965a8f4cc9e9c49a4ef0a0fe0cc67b165b87e726cb4afd45444ad3003"
+    },
+    "src/app/(auth)/sign-up/page.tsx": {
+      "owner": "module:auth",
+      "hash": "4a201060f83c9f7c388f1bc3c4ffba1a122d3b99ceab6fdd01eb37adddeaad6e"
+    },
+    "src/app/(auth)/verify-email/page.tsx": {
+      "owner": "module:auth",
+      "hash": "2d1a1f255b99360595b42e3705e50758806d5669863ae6a607d6e4d25876af93"
+    },
+    "src/app/(onboarding)/onboarding/page.tsx": {
+      "owner": "module:onboarding",
+      "hash": "c5b87ca25fe70f323bd8cec8fc7da7855a03214a9445154537d116973bfb717d"
+    },
+    "src/app/(site)/blog/[slug]/opengraph-image.tsx": {
+      "owner": "module:blog",
+      "hash": "29ff3c9fc47ed688570e35872ed2dd92edf50d951ed8ead007d2bbcdc18721f8"
+    },
+    "src/app/(site)/blog/[slug]/page.tsx": {
+      "owner": "module:blog",
+      "hash": "713f1c11ffef38fde8b16e0877e29e9f9d7ebeb58b83dc41807faad07a1ccab9"
+    },
+    "src/app/(site)/blog/page.tsx": {
+      "owner": "module:blog",
+      "hash": "986607d0ee6754a1c9c0de5119d35cc310ff1a3fbcc69fc7cf0f219e488c6aa8"
+    },
+    "src/app/(site)/blog/page/[page]/page.tsx": {
+      "owner": "module:blog",
+      "hash": "8a8e71a936dd633c9d863d3a7d3b798fe33eff4fffda52831773995a5f855631"
+    },
+    "src/app/(site)/blog/rss.xml/route.ts": {
+      "owner": "module:blog",
+      "hash": "7a44b1f4067222847cfe39320114e07418fb02f0168f2ed4e87b4d95f8296fc6"
+    },
+    "src/app/(site)/blog/tags/[tag]/page.tsx": {
+      "owner": "module:blog",
+      "hash": "2bbf329ec839497e0f752335fa20b23d015d5f9752075179881e668c671645a4"
+    },
+    "src/app/(site)/changelog/page.tsx": {
+      "owner": "module:changelog",
+      "hash": "c514b4d87f924af5e90f6c2ee3fe19c79ca898608a9743fe447c9078fc1ae0c8"
+    },
+    "src/app/(site)/changelog/rss.xml/route.ts": {
+      "owner": "module:changelog",
+      "hash": "f49ecac7a5f9b1bbfcc81a4bee837a7579352ec650da1b00eea2db25a4cf7246"
+    },
+    "src/app/(site)/contact/page.tsx": {
+      "owner": "module:contact",
+      "hash": "95da71c8f86ebc28102575ce8ac337624951ca77390f147d86d054f31c1558aa"
+    },
+    "src/app/(site)/docs/[slug]/[page]/opengraph-image.tsx": {
+      "owner": "module:docs",
+      "hash": "67a7ed19ae8cae4f1796e3646b8c8a7272679face2048c4c84644f5f6d08cf89"
+    },
+    "src/app/(site)/docs/[slug]/[page]/page.tsx": {
+      "owner": "module:docs",
+      "hash": "b69d6fe56008f955f4345d217ff1bb3ab3a954ca62b8b192f0cd65e61c83932f"
+    },
+    "src/app/(site)/docs/[slug]/opengraph-image.tsx": {
+      "owner": "module:docs",
+      "hash": "37d300403c0a557b715f29f0a749eab496186865d2be6b056c6ee6a55fc47b22"
+    },
+    "src/app/(site)/docs/[slug]/page.tsx": {
+      "owner": "module:docs",
+      "hash": "639e4f0f60d7e7e03d0484e598b47168c77268f75c9dbca118927bf1b8bcef98"
+    },
+    "src/app/(site)/docs/layout.tsx": {
+      "owner": "module:docs",
+      "hash": "fcaea1d9f442c0884fcd8967915d3cfe1385484af680f5c8d203f523dc12e739"
+    },
+    "src/app/(site)/docs/opengraph-image.tsx": {
+      "owner": "module:docs",
+      "hash": "a24f8b3fb1e41d4df7d63515774f2ab26c18cbec828e6845e6c229ad75acb37f"
+    },
+    "src/app/(site)/docs/page.tsx": {
+      "owner": "module:docs",
+      "hash": "40413cd61010897a780a6fdaa79d85c6a739e2a40a065739ba14194095f31d61"
+    },
+    "src/app/(site)/docs/search-index.json/route.ts": {
+      "owner": "module:docs",
+      "hash": "a486f9472efa23b3a01c8703e713f62b13969b4efc7c276e73efe434c51839ca"
+    },
+    "src/app/(site)/faq/page.tsx": {
+      "owner": "module:faq",
+      "hash": "909032a5d8cfcaa6cd4e525d7cf51e375f49e11cbc43abf6e88676263ab7af3f"
+    },
+    "src/app/(site)/layout.tsx": {
+      "owner": "starter",
+      "hash": "c87fb9902ff71c133283215a8e1d82bf86c4e0e6684ac30fffa61c054bcf4908"
+    },
+    "src/app/(site)/legal/[slug]/page.tsx": {
+      "owner": "module:legal",
+      "hash": "096a395507190b7916879286c323320d78a46ca050716d4ead0f46fac9ad399b"
+    },
+    "src/app/(site)/page.tsx": {
+      "owner": "preset:saas",
+      "hash": "3a3aa2bc0dafc393526a416a2f643c7d56a0a916036d2ed129cbd780514f51d6"
+    },
+    "src/app/(site)/pricing/page.tsx": {
+      "owner": "module:billing",
+      "hash": "dad8b122aa0ac122fab9a8e01a2052721fecd4d15f8e2e6c3d7fcb7696fc77f2"
+    },
+    "src/app/api/auth/[...all]/route.ts": {
+      "owner": "module:auth",
+      "hash": "31bf362c6eb91e815c3f5d19439cf4e571ba87679719f810e429ad4bc9b47f74"
+    },
+    "src/app/api/payments/webhook/route.ts": {
+      "owner": "module:payments",
+      "hash": "b6169b2ce5af5be6a31a6a12e0b8fccc82a0a155e4becf944077e7912754cc1c"
+    },
+    "src/app/api/v1/me/route.ts": {
+      "owner": "module:api",
+      "hash": "60fa001a9d7eb5b263cc0c2b0939752a5e6a19950d1a30b3aeb4961d325f97ab"
+    },
+    "src/app/billing/checkout/route.ts": {
+      "owner": "module:billing",
+      "hash": "d5c2574f586b95ebdd75f8a5bc4a6d6b7103e2cf79738368b1f846614188e165"
+    },
+    "src/app/billing/portal/route.ts": {
+      "owner": "module:billing",
+      "hash": "4e951ceff55270a4d5b042f89cde0a07551e77d99dbd9e7f7278f66f122e3656"
+    },
+    "src/app/dev/billing-portal/page.tsx": {
+      "owner": "module:payments",
+      "hash": "1bd8a5762a05801b7da98a990eb30837580bfd4e9621ad046883c239967bf680"
+    },
+    "src/app/dev/checkout/[id]/page.tsx": {
+      "owner": "module:payments",
+      "hash": "7dec6fed4c8afa7e91d4ae6132fd6937754d73620f6c88ed62162e69ebc0694d"
+    },
+    "src/app/dev/emails/[name]/route.ts": {
+      "owner": "module:transactional-emails",
+      "hash": "a1323359b7754640ee350a73c21f7298b8570da8dd4c82f851225c674bb71a3a"
+    },
+    "src/app/dev/emails/page.tsx": {
+      "owner": "module:transactional-emails",
+      "hash": "967f6af9cfcdac1fa805f2a5ea6ff0c0d31eda2686d8b53a943968d22674ea12"
+    },
+    "src/app/dev/outbox/[id]/page.tsx": {
+      "owner": "module:email",
+      "hash": "f16b52da306a7477e72937802f1e57ccfdd1d1c9572c0e93279f445bf7ccd7b8"
+    },
+    "src/app/dev/outbox/page.tsx": {
+      "owner": "module:email",
+      "hash": "bad258f90db6a78eca96e3d2ec653ce70840bfadad22fe88286659f0c7a4f1cc"
+    },
+    "src/app/error.tsx": {
+      "owner": "starter",
+      "hash": "13bb09e54cb00a6f6aa6d7e335eba786bc902a2b8306098db0e7fc0f693a1540"
+    },
+    "src/app/global-error.tsx": {
+      "owner": "starter",
+      "hash": "493a776a16585de40ab3c7117a83e278ea268d6c6e7023d92610f11e501818c3"
+    },
+    "src/app/globals.css": {
+      "owner": "starter",
+      "hash": "9a51c4081caa88b8c1e7ab044ce6783f05b66fdff968e44addbef35deb3bbd25"
+    },
+    "src/app/icon.svg": {
+      "owner": "starter",
+      "hash": "3a5236f6de3fefac92639255fa9870193a6f0b3a69961d039016e763ad6c8bac"
+    },
+    "src/app/layout.tsx": {
+      "owner": "starter",
+      "hash": "70a59d8ae708696ae04684c7331255facc214c9a348b1900dc09f49fdcd9e677"
+    },
+    "src/app/not-found.tsx": {
+      "owner": "starter",
+      "hash": "f63d05faebfb0598963b46fba75784886f162e79f4795550c4c6609dc15a68e8"
+    },
+    "src/app/opengraph-image.tsx": {
+      "owner": "module:seo",
+      "hash": "4c4379cdc584cb209eb52959eeafa62f391d35981c7fb9bc3096c391e80d7d8f"
+    },
+    "src/app/robots.ts": {
+      "owner": "module:seo",
+      "hash": "9ac4fade1cc0f4b8c69e7c75a5d48ec21bdbef99b0d980347c4f52e7cd6eae61"
+    },
+    "src/app/sitemap.ts": {
+      "owner": "module:seo",
+      "hash": "3d3ab27b47c724c277efb9b173e313ead0f1de462138685a0b887f29328adc00"
+    },
+    "src/components/admin/impersonation-banner.tsx": {
+      "owner": "module:admin",
+      "hash": "4a1bd166f5995a8b1262315df572457872e8abb0d421daa18a7a043c28510931"
+    },
+    "src/components/analytics/analytics.tsx": {
+      "owner": "module:analytics",
+      "hash": "2bf677ffc09b7017453a5d5b2d5c153b7eff45db540af2f545b59fee31becc5c"
+    },
+    "src/components/api/create-key-form.tsx": {
+      "owner": "module:api",
+      "hash": "924f507efda42de3ddd4e7716f5b64ac397ecf837a739fd8fe33c9779642fb04"
+    },
+    "src/components/api/key-list.tsx": {
+      "owner": "module:api",
+      "hash": "7450bd35fec363286eeaa66306a5352eaed8200398221731884e50eced935b1a"
+    },
+    "src/components/auth/auth-form.tsx": {
+      "owner": "module:auth",
+      "hash": "c4b3dfc8bea069fde59b84cb106b05e7f452609510914e4c97994a7e1dc89517"
+    },
+    "src/components/auth/auth-header-actions.tsx": {
+      "owner": "module:auth",
+      "hash": "8e3ab47812350ac64ee7926ffdfd989b3a4ce8a177f50da0eb8041d2d8805273"
+    },
+    "src/components/auth/password-reset-forms.tsx": {
+      "owner": "module:auth",
+      "hash": "5ee2f3b31ed73ccf39d0a9da61e29644052a0d485593ab53c15571f44333db04"
+    },
+    "src/components/auth/sign-in-form.tsx": {
+      "owner": "module:auth",
+      "hash": "ee075372a85c72ce1e337fdf5e23465875fadf3ef3e4b2fd2e114a82409cbf9a"
+    },
+    "src/components/auth/sign-up-form.tsx": {
+      "owner": "module:auth",
+      "hash": "a9f110a76ec5b9707de20b0296c0b1eeb15a467d3077b059485cd53f7cb4fc5a"
+    },
+    "src/components/auth/social-buttons.tsx": {
+      "owner": "module:auth",
+      "hash": "f66d6f0bc58305f6097f801ac4e62cd1454a057a9652003dca79bd13453edcb0"
+    },
+    "src/components/auth/user-menu.tsx": {
+      "owner": "module:auth",
+      "hash": "686342ccd20ab58ae67f0e6501aec2923f52b2c95aa8a9f2f2445a9c8362dd32"
+    },
+    "src/components/billing/plan-widget.tsx": {
+      "owner": "module:billing",
+      "hash": "715e4877c77f95de58f1ebbaeb94cc8ad7de749cd5619e65d2630fcff5e2c335"
+    },
+    "src/components/blog/post-index.tsx": {
+      "owner": "module:blog",
+      "hash": "c62bd4e93b59686a4d5e22318f4642e17f321c51705ab91a05f899dc4d6b55e6"
+    },
+    "src/components/consent/cookie-banner.tsx": {
+      "owner": "module:cookie-consent",
+      "hash": "d745095e9422d4c8ecc7ee7c8121114c6cef877a09b97114bb1d15cdce019740"
+    },
+    "src/components/consent/use-consent.ts": {
+      "owner": "module:cookie-consent",
+      "hash": "143c9cff103d90e3bc91b3f5249dc93a24ed64841bba7cc2aa1045d48aaf3c24"
+    },
+    "src/components/contact/contact-form.tsx": {
+      "owner": "module:contact",
+      "hash": "d5ef6a5de516687836d345487d83cc61b509d943cf6388a7e737e6f01f9d4591"
+    },
+    "src/components/contact/turnstile.tsx": {
+      "owner": "module:contact",
+      "hash": "ed95ada9857d8c23f123260b89b272949aa7c3f6176e0b7fe77c723ec28d3d07"
+    },
+    "src/components/docs/doc-page.tsx": {
+      "owner": "module:docs",
+      "hash": "77db30b6cf32aebf0d70066c06f642db0d4409884836591af6b0f1a388ac3ffd"
+    },
+    "src/components/docs/docs-search.tsx": {
+      "owner": "module:docs",
+      "hash": "f5d8161aa14d2c991adfd7e3def27abd6f34efb15f5d2947c10640b68b873de9"
+    },
+    "src/components/docs/docs-sidebar.tsx": {
+      "owner": "module:docs",
+      "hash": "d298d4739a271939d607700a26c094ba92a3aef748e6a5b58322ee4fa8a50a20"
+    },
+    "src/components/mdx/callout.tsx": {
+      "owner": "module:mdx",
+      "hash": "c19f13bb39cdcc803972de2261bf8b7568480da2db4c7ed726e303b5fbf27b12"
+    },
+    "src/components/mdx/code-block.tsx": {
+      "owner": "module:mdx",
+      "hash": "6f705b7e04b4b7670979152eae0a61a3259d9e5f6086785eb2b5ff754ac9e596"
+    },
+    "src/components/mdx/copy-button.tsx": {
+      "owner": "module:mdx",
+      "hash": "3f2f70d55ba16438c83f92501a4bc02c03a2ed40b7c35918f17f903a59aa4740"
+    },
+    "src/components/mdx/mdx-components.tsx": {
+      "owner": "module:mdx",
+      "hash": "98dddc9e054d00821db7512d8f6de6b6983d478202df77c1c29b5a57ed5c7eff"
+    },
+    "src/components/mdx/table-of-contents.tsx": {
+      "owner": "module:mdx",
+      "hash": "85bbe107cab737a78fd30c2f84eae642a8122a0ba3fe3e94b0964d53998f14f2"
+    },
+    "src/components/notifications/notification-bell.tsx": {
+      "owner": "module:notifications",
+      "hash": "1e79a9f38cb2c6a7adb5dfa5f870bc0591faa81224c751702397f633f0b655aa"
+    },
+    "src/components/notifications/notification-list.tsx": {
+      "owner": "module:notifications",
+      "hash": "98fb611917869ec879e178f401d28ccf6419772ea14f1a9d45decfca05970a51"
+    },
+    "src/components/onboarding/checklist-widget.tsx": {
+      "owner": "module:onboarding",
+      "hash": "8251de2f89c7f4829848ec1fadf01763e759b1be732d9bad1c0b693400860f24"
+    },
+    "src/components/onboarding/send-to-onboarding.tsx": {
+      "owner": "module:onboarding",
+      "hash": "fa89f44c8534e3d4b53a3ad3528233d9c553dededd1e411acadf2af9f6858572"
+    },
+    "src/components/onboarding/wizard.tsx": {
+      "owner": "module:onboarding",
+      "hash": "082052bb3ed08ed9f8b7e10c1ea0c352320c1d247b890b7a0d92c9b4594ff060"
+    },
+    "src/components/sections/auth-card.tsx": {
+      "owner": "section:auth-card",
+      "hash": "cc390b604500485c526008932f1290e6ffa331a405c052d82324c232a3e77b06"
+    },
+    "src/components/sections/blog-list.tsx": {
+      "owner": "section:blog-list",
+      "hash": "bc2969d2ffceb855233e445aef7bb3e92ce459fd6677eabf39c1be126709324b"
+    },
+    "src/components/sections/cta-band.tsx": {
+      "owner": "section:cta-band",
+      "hash": "7f7a6d467f54c9243f06b7ffb098501207f79ac55424fb1d6d3f8e9ee2402bc5"
+    },
+    "src/components/sections/dashboard-nav.tsx": {
+      "owner": "section:dashboard-shell",
+      "hash": "4367cf10fbda07842ef009cbc5d6c0a458b07c40a4c2a72aea30ff222fe7aad3"
+    },
+    "src/components/sections/dashboard-shell.tsx": {
+      "owner": "section:dashboard-shell",
+      "hash": "aa183f4b91a1f37b2fdace18e1b7bee28cc1ced61ee039d041b700483a5c9ab1"
+    },
+    "src/components/sections/empty-state.tsx": {
+      "owner": "section:empty-state",
+      "hash": "8bad071ae9b900ca184c9ca865a0ada611bbf8a295c41ef4e057632300f493ff"
+    },
+    "src/components/sections/faq.tsx": {
+      "owner": "section:faq",
+      "hash": "205e4c8e88ed0893ba429abe5c6e2e51cb4a35db86f127621b03134114cae4a2"
+    },
+    "src/components/sections/feature-grid.tsx": {
+      "owner": "section:feature-grid",
+      "hash": "92e5fe1f424d0b0b694ce4dbc44fa0e30111143ae7f73ab9391b9caae0a3f8ef"
+    },
+    "src/components/sections/feature-rows.tsx": {
+      "owner": "section:feature-rows",
+      "hash": "aa9c7a4d499ba88aa006908a1ce028a97d44643246520729ae5078a633e67afd"
+    },
+    "src/components/sections/hero-centered.tsx": {
+      "owner": "section:hero-centered",
+      "hash": "043c67a4a71382b59ef7adb78c2b7c612dcc6a32ad23e9a4734d037816c1775e"
+    },
+    "src/components/sections/kit/section-actions.tsx": {
+      "owner": "section:section-kit",
+      "hash": "789a3ad7ba87f8de8077042805f51c290caae2bba08e04d24a8f114b907edfde"
+    },
+    "src/components/sections/kit/section-header.tsx": {
+      "owner": "section:section-kit",
+      "hash": "18cba1fef7e300e6885a170b9bcc4b5618f89314a77f1ab4f1359ca830215edc"
+    },
+    "src/components/sections/kit/section-media.tsx": {
+      "owner": "section:section-kit",
+      "hash": "09aeebb6a00cdd85d4ba12218eb1c9c2c7f42c059de6a07c4b183790d01c691f"
+    },
+    "src/components/sections/kit/section.tsx": {
+      "owner": "section:section-kit",
+      "hash": "028541e108aca1217841b610b990f78e8f25889eced365dd40d26b56a5077e59"
+    },
+    "src/components/sections/kit/types.ts": {
+      "owner": "section:section-kit",
+      "hash": "89a66a21107033af50867ffbdab58d5928db318918347f1a830f424e34406449"
+    },
+    "src/components/sections/page-header.tsx": {
+      "owner": "section:page-header",
+      "hash": "75040d287489d781e76bf37c34709220150aeed10b8a9ec8c8b5edd17c619181"
+    },
+    "src/components/sections/pricing-table.tsx": {
+      "owner": "section:pricing-table",
+      "hash": "1483e1decd7647b2cc4d3f0c777101429c037440687159cbb9e45d1393886a0f"
+    },
+    "src/components/sections/testimonials.tsx": {
+      "owner": "section:testimonials",
+      "hash": "3562a2f1f5168c6780a30aff133522d7e92ce4730d343cf1d872854c3e5c9344"
+    },
+    "src/components/settings/delete-account.tsx": {
+      "owner": "module:settings",
+      "hash": "5b510abc44a6f86f172201db31b5b8711468189ef1913f5b25528c5fa28af3df"
+    },
+    "src/components/settings/email-form.tsx": {
+      "owner": "module:settings",
+      "hash": "ef8b6157d7f153539eda061f30d74fa8d4182c167ce929daed9964837cd5a432"
+    },
+    "src/components/settings/form-status.tsx": {
+      "owner": "module:settings",
+      "hash": "0f8c32de9c9d08899f1179c08f46627538358f8aec202bd2c3e03add53aeb783"
+    },
+    "src/components/settings/password-form.tsx": {
+      "owner": "module:settings",
+      "hash": "6b72a3d5022e63cb1ca1eea2a23cd261551e85be0e1374dc77551cd1f013f59d"
+    },
+    "src/components/settings/profile-form.tsx": {
+      "owner": "module:settings",
+      "hash": "72c9532c5f3faea013e02030f4f602ae3bd6c367a6221dd21e391e345f4ec3c9"
+    },
+    "src/components/settings/sessions-list.tsx": {
+      "owner": "module:settings",
+      "hash": "4ae35f25ecb474fc4d7bc03d944db997d2fe62832f801f5e38547a55f48fbc1c"
+    },
+    "src/components/settings/settings-tabs.tsx": {
+      "owner": "module:settings",
+      "hash": "e06bf747267e45cbd9eb961338edf465cfe120e3b591243ab6c9e97681e8bb33"
+    },
+    "src/components/site/mobile-nav.tsx": {
+      "owner": "starter",
+      "hash": "527af2ba9677cab15b0d6606fe3d79d7db7b08b90ea86cb09245866f6aa9b714"
+    },
+    "src/components/site/nav-link.tsx": {
+      "owner": "starter",
+      "hash": "c16fd7ffe56446ec9a978ad4b9e91b57502b85c490e40385ef5b29afae0c725a"
+    },
+    "src/components/site/site-footer.tsx": {
+      "owner": "starter",
+      "hash": "f400d80a2240ab12112288c4f17eae795117b593a94b2be5b0155a49f1935400"
+    },
+    "src/components/site/site-header.tsx": {
+      "owner": "starter",
+      "hash": "10eed37af79498cfdd02866601e2aee214bc91cd175162b7ffc9151a725a616d"
+    },
+    "src/components/site/site-shell.tsx": {
+      "owner": "starter",
+      "hash": "e264de728d6aae37b5adb94f8404f0b58d0310dcee52490608830a2c7c5ee6fa"
+    },
+    "src/components/site/skip-link.tsx": {
+      "owner": "starter",
+      "hash": "234adb45ea33b589d3c6881cf8479c2f76f6a4789efac1cbf2b7ab424ba37824"
+    },
+    "src/components/site/theme-provider.tsx": {
+      "owner": "starter",
+      "hash": "3dc39eb51e3bee3cb367108aea1c10a759bbe90dd534f297227e04482ac514bd"
+    },
+    "src/components/site/theme-toggle.tsx": {
+      "owner": "starter",
+      "hash": "f7bd34985cd4a526948c0a99b25cb8beb0dfdef07b0ecf4183fd1394705ea6af"
+    },
+    "src/components/teams/create-team-dialog.tsx": {
+      "owner": "module:teams",
+      "hash": "a13a08df57133736011f46535ab8094c71044341a0eec0e0df32bcef0acbc186"
+    },
+    "src/components/teams/invite-form.tsx": {
+      "owner": "module:teams",
+      "hash": "5076e081858209fa11ee34a0864d9e9d047bd37ed5c673f8a20180b33d8741f2"
+    },
+    "src/components/teams/team-form.tsx": {
+      "owner": "module:teams",
+      "hash": "de932e02bd3296e1aea12d0ab47bcf5e22c428417680f5b5d0c4c6ffa9c79f0b"
+    },
+    "src/components/teams/team-switcher-slot.tsx": {
+      "owner": "module:teams",
+      "hash": "04bb7c35170c9a9bbd0491b4b9aaab60510272555cc4c14baa329bbc525a0207"
+    },
+    "src/components/teams/team-switcher.tsx": {
+      "owner": "module:teams",
+      "hash": "0be9700561883d3f37851f2abbcb94151c92c1af271494e1dcb412744b5c2c5e"
+    },
+    "src/components/teams/team-widget.tsx": {
+      "owner": "module:teams",
+      "hash": "c5cd1cf8b9e45a4ead1fa22e4d27d624c24d0895794ef0644873076ab72c0c04"
+    },
+    "src/components/ui/alert.tsx": {
+      "owner": "ui:alert",
+      "hash": "ca44ee3411ada0bb6a48a3fc589e54ec809831e2da05f73a4e2953447a094829"
+    },
+    "src/components/ui/avatar.tsx": {
+      "owner": "ui:avatar",
+      "hash": "cd431302d9afb085bd15c513368c3b4cba58f1e93a37576f70ae1cbabd74a18c"
+    },
+    "src/components/ui/badge.tsx": {
+      "owner": "ui:badge",
+      "hash": "5c1f1f8ae5fdccf2396a81940ffb06f8ed9f004c2c979dca36c9e6f06aa862dd"
+    },
+    "src/components/ui/button.tsx": {
+      "owner": "ui:button",
+      "hash": "0b92f7e3fa9942e4ae6999fa1e91824ae4f0498253fd76de33cda5c0a5b16f78"
+    },
+    "src/components/ui/card.tsx": {
+      "owner": "ui:card",
+      "hash": "0965bf3aeea7e60c8abfd504db49da1f4387ef621c6dfbad6a9078dccbf586c1"
+    },
+    "src/components/ui/checkbox.tsx": {
+      "owner": "ui:checkbox",
+      "hash": "35320a95ba2ae96e5b5dab791f0bf85d42c437b0a06399c392a988fda4060e87"
+    },
+    "src/components/ui/copy-button.tsx": {
+      "owner": "ui:copy-button",
+      "hash": "6835a0e2449ab46447bc893ade660050aa85f6c3b442ba09a797e4b5b7a6c6f1"
+    },
+    "src/components/ui/dialog.tsx": {
+      "owner": "ui:dialog",
+      "hash": "786f3fd5158862e8316f4170e4b31a9ae1f4fd03150d45f9abb10d5507c0a1c1"
+    },
+    "src/components/ui/dropdown-menu.tsx": {
+      "owner": "ui:dropdown-menu",
+      "hash": "240bcc89d1e1da8a52e0317b7dc530727eb7c7ee7fe8303f5d2688ffa2d459d2"
+    },
+    "src/components/ui/field.tsx": {
+      "owner": "ui:field",
+      "hash": "3949b4735c9b637dfd9d7ce79ce5426b6052e1ead3eab561199f8f29f01fa544"
+    },
+    "src/components/ui/input.tsx": {
+      "owner": "ui:input",
+      "hash": "7d2b12fc44f087c0964c2d9194fbed545c68785a375a775bf325347cf12176e3"
+    },
+    "src/components/ui/kbd.tsx": {
+      "owner": "ui:kbd",
+      "hash": "afdeb3be648b852362aa79a36a1c39a832aba1ce60f3af03e6807ee1ce438f42"
+    },
+    "src/components/ui/label.tsx": {
+      "owner": "ui:label",
+      "hash": "20b334210dadf4962926ed710d1bf3b04c00cb6c27024398d3c7f4c813d995e8"
+    },
+    "src/components/ui/native-select.tsx": {
+      "owner": "ui:native-select",
+      "hash": "720a44244cf00bc2f63cd617c22f116928189557df85b0ae196fd80ed6b643c2"
+    },
+    "src/components/ui/pagination.tsx": {
+      "owner": "ui:pagination",
+      "hash": "340b06aa4480ec540b5407c420437a886946ed7ca6a1c8f07bc3ac36b7f220b9"
+    },
+    "src/components/ui/popover.tsx": {
+      "owner": "ui:popover",
+      "hash": "c53cd4145781768d52c57a2bb07ba2abb926642cfd0670190e138977dbe7347c"
+    },
+    "src/components/ui/progress.tsx": {
+      "owner": "ui:progress",
+      "hash": "94988c299eceb2b597bdddd8b9c77a790a1cffae594a1c8ba2a563756b9740b9"
+    },
+    "src/components/ui/prose.tsx": {
+      "owner": "ui:prose",
+      "hash": "6aa9b88bdbbc7177a1c59167e2d6a1e95cb82b201b6f72a99da27b535b0cae48"
+    },
+    "src/components/ui/separator.tsx": {
+      "owner": "ui:separator",
+      "hash": "3ab1e1a6c62fbe42705559d64cdd78a363ea0dcb81a7176c71ae0c5c162fea2a"
+    },
+    "src/components/ui/switch.tsx": {
+      "owner": "ui:switch",
+      "hash": "3c1e7ddd89a7798b1f70034a4c31ac80bb9c540aeb3008b51f0af6a7a203a6d2"
+    },
+    "src/components/ui/table.tsx": {
+      "owner": "ui:table",
+      "hash": "a629cd1988eaa1a660baaac1143431eb78646aa671d3d8f941f2a323edca6a62"
+    },
+    "src/components/ui/textarea.tsx": {
+      "owner": "ui:textarea",
+      "hash": "da9e548addf1ec39bccea97968bb7bb92c7d9a3372b4751715d2e3da3b750434"
+    },
+    "src/db/index.ts": {
+      "owner": "module:database",
+      "hash": "89f522fe8d9f1ac47ca4dd11c06d2fb441bb7d8ff52224b2a19cdfd00d92d1f4"
+    },
+    "src/db/schema/api.ts": {
+      "owner": "module:api",
+      "hash": "44dd508ee1232c12242050cbc60dea48b7d9c3f04785161d7e4b81f1c9c5ebb3"
+    },
+    "src/db/schema/auth.ts": {
+      "owner": "module:auth",
+      "hash": "7e760a1f38d23caed7b921198ddb95f3737d6a9f746a9b94f483a1c8c72ed3b7"
+    },
+    "src/db/schema/billing.ts": {
+      "owner": "module:billing",
+      "hash": "d66b4eec83cafc4ce9569f35efc21a94d1cf4da1c8bb76c1dbedd19de6e29542"
+    },
+    "src/db/schema/notifications.ts": {
+      "owner": "module:notifications",
+      "hash": "78cf38dfc7f1b2c2d44e1a5ff784812ee2fc1516c1e1f07dcf6ebe4cb842a8d4"
+    },
+    "src/db/schema/onboarding.ts": {
+      "owner": "module:onboarding",
+      "hash": "761a4ea66b9398da72fce7e11d1479856fa944f45fa8b2e7577594106f861922"
+    },
+    "src/db/schema/teams.ts": {
+      "owner": "module:teams",
+      "hash": "dcdfe3e32388de12f2ea0f2f66ea1b5525f5779ddd7c9aa65c45bf73fb0978c7"
+    },
+    "src/emails/auth/magic-link.tsx": {
+      "owner": "module:auth",
+      "hash": "8d74e7f3cac4929c3a1d90bb2c9275dcd10babc7eb3aed5703fd561b74b6e1c8"
+    },
+    "src/emails/auth/reset-password.tsx": {
+      "owner": "module:auth",
+      "hash": "5da6f014d76190e695f388ee86d0a79cf5d0f8d8d810728dfb9d5c09a5974e56"
+    },
+    "src/emails/auth/verify-email.tsx": {
+      "owner": "module:auth",
+      "hash": "2928bb6c5aacc8791106daabcd574003d55d79438200e37aa4886138c54f9e1f"
+    },
+    "src/emails/components/email-layout.tsx": {
+      "owner": "module:email",
+      "hash": "af2938f6340124e9c795dc6a56b7442ad61a0f7edcd398a7b908052a0aa2989b"
+    },
+    "src/emails/contact-notification.tsx": {
+      "owner": "module:contact",
+      "hash": "641a8308cbc997b23dae2c3bb15fb9ac6ac9397213891582107e239642304147"
+    },
+    "src/emails/payment-failed.tsx": {
+      "owner": "module:billing",
+      "hash": "eeed2b5160c1524ecf4a6bc1dd7ccb8efd3ebd3f52dab2c5d2ba74fa86b0dd0a"
+    },
+    "src/emails/team-invite.tsx": {
+      "owner": "module:teams",
+      "hash": "bc51692943fd88a55ac874f680afbb0d1fc6f9b16d6514acf533834565877c60"
+    },
+    "src/emails/theme.ts": {
+      "owner": "module:email",
+      "hash": "b75619770b63e0f4caba3448de6cb55160539293ce35557d12ff6679150e5b1f"
+    },
+    "src/emails/welcome.tsx": {
+      "owner": "module:transactional-emails",
+      "hash": "9ea958bddbc8779079d7555c96473769994fd8115bf4321d0fc127811b7b361a"
+    },
+    "src/env/admin.ts": {
+      "owner": "module:admin",
+      "hash": "d5072813a207bdd59d0cc036a1eeeb69b92fa9b9bda6f1407707ceba17c29909"
+    },
+    "src/env/analytics.ts": {
+      "owner": "module:analytics",
+      "hash": "d7f63ecb14b14c27a375f59e1e64248b22890fb0d890df7c36e4dc59c988c4e3"
+    },
+    "src/env/auth.ts": {
+      "owner": "module:auth",
+      "hash": "99a5138fc97fe2059092cfa2dcbf8d5c927836a0cd87a7d07417fdc81eb4c775"
+    },
+    "src/env/contact.ts": {
+      "owner": "module:contact",
+      "hash": "60d5fb7798b85016a650e265b9b3593ce8fe07e7455a357895cee5032c02765f"
+    },
+    "src/env/core.ts": {
+      "owner": "starter",
+      "hash": "40e54fa272435130f74fe55465ea86e10cacc6e7f6db4955ffd476dea5cb1bdd"
+    },
+    "src/env/database.ts": {
+      "owner": "module:database",
+      "hash": "94b30ac379d3e5c80965effe6bcf360bf0d176e58fe352813bff855c1d0a0a90"
+    },
+    "src/env/email.ts": {
+      "owner": "module:email",
+      "hash": "5a5409debe6887dd4ddaf03d1e9d37313e5ce837b6f3ea5d6462a6e2729c8f55"
+    },
+    "src/env/payments.ts": {
+      "owner": "module:payments",
+      "hash": "71771d664f763b87cca9672c9049c9855aa0fd536d8fe09ade4b10c7f67a6903"
+    },
+    "src/env/rate-limit.ts": {
+      "owner": "module:rate-limit",
+      "hash": "c9377ef0c1befea7333c1c1d63dc465d359228defd413e1912839b2360bbcd9d"
+    },
+    "src/lib/admin/actions.ts": {
+      "owner": "module:admin",
+      "hash": "ce60981101bad71fd885901d502541aa1ad0a20b6be8f9bb12416e4f718b5b54"
+    },
+    "src/lib/admin/auth-client-plugin.ts": {
+      "owner": "module:admin",
+      "hash": "5702b8d0774d99080d94b50e4804edaeca9c22d185a3fe20452abd8d81ac7205"
+    },
+    "src/lib/admin/auth-plugin.ts": {
+      "owner": "module:admin",
+      "hash": "5ca72d97a1d6fa33bdc0298e77fda415fbed88521dc1ca2e2d82f58e49a09ee3"
+    },
+    "src/lib/admin/guard.ts": {
+      "owner": "module:admin",
+      "hash": "1ecf981229a16327e4ce332d8820ac71817c7f5ed993ed52f1b010fb87b0698b"
+    },
+    "src/lib/admin/stats.ts": {
+      "owner": "module:admin",
+      "hash": "2908fe9aa430b4ea828cdc8b3cd78a3892aa95e274a3f6fda691730fccb91a78"
+    },
+    "src/lib/analytics/consent.ts": {
+      "owner": "module:analytics",
+      "hash": "35d11053a79e71e2924f26a1ec55c08673098935c630af57e3d967cdfe8b4ddd"
+    },
+    "src/lib/analytics/providers.ts": {
+      "owner": "module:analytics",
+      "hash": "37b1a8df76c0e1b3d263cc88981b392d01f4648e6124c52e4c153328ae7c09ca"
+    },
+    "src/lib/analytics/track.ts": {
+      "owner": "module:analytics",
+      "hash": "2f1891c9978f43a60da808632d5791359235175bf02ee371cd2454c06b649347"
+    },
+    "src/lib/api/actions.ts": {
+      "owner": "module:api",
+      "hash": "ccc449536cd0b415840f13a381cea3da5e987fd9f78d461c4c1f01751aa4d79b"
+    },
+    "src/lib/api/config.ts": {
+      "owner": "module:api",
+      "hash": "09ea238081f784578db8740fab7f2db0fa45c821ef6a681c03d6d88eb924d2d7"
+    },
+    "src/lib/api/keys.ts": {
+      "owner": "module:api",
+      "hash": "e9fbbd21e3fca06b70a3bc28335a48d9457655f9f3ffb3e9a417be33d4062262"
+    },
+    "src/lib/api/onboarding.ts": {
+      "owner": "module:api",
+      "hash": "22be3c935060912d2c14d9fc4b8b384486431400f3769b821c5c8ffb67a6ac0c"
+    },
+    "src/lib/api/route.ts": {
+      "owner": "module:api",
+      "hash": "a34bb9c6a7b0a33988c22fed92f7c163b022587300a090286913ec9d515ee4c4"
+    },
+    "src/lib/auth/actions.ts": {
+      "owner": "module:auth",
+      "hash": "8bf17eded900b3abaff1f2b18bd8ef23eff8f0d1741d8fcfb238deed96da3dc9"
+    },
+    "src/lib/auth/auth.ts": {
+      "owner": "module:auth",
+      "hash": "612ee73fb83a6d0d2886867dcdbe5b1b3e32b7ce82b1e93e94120808cfd4f41e"
+    },
+    "src/lib/auth/client.ts": {
+      "owner": "module:auth",
+      "hash": "6f4d1347f0797e4dd778dbe0a2fee28e2e7c91ccc35c74b3200a80681b9d109a"
+    },
+    "src/lib/auth/config.ts": {
+      "owner": "module:auth",
+      "hash": "57ada8a95d2946be3247bdaea1a171cf6fa3234284950d7f0c5ef04321d6c5c3"
+    },
+    "src/lib/auth/events.ts": {
+      "owner": "module:auth",
+      "hash": "1c02c7019d9ec2f064d19dc28367d5c5c9d34959960173777989f1e6e6ee00c0"
+    },
+    "src/lib/auth/proxy.ts": {
+      "owner": "module:auth",
+      "hash": "8a95b0bec230b02b2b425c11b58cff86eb1feb0279cadc5b8f1cc68cff135a24"
+    },
+    "src/lib/auth/redirect.ts": {
+      "owner": "module:auth",
+      "hash": "9e0b9765ec41fd42c9b1b4070b4eb7b7e3f68e269c3f09bacb1e62d5bd976817"
+    },
+    "src/lib/auth/session.ts": {
+      "owner": "module:auth",
+      "hash": "277b35f33c6747a2bddeb4902f9ca72671f6b0366643c59616ef6772c0d9a714"
+    },
+    "src/lib/billing/config.ts": {
+      "owner": "module:billing",
+      "hash": "222d531a1277266d2f80482219a874c06fce54a6451b924e539831429190d54a"
+    },
+    "src/lib/billing/customer.ts": {
+      "owner": "module:billing",
+      "hash": "3b3a6074c134b47472f06ae5822aaaac9aff84ddaaaf22128093721b872e01cb"
+    },
+    "src/lib/billing/entitlements.ts": {
+      "owner": "module:billing",
+      "hash": "eead34a578190e9fb2eaea93e517a903bb752b0016c35b56d53ce8f63ddab984"
+    },
+    "src/lib/billing/onboarding.ts": {
+      "owner": "module:billing",
+      "hash": "03d9fa5bc63b12b2d8975b30664eef9cfa95270e29ebac29ab8b31e2938f57db"
+    },
+    "src/lib/billing/plans.ts": {
+      "owner": "module:billing",
+      "hash": "4cbca5cc5135200d774ff91b6a324d07b8b377899d3bed5c3e83f59c0e7c1656"
+    },
+    "src/lib/billing/webhooks.ts": {
+      "owner": "module:billing",
+      "hash": "d4ca7b65e588d6d370dad8a964d2b9ea07750e12550a386ae2d680e7544e7614"
+    },
+    "src/lib/blog/config.ts": {
+      "owner": "module:blog",
+      "hash": "ac51e435f171a5cdbb1b18612da90757e63cda70fb6ea14acc8b14736c8c5d0c"
+    },
+    "src/lib/blog/posts.ts": {
+      "owner": "module:blog",
+      "hash": "c6cce0f7c2dd57811e8fd0345f45a6b0d03f5e8ee33c63451eb1ec2af741ef16"
+    },
+    "src/lib/blog/sitemap.ts": {
+      "owner": "module:blog",
+      "hash": "cee30e5bed053035dcbee359f8d74d468d1a2adf74235f73ac3ffb7306fddd30"
+    },
+    "src/lib/changelog/entries.ts": {
+      "owner": "module:changelog",
+      "hash": "fdd1349e516c25de40a10cafc7f31aa355c2abae56fca749af5434ff5f359807"
+    },
+    "src/lib/consent/config.ts": {
+      "owner": "module:cookie-consent",
+      "hash": "fec4d9db5b07bbabe0b34fe4ccc828013976e3993f3c635facaf06e77042f93e"
+    },
+    "src/lib/consent/consent.ts": {
+      "owner": "module:cookie-consent",
+      "hash": "8174267d4c03bc45629258c59f795b30611c0e4f2caf65d48a619ef706cd50c4"
+    },
+    "src/lib/consent/server.ts": {
+      "owner": "module:cookie-consent",
+      "hash": "37b98a782175ac4412b8851478609be120fb3cbfad813e2eaa56b100612cccf1"
+    },
+    "src/lib/contact/actions.tsx": {
+      "owner": "module:contact",
+      "hash": "4333e072ec4adcf9e124bf172eae5251d0788d7f44be084b34b9cfa9786b3650"
+    },
+    "src/lib/contact/config.ts": {
+      "owner": "module:contact",
+      "hash": "e8c4aa1347f532157cd2b2a35c0622d99ca070e3a41e7101f45e9d6333433201"
+    },
+    "src/lib/contact/schema.ts": {
+      "owner": "module:contact",
+      "hash": "aa735b3b0bb290e8c31e390148ce8487095bd6cdf14f0f315b07f096602a3459"
+    },
+    "src/lib/contact/spam.ts": {
+      "owner": "module:contact",
+      "hash": "8870d754985552f759023814a6373bbe01fd477a3ba333c8151bac893190e130"
+    },
+    "src/lib/dashboard/icons.tsx": {
+      "owner": "module:dashboard",
+      "hash": "06005bcbb827a90ca9edc3293d320c3c85f63fdfb61b4f00f69abf730a31226a"
+    },
+    "src/lib/dashboard/nav.ts": {
+      "owner": "module:dashboard",
+      "hash": "2cd2874695fc731518dbada4022386301384608b0688bb2503764b9b06e0da90"
+    },
+    "src/lib/docs/config.ts": {
+      "owner": "module:docs",
+      "hash": "0d958f995f29d15710354cdcbd541eacd28ff73fb779b1161498bc5dc452657e"
+    },
+    "src/lib/docs/docs.ts": {
+      "owner": "module:docs",
+      "hash": "6abbe7dac83402229705e1e01223b93fd18cc855e8cea4a1d3d1c427223c52bf"
+    },
+    "src/lib/docs/sitemap.ts": {
+      "owner": "module:docs",
+      "hash": "436389c137dc47f9a4640490b2ef8a4051f9aefdca0152b0152f42db7c765551"
+    },
+    "src/lib/email/outbox.ts": {
+      "owner": "module:email",
+      "hash": "5c2253c29cb459b3731dfaa172dbf7a44512c2d3a9663aeb71fb1a87fc4c508d"
+    },
+    "src/lib/email/send.ts": {
+      "owner": "module:email",
+      "hash": "b2e356524cad890339e24573e450b6183aa46a17570e9b84e0f825827cf3500b"
+    },
+    "src/lib/faq.ts": {
+      "owner": "module:faq",
+      "hash": "47cf4dde038967ccde94b114a0b95eb5388978462e9747232f4e102837e32cd0"
+    },
+    "src/lib/fonts.ts": {
+      "owner": "theme:neutral",
+      "hash": "3b390fb35546c37dd612ef95d9586171fb33365dceef9d0c6da77f7ced7c3fa1"
+    },
+    "src/lib/legal/pages.ts": {
+      "owner": "module:legal",
+      "hash": "5b80c697da097dd71b50d9797c200cdac8f75f3239ff9ee49fe5466db4c00712"
+    },
+    "src/lib/mdx/collection.ts": {
+      "owner": "module:mdx",
+      "hash": "db69f74ca532597c4e9598ae3e1b981cf62c76a413f1adacaafc2e59ce4fcb36"
+    },
+    "src/lib/mdx/render.tsx": {
+      "owner": "module:mdx",
+      "hash": "66ad7b43e63935f1ebb51301108870d050b933241543125c80d96e6ac8e25c67"
+    },
+    "src/lib/mdx/rss.ts": {
+      "owner": "module:mdx",
+      "hash": "082b5b6040d780d2ae76ade1065fc9e264a66d9b1aa6fa03e7cacd7da6937177"
+    },
+    "src/lib/mdx/text.ts": {
+      "owner": "module:mdx",
+      "hash": "540227d12a2083d041a428696e533e97db846213fa7c1bd7a9cdaa8f149e8774"
+    },
+    "src/lib/metadata.ts": {
+      "owner": "starter",
+      "hash": "487ef907779071057089f82f7c9bf1e1973cdeb31c1cf631b0a3feeecec624cc"
+    },
+    "src/lib/notifications/actions.ts": {
+      "owner": "module:notifications",
+      "hash": "cc360a363c77c780fef6f7a3f3593ab253a20009182ec7e22f9137d6b3fbe5fd"
+    },
+    "src/lib/notifications/notify.ts": {
+      "owner": "module:notifications",
+      "hash": "ffc09b60b093d19a411cbec2f6d29c0b3892937bcbd10848f89362063be509f2"
+    },
+    "src/lib/notifications/welcome.ts": {
+      "owner": "module:notifications",
+      "hash": "dc43971771f127d31d954fbbd1589abe0af9be340c3c6fab64607b66616bdecf"
+    },
+    "src/lib/onboarding/actions.ts": {
+      "owner": "module:onboarding",
+      "hash": "26a62f8431c6e1c37d97f635a06dca8374f79676a56182a3a39e57559439d20d"
+    },
+    "src/lib/onboarding/config.ts": {
+      "owner": "module:onboarding",
+      "hash": "fc26c8858998003762f829d2b00fa9519cb688ff75484090be09d7319a63026b"
+    },
+    "src/lib/onboarding/state.ts": {
+      "owner": "module:onboarding",
+      "hash": "9623194918ef0d3342c7d824f0e19214de3208efffccba60277d218f47d19324"
+    },
+    "src/lib/onboarding/types.ts": {
+      "owner": "module:onboarding",
+      "hash": "2f0176fa4fea27ddd6c63c8817c666d30ece8a6f12565124aa3329925bffc7f1"
+    },
+    "src/lib/payments/dispatch.ts": {
+      "owner": "module:payments",
+      "hash": "2c61461e730e364f44dd718958e42714c0ca9acd5b2d97525b2d470c8e514ae6"
+    },
+    "src/lib/payments/index.ts": {
+      "owner": "module:payments",
+      "hash": "fb0b32f7f9a9558afff16505bee249e0aa702518c5634c437888985152b37275"
+    },
+    "src/lib/payments/mock-actions.ts": {
+      "owner": "module:payments",
+      "hash": "2eff369db0bdb210d1b204ec408a9ac041bf0d1ec7170ef14e0567b10c3764c4"
+    },
+    "src/lib/payments/mock.ts": {
+      "owner": "module:payments",
+      "hash": "8adb47bb3ed9aa115aab2fd71f99e7e82f8f61409d56cf2b4068b4da3ae60b26"
+    },
+    "src/lib/payments/stripe.ts": {
+      "owner": "module:payments",
+      "hash": "11e7d43f9b84da26daec606643108e5a9d42fe4427bc2501ea5308eaf6f2514e"
+    },
+    "src/lib/payments/types.ts": {
+      "owner": "module:payments",
+      "hash": "800f7f248384ebff96c223cd8a9b8b59429e6b6aea50fc7201dc85777f5fc62e"
+    },
+    "src/lib/rate-limit.ts": {
+      "owner": "module:rate-limit",
+      "hash": "db2b536112bd25aaeef7b486c6d87b047ea674932b57815be50d24dc2f5316f2"
+    },
+    "src/lib/security-headers.ts": {
+      "owner": "starter",
+      "hash": "03cca5e93699529fe5edc020e4d4c578cbbd714120f081d4496eae315a5f5f61"
+    },
+    "src/lib/seo/json-ld.tsx": {
+      "owner": "module:seo",
+      "hash": "04988b4e4cc78d4c632840acd7da359bfceb1e30236a2df420c10cf73eee4445"
+    },
+    "src/lib/seo/og-image.tsx": {
+      "owner": "module:seo",
+      "hash": "72c93ad76e165af257720fc252eafb18f6ac53bca2f015eed1c82be4f1752453"
+    },
+    "src/lib/seo/og-theme.ts": {
+      "owner": "module:seo",
+      "hash": "cae9d82a71a09619c927aad8b3c40289e05123472b8bb099b12985edb789b009"
+    },
+    "src/lib/seo/site-json-ld.tsx": {
+      "owner": "module:seo",
+      "hash": "75d691c78e5514d791c85f29f73a768b583c47aca937da9599fccd297831593d"
+    },
+    "src/lib/settings/actions.ts": {
+      "owner": "module:settings",
+      "hash": "ffc5ea03f63374620616ef0a12efd98342ad93c958c1d60ad4071260dfc048fb"
+    },
+    "src/lib/site.ts": {
+      "owner": "starter",
+      "hash": "31cb4076fbe87dea4fd7746a7c1c461ea996eebe49a29c5529701fc71324377a"
+    },
+    "src/lib/teams/actions.ts": {
+      "owner": "module:teams",
+      "hash": "7d3b76455d1a17d34e7daefe9da859e8745997032d3b29160cd1e4365b34e997"
+    },
+    "src/lib/teams/auth-client-plugin.ts": {
+      "owner": "module:teams",
+      "hash": "9ed8735b36d8b97b9d9daddaaf4a58aaf1c4c3bb626e21744ae776f4542ac6e7"
+    },
+    "src/lib/teams/auth-plugin.ts": {
+      "owner": "module:teams",
+      "hash": "9e2b0a3ee786f27316b142a47f3b97468333b17795cad223b61f5ef8362ce98b"
+    },
+    "src/lib/teams/onboarding.ts": {
+      "owner": "module:teams",
+      "hash": "60ac910383bfe14be2c29c7d857a00581e4da7308e9196a18e25a4c4489042b1"
+    },
+    "src/lib/teams/queries.ts": {
+      "owner": "module:teams",
+      "hash": "d8317e63facfc6c04679658b8ddb17c0140744478e37e8f0ad184c6aefdd8d21"
+    },
+    "src/lib/transactional/templates.ts": {
+      "owner": "module:transactional-emails",
+      "hash": "1186458963d6670bb5d41a3d68edf4b9df4707d6d17f841bdb843af6897abe3c"
+    },
+    "src/lib/transactional/welcome.ts": {
+      "owner": "module:transactional-emails",
+      "hash": "07ea0a15f6be8e54c94f26431ad53e0cb0febb03c70779576e67553f511a2fe5"
+    },
+    "src/lib/url.ts": {
+      "owner": "starter",
+      "hash": "777754a432dca38abdc86e88bea76e00cead115366d96bec559dc6d4ba754be4"
+    },
+    "src/lib/utils.ts": {
+      "owner": "starter",
+      "hash": "5e0427ca7c05e13be9a704e92111662272dabbfe28e2636fe55b97797328153a"
+    },
+    "src/styles/theme.css": {
+      "owner": "theme:neutral",
+      "hash": "5c8a9fbbc65561bfc205b3cb4d547090f0234781f5dabd79a8d863525ff1a858"
+    },
+    "tsconfig.json": {
+      "owner": "starter",
+      "hash": "17a3e0e12ddab8febf9de09c844a875777faf0ef49926c7b6c0e044da71d24e9"
+    },
+    "vercel.json": {
+      "owner": "module:vercel",
+      "hash": "6312dc4fd7c0362404a2a31d947c72e73b1946fc88ee2a2239db68577a107a95"
+    }
+  }
+}
