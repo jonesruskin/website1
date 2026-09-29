@@ -1,8 +1,10 @@
 import { apiRoute } from "@/lib/api/route";
+import { requireStudioForKeys } from "@/lib/baton/plan-features";
 import { listTools } from "@/lib/baton/queries";
 
 /** GET /api/v1/tools: the key owner's tools with their credit balances. */
 export const GET = apiRoute({ scope: "read" }, async ({ principal }) => {
+  await requireStudioForKeys(principal);
   const tools = await listTools(principal.userId);
   return {
     data: tools.map((tool) => ({

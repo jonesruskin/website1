@@ -20,7 +20,7 @@ const creditNotes: Record<string, string> = {
   free: "One tool, starting with 10 credits (20 for the founding 100). Earn one for every click you send, spend one for every visitor you receive. At zero, your tool waits to be shown until it has sent someone.",
   pro: "The same exchange across up to five tools, each with its own balance. Handshakes let you pair directly with tools that agree, and they rank first.",
   enterprise:
-    "The same exchange across a whole portfolio, with unlimited tools and handshakes, team seats, and stats you can pull through the API.",
+    "The same exchange across a whole portfolio, with unlimited tools and handshakes, a year of stats, API access and CSV export of your ledger.",
 };
 
 export default async function PricingPage() {

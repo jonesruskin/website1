@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { apiRoute } from "@/lib/api/route";
+import { requireStudioForKeys } from "@/lib/baton/plan-features";
 import { getOverview } from "@/lib/baton/queries";
 
 /**
@@ -9,5 +10,8 @@ import { getOverview } from "@/lib/baton/queries";
  */
 export const GET = apiRoute(
   { scope: "read", query: z.object({ days: z.coerce.number().int().min(1).max(365).default(7) }) },
-  async ({ principal, query }) => ({ data: await getOverview(principal.userId, query.days) }),
+  async ({ principal, query }) => {
+    await requireStudioForKeys(principal);
+    return { data: await getOverview(principal.userId, query.days) };
+  },
 );

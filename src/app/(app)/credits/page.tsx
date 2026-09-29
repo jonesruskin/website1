@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { requireSession } from "@/lib/auth/session";
+import { hasStudio } from "@/lib/baton/plan-features";
 import { formatDelta, formatNumber, ledgerReason, ledgerReasons, plural } from "@/lib/baton/format";
 import {
   clampStatsDays,
@@ -48,11 +49,12 @@ export default async function CreditsPage({
     ? Math.min(requested, maxDays)
     : Math.min(14, maxDays);
 
-  const [tools, overview, ledger, totals] = await Promise.all([
+  const [tools, overview, ledger, totals, studio] = await Promise.all([
     listTools(user.id),
     getOverview(user.id, range),
     getLedger(user.id, { limit: PAGE_SIZE, offset: (page - 1) * PAGE_SIZE }),
     getLedgerTotals(user.id),
+    hasStudio(user.id),
   ]);
   const pageCount = Math.max(1, Math.ceil(ledger.total / PAGE_SIZE));
   const broke = tools.filter((tool) => tool.credits < 1);
@@ -208,6 +210,19 @@ export default async function CreditsPage({
         total={2}
         title="Ledger"
         description="Every credit that ever moved, newest first. Your balance is the sum of this list."
+        actions={
+          studio ? (
+            <Button asChild variant="outline" size="sm">
+              <a href="/credits/export" download>
+                Export CSV
+              </a>
+            </Button>
+          ) : (
+            <Button asChild variant="ghost" size="sm">
+              <Link href="/pricing">CSV export · Studio</Link>
+            </Button>
+          )
+        }
       >
         {ledger.rows.length === 0 ? (
           <p className="rounded-lg border border-dashed p-6 text-sm text-muted-foreground">

@@ -271,9 +271,9 @@ export default defineSite({
         features: [
           "Unlimited tools",
           "Unlimited handshakes",
-          "Team seats and roles",
-          "Stats API and CSV export",
-          "Priority review for new tools",
+          "365-day stats",
+          "Stats API access with your API keys",
+          "CSV export of your credit ledger",
         ],
         limits: {
           tools: 1000,

@@ -2,7 +2,7 @@
   {
     "category": "The basics",
     "question": "Is it free?",
-    "answer": "Yes to start, and for good. The Relay plan is free and covers one tool. Every tool starts with 10 credits, and credits are earned by sending visitors, not bought.\n\nPaid plans add things around the exchange, not rank or credits: Anchor ($12 a month) has 5 tools, handshakes, 90-day stats and the option to hide the Baton mark. Studio ($39 a month) has unlimited tools, team seats and the stats API. Paid plans start with a 14-day free trial.",
+    "answer": "Yes to start, and for good. The Relay plan is free and covers one tool. Every tool starts with 10 credits (20 for the first 100 tools), and credits are earned by sending visitors, never bought.\n\nPaid plans never sell credits or rank among strangers. The one ranking feature, handshakes, only puts two tools first for each other when both makers agree. Beyond that: Anchor ($12 a month) has 5 tools, handshakes, 90-day stats and the option to hide the Baton mark. Studio ($39 a month) has unlimited tools and handshakes, a year of stats, API access with your keys and CSV export of your ledger. Paid plans start with a 14-day free trial.",
     "tags": ["pricing"]
   },
   {
@@ -13,7 +13,7 @@
   {
     "category": "The basics",
     "question": "What tools are allowed?",
-    "answer": "Real, working tools with a public URL and a clear job: apps, utilities, templates, courses, anything people finish something with and then take away. Free and paid tools are both welcome.\n\nWe don't accept anything deceptive, illegal or harmful, and we can remove a tool that misleads people or games the exchange. New tools are reviewed, and Studio gets priority review."
+    "answer": "Real, working tools with a public URL and a clear job: apps, utilities, templates, courses, anything people finish something with and then take away. Free and paid tools are both welcome.\n\nWe don't accept anything deceptive, illegal or harmful, and we can remove a tool that misleads people or games the exchange. We watch the network for tools that break these rules."
   },
   {
     "category": "What your visitors see",
