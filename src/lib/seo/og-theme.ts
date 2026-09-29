@@ -14,4 +14,5 @@ export const ogTheme = {
   accent: "#fb6c2b", // --signal
   accentInk: "#aa3606", // --signal-ink
   card: "#fdfaf4", // --card
+  accentForeground: "#170d08", // --signal-foreground
 } as const;
