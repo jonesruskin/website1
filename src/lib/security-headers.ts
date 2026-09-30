@@ -34,7 +34,10 @@ const baseCsp: CspDirectives = {
 };
 
 /** Sources specific to this site. */
-const extraCsp: CspDirectives = {};
+const extraCsp: CspDirectives = {
+  // Dodo Payments checkout and customer portal (test and live), only when Dodo is configured.
+  "form-action": ["$DODO_PAYMENTS_API_KEY?https://*.dodopayments.com"],
+};
 
 function resolveSource(source: string): string[] {
   if (!source.startsWith("$")) return [source];

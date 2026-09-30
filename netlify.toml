@@ -1,0 +1,21 @@
+# Netlify build settings. The Next.js runtime (OpenNext adapter) is applied
+# automatically. Every production variable is checked before the build starts:
+# a missing key fails the deploy here instead of breaking the live site.
+# Set variables in Netlify → Site configuration → Environment variables (see DEPLOY.md).
+
+[build]
+  command = "pnpm env:check && pnpm build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_TELEMETRY_DISABLED = "1"
+
+# Deploy previews and branch deploys capture email in the outbox instead of
+# sending it, so previews never email real people. Give those contexts Dodo
+# test-mode keys in the Netlify UI (DEPLOY.md, step 7).
+[context.deploy-preview.environment]
+  EMAIL_OUTBOX = "1"
+
+[context.branch-deploy.environment]
+  EMAIL_OUTBOX = "1"

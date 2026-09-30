@@ -39,6 +39,7 @@ free tools for everyday jobs.
 | `src/db/schema/baton.ts` | Tools, impressions, clicks, ledger, handshakes, blocks |
 
 Design language and conventions for contributors (human or AI) are in [AGENTS.md](AGENTS.md).
+To go live on a near-zero budget (Netlify, Neon, Resend, Dodo Payments), follow [DEPLOY.md](DEPLOY.md).
 
 Built on [site-forge](https://github.com/jonesruskin/site-forge) (preset: `saas`). All of the
 code in this repository is yours to change: nothing is hidden in a package.

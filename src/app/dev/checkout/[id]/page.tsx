@@ -50,8 +50,8 @@ export default async function MockCheckoutPage({ params }: { params: Promise<{ i
         <CardContent className="flex flex-col gap-4">
           {amount && <p className="font-display text-4xl font-semibold tracking-tight">{amount}</p>}
           <p className="text-muted-foreground flex items-center gap-2 text-sm">
-            <CreditCardIcon aria-hidden className="size-4" /> Set STRIPE_SECRET_KEY to use real
-            Stripe Checkout.
+            <CreditCardIcon aria-hidden className="size-4" /> Set DODO_PAYMENTS_API_KEY (or
+            STRIPE_SECRET_KEY) to use a real checkout.
           </p>
         </CardContent>
         {checkout.status === "open" ? (
