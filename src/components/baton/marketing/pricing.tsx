@@ -75,7 +75,7 @@ export function Pricing({ plans, locale }: { plans: PricingPlan[]; locale?: stri
                   />
                   {interval === "monthly" ? "Monthly" : "Yearly"}
                   {interval === "yearly" && saving >= 0.05 && (
-                    <span className="font-mono text-xs tracking-widest uppercase opacity-80">
+                    <span className="font-mono text-xs tracking-widest uppercase">
                       Save {Math.round(saving * 100)}%
                     </span>
                   )}

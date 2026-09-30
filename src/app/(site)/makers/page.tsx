@@ -175,7 +175,7 @@ export default function MakersPage() {
                 A click you send
               </p>
               <p
-                className="font-display text-8xl leading-none font-bold tracking-tighter text-signal sm:text-9xl"
+                className="font-display text-8xl leading-none font-bold tracking-tighter text-signal-ink sm:text-9xl"
                 style={{ fontStretch: "70%" }}
               >
                 +1

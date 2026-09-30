@@ -32,11 +32,11 @@ GET https://baton.run/api/baton/v1/card?key=bk_…&ctx=pdf
     "body": "Add your signature and send it back.",
     "cta": "Open",
     "tool": { "name": "Example Sign", "host": "sign.example.com" },
-    "via": ["pdf"],
+    "via": ["PDF"],
     "href": "https://baton.run/r/<token>"
   },
-  "badge": "…",
-  "poweredBy": "…"
+  "badge": true,
+  "poweredBy": "https://baton.run/makers?ref=card"
 }
 ```
 
@@ -48,9 +48,9 @@ The values above are placeholders showing the shape.
 | `card.body`      | One line of supporting text.                                                    |
 | `card.cta`       | The button label.                                                               |
 | `card.tool`      | The tool being recommended: its `name` and the `host` of its website.           |
-| `card.via`       | The artifacts that connect the two tools, for example `["pdf"]`.                |
+| `card.via`       | Labels of the artifacts that connect the two tools, for example `["PDF"]`.      |
 | `card.href`      | A signed `/r/<token>` link. **Always link to this**, never to the tool directly. |
-| `badge`          | The Baton attribution that goes with the card.                                  |
+| `badge`          | `true` when the card should show the "passed by Baton" mark (hidden on paid plans). |
 | `poweredBy`      | Where that attribution points.                                                  |
 
 ### 204: no match
@@ -58,6 +58,14 @@ The values above are placeholders showing the shape.
 When nothing fits the journey, the endpoint answers `204 No Content` with an empty body. Show
 nothing, or something of your own. This is the same case where
 [`baton.pass()`](/docs/embed/pass) resolves to `false`.
+
+### Other statuses
+
+| Status | Meaning                                                              |
+| ------ | -------------------------------------------------------------------- |
+| `400`  | The `key` is missing or malformed.                                   |
+| `404`  | No active tool has that key (unknown, deleted or paused).            |
+| `429`  | More than 60 requests a minute from one address. See `Retry-After`.  |
 
 ### Clicks
 
@@ -84,9 +92,9 @@ curl https://baton.run/api/v1/tools \
 
 | Endpoint         | Scope  | What it returns                                                         |
 | ---------------- | ------ | ----------------------------------------------------------------------- |
-| `GET /api/v1/tools` | `read` | The tools on your account.                                           |
-| `GET /api/v1/stats` | `read` | Impressions, clicks and credits for your tools. Included with the Studio plan. |
-| `GET /api/v1/me` | `read` | The account the key belongs to.                                         |
+| `GET /api/v1/tools` | `read` | The tools on your account, with credits and site keys. Studio plan. |
+| `GET /api/v1/stats` | `read` | Credits, passes sent and received, cards shown, and a daily series (`?days=`, clamped by plan). Studio plan. |
+| `GET /api/v1/me` | `read` | The account the key belongs to. Every plan.                             |
 
 A key has scopes. `read` reads your account data and `write` creates and changes it. A request
 outside a key's scopes is refused with `403`.
@@ -114,9 +122,10 @@ Errors are [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) `application/probl
 
 | Status | Meaning                                              |
 | ------ | ---------------------------------------------------- |
-| `400`  | The query or body failed validation.                 |
+| `400`  | The body isn't valid JSON.                           |
+| `422`  | The query or body failed validation.                 |
 | `401`  | No key, or a key that isn't valid.                   |
-| `403`  | The key doesn't have the scope this endpoint needs.  |
+| `403`  | The key lacks the scope, or the endpoint needs Studio. |
 | `404`  | The thing you asked for doesn't exist.               |
 | `429`  | You have hit the rate limit.                         |
 

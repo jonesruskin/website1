@@ -95,7 +95,7 @@ const source = String.raw`(function() {
       if (c.body) card.appendChild(el('p', 'body', c.body));
 
       var foot = el('div', 'foot');
-      var cta = link('cta', c.href, c.cta || 'Open');
+      var cta = link('cta', safeUrl(c.href) || '#', c.cta || 'Open');
       cta.appendChild(el('span', null, '→')).setAttribute('aria-hidden', 'true');
       foot.appendChild(cta);
       if (c.tool.host) foot.appendChild(el('span', 'host', c.tool.host));

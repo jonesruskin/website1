@@ -42,7 +42,7 @@ function balances(n: number) {
 const rules = [
   "1 click sent = 1 credit.",
   "No pay-to-rank on free.",
-  "Competitors are never paired.",
+  "Competitors are never paired unless both opt in.",
   "Duplicate clicks don't count.",
   "Daily-rotating anonymous visitor hashes, no cookies.",
 ];

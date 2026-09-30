@@ -53,7 +53,8 @@ export default async function PricingPage() {
           </h1>
           <p className="max-w-2xl text-lead text-muted-foreground">
             Joining the network costs nothing. Plans add more tools, direct pairings and longer
-            stats. They never sell credits, and they never buy rank.
+            stats. They never sell credits, and they never buy rank with strangers: a pairing only
+            ranks first when both makers agree.
             {billingConfig.trialDays
               ? ` Paid plans start with a ${billingConfig.trialDays}-day free trial, and you can cancel any time.`
               : " Cancel any time."}
