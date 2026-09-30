@@ -26,7 +26,7 @@ import {
 } from "./rules";
 import { batonSecret } from "./secret";
 import { artifactLabel, isArtifact } from "./taxonomy";
-import { signClickToken, verifyClickToken, visitorHash } from "./token";
+import { networkHash, signClickToken, verifyClickToken, visitorHash } from "./token";
 
 const CANDIDATE_CAP = 500;
 const STATS_DAYS = 30;
@@ -234,6 +234,7 @@ export async function redeemClick(input: RedeemInput): Promise<string | null> {
   }
 
   const visitor = visitorHash(input.ip, input.userAgent, secret);
+  const network = networkHash(input.ip, secret);
   const bot = isLikelyBot(input.userAgent);
 
   const outcome = await db.transaction(async (tx) => {
@@ -274,6 +275,17 @@ export async function redeemClick(input: RedeemInput): Promise<string | null> {
       .select({ n: count() })
       .from(batonClick)
       .where(and(...creditedSince, eq(batonClick.hostToolId, host.id)));
+    const [ipFromHost] = await tx
+      .select({ n: count() })
+      .from(batonClick)
+      .where(
+        and(
+          eq(batonClick.ipHash, network),
+          eq(batonClick.credited, true),
+          gte(batonClick.createdAt, since),
+          eq(batonClick.hostToolId, host.id),
+        ),
+      );
 
     const decision = creditDecision({
       hostActive: host.status === "active",
@@ -281,6 +293,7 @@ export async function redeemClick(input: RedeemInput): Promise<string | null> {
       shownCredits: shown.credits,
       visitorToShown: toShown?.n ?? 0,
       visitorFromHost: fromHost?.n ?? 0,
+      ipFromHost: ipFromHost?.n ?? 0,
       bot,
     });
 
@@ -292,6 +305,7 @@ export async function redeemClick(input: RedeemInput): Promise<string | null> {
         hostToolId: host.id,
         shownToolId: shown.id,
         visitorHash: visitor,
+        ipHash: network,
         credited: decision.credited,
       })
       .onConflictDoNothing({ target: batonClick.impressionId })

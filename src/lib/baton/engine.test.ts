@@ -8,6 +8,7 @@ import {
   displayHost,
   isLikelyBot,
   MAX_CREDITED_PER_HOST,
+  MAX_CREDITED_PER_IP_PER_HOST,
   normalizeCtx,
   showBadge,
   slugify,
@@ -61,6 +62,15 @@ const facts = (over: Partial<CreditFacts> = {}): CreditFacts => ({
 describe("creditDecision", () => {
   it("credits a clean click", () => {
     expect(creditDecision(facts())).toEqual({ credited: true });
+  });
+  it("caps one network address per host, however many user agents it rotates", () => {
+    expect(creditDecision(facts({ ipFromHost: MAX_CREDITED_PER_IP_PER_HOST - 1 })).credited).toBe(
+      true,
+    );
+    expect(creditDecision(facts({ ipFromHost: MAX_CREDITED_PER_IP_PER_HOST }))).toEqual({
+      credited: false,
+      reason: "ip-cap",
+    });
   });
   it("does not credit a tool with no credits left", () => {
     expect(creditDecision(facts({ shownCredits: 0 }))).toEqual({

@@ -66,6 +66,12 @@ export function visitorHash(ip: string, userAgent: string, secret: string, now =
   return createHash("sha256").update(`${secret}:${day}:${ip}:${userAgent}`).digest("hex").slice(0, 32);
 }
 
+/** Like visitorHash, but for the network address alone: caps farming by rotating user agents. */
+export function networkHash(ip: string, secret: string, now = new Date()) {
+  const day = now.toISOString().slice(0, 10);
+  return createHash("sha256").update(`${secret}:net:${day}:${ip}`).digest("hex").slice(0, 32);
+}
+
 /** Public embed key: "bk_" + 20 random base62-ish chars. */
 export function createSiteKey() {
   return `bk_${randomBytes(15).toString("base64url")}`;

@@ -279,7 +279,7 @@ export async function getLedger(
       .where(owned)
       .orderBy(desc(batonLedger.createdAt), desc(batonLedger.id))
       .limit(Math.min(Math.max(limit, 1), 100))
-      .offset(Math.max(offset, 0)),
+      .offset(Math.min(Math.max(offset, 0), 1_000_000)),
     db
       .select({ value: count() })
       .from(batonLedger)

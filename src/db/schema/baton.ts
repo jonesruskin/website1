@@ -89,6 +89,8 @@ export const batonClick = pgTable(
       .notNull()
       .references(() => batonTool.id, { onDelete: "cascade" }),
     visitorHash: text("visitor_hash").notNull(),
+    /** Daily-rotating hash of the IP alone (see networkHash). Null on clicks before it existed. */
+    ipHash: text("ip_hash"),
     /** False when the click was valid for the visitor but not for credits (duplicate, fraud rules). */
     credited: boolean("credited").notNull().default(false),
     createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -97,6 +99,7 @@ export const batonClick = pgTable(
     index("baton_click_host_idx").on(table.hostToolId, table.createdAt),
     index("baton_click_shown_idx").on(table.shownToolId, table.createdAt),
     index("baton_click_visitor_idx").on(table.visitorHash, table.shownToolId),
+    index("baton_click_ip_idx").on(table.ipHash, table.hostToolId),
   ],
 );
 

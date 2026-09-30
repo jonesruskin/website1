@@ -30,6 +30,7 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = { title: "Credits", robots: { index: false } };
 
 const PAGE_SIZE = 15;
+const MAX_PAGE = 10_000;
 const RANGES = [7, 14, 30, 90] as const;
 
 const first = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value);
@@ -42,7 +43,8 @@ export default async function CreditsPage({
   const { user } = await requireSession("/credits");
   const query = await searchParams;
   const requested = Number(first(query.range));
-  const page = Math.max(1, Math.floor(Number(first(query.page))) || 1);
+  // Clamped: an absurd ?page= would overflow the SQL offset.
+  const page = Math.min(MAX_PAGE, Math.max(1, Math.floor(Number(first(query.page))) || 1));
 
   const { maxDays } = await clampStatsDays(user.id, 7);
   const range = RANGES.includes(requested as (typeof RANGES)[number])

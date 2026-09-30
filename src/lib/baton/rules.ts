@@ -5,6 +5,12 @@
 
 /** Max credited clicks one visitor can earn a single host within the window. */
 export const MAX_CREDITED_PER_HOST = 3;
+/**
+ * Max credited clicks one network address can earn a single host within the
+ * window, whatever browsers it claims to be. Stops user-agent rotation from one
+ * machine while leaving room for an office or school behind one NAT.
+ */
+export const MAX_CREDITED_PER_IP_PER_HOST = 10;
 /** Fraud window for the per-visitor rules, in hours. */
 export const CREDIT_WINDOW_HOURS = 24;
 
@@ -50,6 +56,8 @@ export type CreditFacts = {
   visitorToShown: number;
   /** Credited clicks by this visitor from this host in the window. */
   visitorFromHost: number;
+  /** Credited clicks from this network address (any user agent) from this host in the window. */
+  ipFromHost?: number;
   bot?: boolean;
 };
 
@@ -57,7 +65,7 @@ export type CreditDecision =
   | { credited: true }
   | {
       credited: false;
-      reason: "inactive" | "no-credits" | "repeat-visitor" | "host-cap" | "bot";
+      reason: "inactive" | "no-credits" | "repeat-visitor" | "host-cap" | "ip-cap" | "bot";
     };
 
 /** Whether a valid click moves a credit. Every "no" still redirects the visitor. */
@@ -68,6 +76,9 @@ export function creditDecision(facts: CreditFacts): CreditDecision {
   if (facts.visitorToShown >= 1) return { credited: false, reason: "repeat-visitor" };
   if (facts.visitorFromHost >= MAX_CREDITED_PER_HOST) {
     return { credited: false, reason: "host-cap" };
+  }
+  if ((facts.ipFromHost ?? 0) >= MAX_CREDITED_PER_IP_PER_HOST) {
+    return { credited: false, reason: "ip-cap" };
   }
   return { credited: true };
 }

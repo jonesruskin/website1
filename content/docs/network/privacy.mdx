@@ -23,13 +23,15 @@ current date and a secret held on the server, and hashes the result. The hash is
 - The raw IP address and user agent are **not stored** with impressions or clicks.
 - The date is part of the input, so **tomorrow the same visitor produces a different hash**.
 - The hash isn't shown to other tools, and it isn't added to the destination URL.
+- Clicks also store a second daily hash of the IP address alone, made the same way. It enforces
+  the per-network cap and rotates daily too.
 
 ## What is stored
 
 | Record         | What it holds                                                                          |
 | -------------- | -------------------------------------------------------------------------------------- |
 | **Impression** | Which tool asked, which tool was shown, the `ctx`, the visitor hash and the time.       |
-| **Click**      | The impression it belongs to, the two tools, the visitor hash, whether it was credited and the time. |
+| **Click**      | The impression it belongs to, the two tools, the visitor and network hashes, whether it was credited and the time. |
 | **Ledger**     | Credit changes per tool: the starting balance, and one line per credited click.        |
 
 That is the whole list. Nothing about the visitor's identity, browsing history on your site or

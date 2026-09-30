@@ -32,7 +32,7 @@ type Props = { searchParams: Promise<{ q?: string; page?: string }> };
 export default async function AdminUsersPage({ searchParams }: Props) {
   const { user: me } = await requireAdmin("/admin/users");
   const { q = "", page: rawPage = "1" } = await searchParams;
-  const page = Math.max(1, Number.parseInt(rawPage, 10) || 1);
+  const page = Math.min(10_000, Math.max(1, Number.parseInt(rawPage, 10) || 1));
   const result = await auth.api.listUsers({
     query: {
       limit: PAGE_SIZE,
