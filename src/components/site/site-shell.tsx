@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { PreviewBanner } from "./preview-banner";
 import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
 
@@ -12,6 +13,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
         {children}
       </main>
       <SiteFooter />
+      <PreviewBanner />
     </div>
   );
 }

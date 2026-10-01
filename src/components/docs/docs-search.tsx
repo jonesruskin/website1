@@ -18,7 +18,7 @@ let indexPromise: Promise<MiniSearch<SearchDocument>> | null = null;
 function loadIndex() {
   indexPromise ??= Promise.all([
     import("minisearch"),
-    fetch("/docs/search-index.json").then((r) => r.json()),
+    fetch(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/docs/search-index.json`).then((r) => r.json()),
   ]).then(
     ([{ default: MiniSearchClass }, documents]: [
       { default: typeof MiniSearch },

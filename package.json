@@ -19,7 +19,8 @@
     "db:dev": "tsx scripts/dev-db.ts",
     "billing:sync": "tsx scripts/billing-sync.ts",
     "admin:grant": "tsx scripts/grant-admin.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "preview:static": "node scripts/static-preview.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.0",

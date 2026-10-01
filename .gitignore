@@ -27,3 +27,6 @@ playwright-report/
 
 # Netlify local build output
 .netlify/
+
+# Static preview output (scripts/static-preview.mjs)
+.preview-out/

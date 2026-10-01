@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 
+import { PreviewBanner } from "@/components/site/preview-banner";
 import siteConfig from "@/site.config";
 
 /**
@@ -43,6 +44,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       </aside>
 
       <div className="bg-background lg:bg-card">{children}</div>
+      <PreviewBanner />
     </div>
   );
 }
