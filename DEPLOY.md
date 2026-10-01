@@ -6,7 +6,7 @@ about $11/year for the domain** until traffic or revenue justify more.
 | Need | Service | Cost | Free-tier limit to watch |
 | --- | --- | --- | --- |
 | Domain | [Cloudflare Registrar](https://www.cloudflare.com/products/registrar/) | .com ≈ $10.44/yr (≈ $11.15 from 1 Nov 2026), same price on renewal | – |
-| Inbox `hello@yourdomain` | Cloudflare Email Routing → your Gmail | $0 | Receives only; replies go out from Gmail |
+| Inbox `hello@toolbaton.com` | Cloudflare Email Routing → your Gmail | $0 | Receives only; replies go out from Gmail |
 | Hosting | [Netlify](https://www.netlify.com/pricing/) free (commercial use allowed) | $0 | 300 credits/mo (≈ 100 GB bandwidth) |
 | Database | [Neon](https://neon.com/pricing) Postgres free | $0 | 0.5 GB storage, 100 CU-hours/mo (scales to zero when idle) |
 | Rate limits | [Upstash Redis](https://upstash.com/pricing/redis) free | $0 | 500k commands/mo (≈ 5k card requests/day) |
@@ -26,11 +26,12 @@ If Netlify ever falls short, see [Fallbacks](#fallbacks).
 ## Steps
 
 ### 1. Domain (about 10 minutes)
-1. Create a Cloudflare account, go to **Domain Registration → Register Domains**, and buy the
-   name.
-2. **Email → Email Routing**: route `hello@yourdomain` to your personal inbox.
-3. Replace the placeholder domain: `grep -rl "baton.run" content src site.config.ts`. The live
-   URL itself comes from `NEXT_PUBLIC_SITE_URL`.
+1. Create a Cloudflare account, go to **Domain Registration → Register Domains**, and buy
+   **toolbaton.com**. The code, docs and examples already use it. If you end up with a
+   different name, replace it everywhere with `grep -rl "toolbaton.com" content src
+   site.config.ts README.md DEPLOY.md`.
+2. **Email → Email Routing**: route `hello@toolbaton.com` to your personal inbox.
+3. The live URL itself comes from `NEXT_PUBLIC_SITE_URL=https://toolbaton.com`.
 
 ### 2. Database: Neon
 1. [console.neon.tech](https://console.neon.tech) → New project (region: closest to Netlify's
@@ -48,8 +49,8 @@ on each serverless instance, which is not safe in production.
 ### 4. Email: Resend
 1. [resend.com/domains](https://resend.com/domains) → add your domain and add the DNS records
    it shows in Cloudflare.
-2. Create an API key → `RESEND_API_KEY`. Set `EMAIL_FROM="Baton <hello@yourdomain>"` and
-   `CONTACT_TO_EMAIL=hello@yourdomain`.
+2. Create an API key → `RESEND_API_KEY`. Set `EMAIL_FROM="Baton <hello@toolbaton.com>"` and
+   `CONTACT_TO_EMAIL=hello@toolbaton.com`.
 
 ### 5. Payments: Dodo
 1. Sign up at [dodopayments.com](https://dodopayments.com), complete business verification
@@ -64,7 +65,7 @@ on each serverless instance, which is not safe in production.
    (`pro` is Anchor's plan id and `enterprise` is Studio's.)
 4. **Developers → API keys**: create a key → `DODO_PAYMENTS_API_KEY`. Set
    `DODO_PAYMENTS_ENVIRONMENT=test_mode`.
-5. **Developers → Webhooks**: add `https://yourdomain/api/payments/webhook`, subscribe to
+5. **Developers → Webhooks**: add `https://toolbaton.com/api/payments/webhook`, subscribe to
    `subscription.*`, `payment.succeeded` and `payment.failed`, and copy the signing secret →
    `DODO_PAYMENTS_WEBHOOK_KEY`.
 6. Test a purchase with a test card, and check that `/settings/billing` shows the plan.
@@ -73,15 +74,15 @@ on each serverless instance, which is not safe in production.
 
 ### 6. Auth
 - `BETTER_AUTH_SECRET`: run `openssl rand -base64 32`.
-- `BETTER_AUTH_URL=https://yourdomain`
-- `ADMIN_EMAILS=you@yourdomain`: the admin area unlocks for these emails.
+- `BETTER_AUTH_URL=https://toolbaton.com`
+- `ADMIN_EMAILS=you@toolbaton.com`: the admin area unlocks for these emails.
 - Optional: Google/GitHub sign-in keys (`GOOGLE_CLIENT_ID`…, see `.env.example`).
 
 ### 7. Hosting: Netlify
 1. [app.netlify.com](https://app.netlify.com) → Add new site → Import from GitHub →
    `jonesruskin/website1`. Build settings come from `netlify.toml`.
 2. **Site configuration → Environment variables**: add everything above, plus
-   `NEXT_PUBLIC_SITE_URL=https://yourdomain`. For the *Deploy previews* and *Branch deploys*
+   `NEXT_PUBLIC_SITE_URL=https://toolbaton.com`. For the *Deploy previews* and *Branch deploys*
    contexts, use your Dodo **test-mode** key and products. Previews already capture email
    instead of sending it.
 3. Deploy. The build runs `pnpm env:check` first and stops with a clear list if anything is

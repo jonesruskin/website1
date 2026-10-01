@@ -14,7 +14,7 @@ export const metadata = createMetadata({
 });
 
 const embed = `<script
-  src="https://baton.run/embed.js"
+  src="https://toolbaton.com/embed.js"
   data-key="bk_…"
   async
 ></script>`;

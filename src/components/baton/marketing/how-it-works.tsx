@@ -10,7 +10,7 @@ import { BatonPill } from "./baton-pill";
 import { LaneLabel } from "./lane-label";
 import { usePrefersReducedMotion } from "./use-media";
 
-const INSTALL = `<script async src="https://baton.run/embed.js" data-key="bk_your_key"></script>`;
+const INSTALL = `<script async src="https://toolbaton.com/embed.js" data-key="bk_your_key"></script>`;
 const PASS = `// the file is ready, the transcript is on screen…
 baton.pass({ ctx: "pdf" });`;
 
@@ -41,7 +41,7 @@ const lanes = [
         <span className="text-muted-foreground">{"<"}</span>
         <span className="text-signal-ink">script</span> async{" "}
         <span className="text-muted-foreground">src=</span>
-        <span className="text-signal-ink">{'"https://baton.run/embed.js"'}</span>
+        <span className="text-signal-ink">{'"https://toolbaton.com/embed.js"'}</span>
         {"\n         "}
         data-key=<span className="text-signal-ink">{'"bk_your_key"'}</span>
         <span className="text-muted-foreground">{"></"}</span>

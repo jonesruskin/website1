@@ -61,6 +61,6 @@
   {
     "category": "Trust and privacy",
     "question": "Do you use cookies?",
-    "answer": "The embed sets no cookies. To apply the fairness rules it uses an anonymous hash of the visitor, which is recalculated every day, so nobody can be recognized from one day to the next. Raw IP addresses and user agents aren't stored with impressions and clicks.\n\nThis website, baton.run, uses a few essential cookies, for example to keep you signed in and remember your theme. The cookie policy lists them."
+    "answer": "The embed sets no cookies. To apply the fairness rules it uses an anonymous hash of the visitor, which is recalculated every day, so nobody can be recognized from one day to the next. Raw IP addresses and user agents aren't stored with impressions and clicks.\n\nThis website, toolbaton.com, uses a few essential cookies, for example to keep you signed in and remember your theme. The cookie policy lists them."
   }
 ]

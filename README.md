@@ -19,7 +19,7 @@ Baton also has a people-facing side. **Trails** (`/trails`) are curated journeys
 free tools for everyday jobs.
 
 ```html
-<script src="https://baton.run/embed.js" data-key="bk_…" async></script>
+<script src="https://toolbaton.com/embed.js" data-key="bk_…" async></script>
 <script>
   // when your tool finishes its job:
   window.baton?.pass({ ctx: "pdf" });

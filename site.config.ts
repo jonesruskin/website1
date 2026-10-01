@@ -8,7 +8,7 @@ import { defineSite } from "@/lib/site";
 export default defineSite({
   name: "Baton",
   description: "The recommendation network for the moment your tool finishes its job.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://baton.run",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://toolbaton.com",
   locale: "en",
   author: {
     name: "Baton",
@@ -177,7 +177,7 @@ export default defineSite({
   },
   legal: {
     companyName: "Baton",
-    contactEmail: "hello@baton.run",
+    contactEmail: "hello@toolbaton.com",
     jurisdiction: "",
     address: "",
   },

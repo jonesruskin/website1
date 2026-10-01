@@ -15,7 +15,7 @@ There are two kinds of endpoint:
 ## Get a card
 
 ```http
-GET https://baton.run/api/baton/v1/card?key=bk_…&ctx=pdf
+GET https://toolbaton.com/api/baton/v1/card?key=bk_…&ctx=pdf
 ```
 
 | Parameter | Required | Description                                                                 |
@@ -33,10 +33,10 @@ GET https://baton.run/api/baton/v1/card?key=bk_…&ctx=pdf
     "cta": "Open",
     "tool": { "name": "Example Sign", "host": "sign.example.com" },
     "via": ["PDF"],
-    "href": "https://baton.run/r/<token>"
+    "href": "https://toolbaton.com/r/<token>"
   },
   "badge": true,
-  "poweredBy": "https://baton.run/makers?ref=card"
+  "poweredBy": "https://toolbaton.com/makers?ref=card"
 }
 ```
 
@@ -86,7 +86,7 @@ These are authenticated with an API key you create at **Settings, API keys**. Th
 once when you create it and only its hash is stored, so copy it straight away.
 
 ```bash
-curl https://baton.run/api/v1/tools \
+curl https://toolbaton.com/api/v1/tools \
   -H "Authorization: Bearer sk_…"
 ```
 

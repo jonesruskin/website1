@@ -51,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         {children}
         <Script
-          src="https://baton.run/embed.js"
+          src="https://toolbaton.com/embed.js"
           data-key="bk_…"
           strategy="afterInteractive"
         />
@@ -127,7 +127,7 @@ Add the script tag to `app.html` in SvelteKit.
 No build step needed:
 
 ```html
-<script src="https://baton.run/embed.js" data-key="bk_…" async></script>
+<script src="https://toolbaton.com/embed.js" data-key="bk_…" async></script>
 
 <button id="compress">Compress</button>
 <div id="next-step"></div>
