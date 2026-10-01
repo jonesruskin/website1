@@ -110,3 +110,16 @@ deploy fails at "Edge Functions bundling", switch hosts. Nothing else in the sta
 - **Vercel Pro** ($20/mo): import the repo. `vercel.json` is already set up.
 - **Hetzner CX22 + Coolify** (≈ €4.49/mo): `pnpm site add docker` adds a Dockerfile and a
   compose file with Postgres, so you can also drop Neon.
+
+## Static preview (GitHub Pages)
+A static copy of the public site, for sharing before launch:
+**https://jonesruskin.github.io/website1/**. It includes the landing page, Trails, docs,
+pricing, makers page, blog, FAQ and legal pages. Sign-up, the dashboard, forms and the card API
+need a server, so they only work on the real deploy, and the preview shows a banner saying so.
+
+To refresh it after changes:
+```sh
+pnpm preview:static            # builds and writes .preview-out/ (base path /website1)
+cd .preview-out && git init -b gh-pages && git add -A && git commit -m "Preview" \
+  && git push -f https://github.com/jonesruskin/website1 gh-pages
+```
