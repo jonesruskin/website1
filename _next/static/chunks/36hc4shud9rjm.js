@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,524873,e=>{"use strict";var o=e.i(92263),t=e.i(644736);e.s(["SendToOnboarding",0,function(){let e=(0,o.useRouter)();return(0,t.useEffect)(()=>e.replace("/onboarding"),[e]),null}])}]);
